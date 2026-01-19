@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "yM4XmctleAM=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Back\\Back.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\zagariy_ds\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.1\\microsoft.aspnetcore.openapi.10.0.1.nupkg.sha512",
+    "C:\\Users\\zagariy_ds\\.nuget\\packages\\microsoft.entityframeworkcore\\10.0.0\\microsoft.entityframeworkcore.10.0.0.nupkg.sha512",
+    "C:\\Users\\zagariy_ds\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\10.0.0\\microsoft.entityframeworkcore.abstractions.10.0.0.nupkg.sha512",
+    "C:\\Users\\zagariy_ds\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\10.0.0\\microsoft.entityframeworkcore.analyzers.10.0.0.nupkg.sha512",
+    "C:\\Users\\zagariy_ds\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\10.0.0\\microsoft.entityframeworkcore.relational.10.0.0.nupkg.sha512",
+    "C:\\Users\\zagariy_ds\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512",
+    "C:\\Users\\zagariy_ds\\.nuget\\packages\\npgsql\\10.0.0\\npgsql.10.0.0.nupkg.sha512",
+    "C:\\Users\\zagariy_ds\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\10.0.0\\npgsql.entityframeworkcore.postgresql.10.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
