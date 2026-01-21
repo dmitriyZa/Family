@@ -10,7 +10,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 class Program
 {
-    private static ITelegramBotClient _botClient;
+    private static ITelegramBotClient? _botClient;
 
     static async Task Main()
     {
@@ -44,23 +44,34 @@ class Program
         if (update.Type == UpdateType.Message && update.Message.Text != null)
         {
             var message = update.Message;
-            switch (message.Text.Split(' ')[0])
+            switch (message.Text.Trim().ToLowerInvariant())
             {
                 case "/start":
                     var startReply = "Добро пожаловать! Выберите действие:";
                     var keyboard = new ReplyKeyboardMarkup(new[]
                     {
-                        new KeyboardButton[] { "Добавить члена семьи👨‍👩‍👧‍👦", "Информация о члене семьиℹ️" },
-                        new KeyboardButton[] { "Отношения в семье💬" },
-                    })
+                    new KeyboardButton[] { new KeyboardButton("Добавить члена семьи👨‍👩‍👧‍👦"), new KeyboardButton("Информация о члене семьиℹ️") },
+                    new KeyboardButton[] { new KeyboardButton("Отношения в семье💬") },
+                })
                     {
                         ResizeKeyboard = true
                     };
-                    await botClient.SendMessage(message.Chat, startReply, replyMarkup: keyboard);
+                    await botClient.SendMessage(message.Chat.Id, startReply, replyMarkup: keyboard, cancellationToken: cancellationToken);
                     break;
-                // Обработчики для других команд
+                case "добавить члена семьи👨‍👩‍👧‍👦":
+                    Console.WriteLine("Выбрана первая кнопка");
+                    await botClient.SendMessage(message.Chat.Id, $"Выбрана кнопка: {message.Text}", cancellationToken: cancellationToken);
+                    break;
+                case "информация о члене семьиℹ️":
+                    Console.WriteLine("Выбрана первая кнопка");
+                    await botClient.SendMessage(message.Chat.Id, $"Выбрана кнопка: {message.Text}", cancellationToken: cancellationToken);
+                    break;
+                case "отношения в семье💬":
+                    Console.WriteLine("Выбрана первая кнопка");
+                    await botClient.SendMessage(message.Chat.Id, $"Выбрана кнопка: {message.Text}", cancellationToken: cancellationToken);
+                    break;
                 default:
-                    await botClient.SendMessage(message.Chat, "Команда не распознана. Используйте /start, чтобы начать.");
+                    await botClient.SendMessage(message.Chat.Id, "Команда не распознана. Используйте /start, чтобы начать.", cancellationToken: cancellationToken);
                     break;
             }
         }
