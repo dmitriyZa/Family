@@ -29,7 +29,7 @@ public class FamilyController : ControllerBase
     {
         if (familyMember == null)
         {
-            return BadRequest("Invalid family member data.");
+            return BadRequest("Неверный формат данных.");
         }
 
         await _familyRepository.AddFamilyMemberAsync(familyMember);
