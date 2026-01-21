@@ -4,18 +4,36 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 public class FamilyController : ControllerBase
 {
-    [HttpGet("{id}")]
-    public IActionResult GetFamilyById(int id)
+    private readonly IFamilyRepository _familyRepository;
+
+    public FamilyController(IFamilyRepository familyRepository)
     {
-        return Ok(new { Id = id, Name = "Doe Family" });
+        _familyRepository = familyRepository;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetFamilyById(int id)
+    {
+        var familyMember = await _familyRepository.GetFamilyByIdAsync(id);
+
+        if (familyMember == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(familyMember);
     }
 
     [HttpPost]
-    public IActionResult CreateFamily(Family family)
+    public async Task<IActionResult> CreateFamily([FromBody] FamilyMember familyMember)
     {
-        // Логика для добавления нового элемента
-        return CreatedAtAction(nameof(GetFamilyById), new { id = family.Id }, family);
+        if (familyMember == null)
+        {
+            return BadRequest("Invalid family member data.");
+        }
+
+        await _familyRepository.AddFamilyMemberAsync(familyMember);
+        return CreatedAtAction(nameof(GetFamilyById), new { id = familyMember.Id }, familyMember);
     }
 }
 
-public record Family(int Id, string Name);
