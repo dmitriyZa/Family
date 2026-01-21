@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 load_dotenv()
 
 # Получаем токены
-API_TELEGRAM_TOKEN = os.getenv('API_TELEGRAM_TOKEN')
+API_TELEGRAM_TOKEN = '8273248222:AAFvNsMk8ZORnv1Jdbs1r20WgJDPEK3vT9U'
 
 bot = telebot.TeleBot(API_TELEGRAM_TOKEN)
 
@@ -58,7 +58,7 @@ def add_family_member(message: telebot.types.Message):
             "DateOfBirth": data[2].strip()
         }
         try:
-            response = requests.post("http://localhost:5000/api/family", json=family_member)
+            response = requests.post("https://localhost:5000/api/family", json=family_member)
             if response.status_code == 201:
                 bot.send_message(message.chat.id, "Член семьи добавлен успешно!")
             else:
@@ -72,7 +72,7 @@ def add_family_member(message: telebot.types.Message):
 def get_family_info(message: telebot.types.Message):
     name = message.text.strip()
     try:
-        response = requests.get(f"http://localhost:5000/api/family?name={name}")
+        response = requests.get(f"https://localhost:5000/api/family?name={name}")
         if response.status_code == 200:
             family_info = response.json()
             bot.send_message(message.chat.id, f"Информация о члене семьи: {family_info}")
@@ -85,7 +85,7 @@ def get_family_info(message: telebot.types.Message):
 def analyze_relationships(message: telebot.types.Message):
     name = message.text.strip()
     try:
-        response = requests.get(f"http://localhost:5000/api/relationships?name={name}")
+        response = requests.get(f"https://localhost:5000/api/relationships?name={name}")
         if response.status_code == 200:
             relationships = response.json()
             bot.send_message(message.chat.id, f"Отношения: {relationships}")
