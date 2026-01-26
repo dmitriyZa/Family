@@ -16,7 +16,7 @@ class Program
     private static ITelegramBotClient? _botClient;
     private static readonly HttpClient httpClient = new();
     private static readonly Dictionary<long, FamilyMember> userInputs = new();
-
+    private static readonly FamilyMemberDialogManager dialogManager = new();
     static async Task Main()
     {
         var token = "8273248222:AAFvNsMk8ZORnv1Jdbs1r20WgJDPEK3vT9U";
@@ -46,95 +46,63 @@ class Program
     {
         if (update.Type == UpdateType.Message && update.Message.Text != null)
         {
-            var message = update.Message;
-            switch (message.Text.Trim().ToLowerInvariant())
+            var chatId = update.Message.Chat.Id;
+            var text = update.Message.Text.Trim();
+
+            switch (text.ToLowerInvariant())
             {
                 case "/start":
-                    var startReply = "Добро пожаловать! Выберите действие:";
                     var keyboard = new ReplyKeyboardMarkup(new[]
                     {
-                        new KeyboardButton[] { new KeyboardButton("Добавить члена семьи👨‍👩‍👧‍👦"), new KeyboardButton("Информация о члене семьиℹ️") },
-                        new KeyboardButton[] { new KeyboardButton("Отношения в семье💬") },
-                    })
-                    {
-                        ResizeKeyboard = true
-                    };
-                    await botClient.SendMessage(message.Chat.Id, startReply, replyMarkup: keyboard, cancellationToken: cancellationToken);
+                    new KeyboardButton[] { new KeyboardButton("Добавить члена семьи👨‍👩‍👧‍👦"), new KeyboardButton("Информация о члене семьиℹ️") },
+                    new KeyboardButton[] { new KeyboardButton("Отношения в семье💬") }
+                })
+                    { ResizeKeyboard = true };
+                    await botClient.SendMessage(chatId, "Добро пожаловать! Выберите действие:", replyMarkup: keyboard, cancellationToken: cancellationToken);
                     break;
                 case "добавить члена семьи👨‍👩‍👧‍👦":
-                    await botClient.SendMessage(message.Chat.Id, "Введите имя:", cancellationToken: cancellationToken);
-                    userInputs[message.Chat.Id] = new FamilyMember();
+                    var reply = dialogManager.StartDialog(chatId);
+                    await botClient.SendMessage(chatId, reply, cancellationToken: cancellationToken);
                     break;
                 default:
-                    if (userInputs.ContainsKey(message.Chat.Id))
+                    var (nextPrompt, completedMember) = dialogManager.ProcessInput(chatId, text);
+                    if (completedMember != null)
                     {
-                        var userFamilyMember = userInputs[message.Chat.Id];
+                        try
+                        {
+                            var jsonContent = JsonConvert.SerializeObject(completedMember);
+                            var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
+                            var response = await httpClient.PostAsync("http://localhost:5274/api/family", content, cancellationToken);
 
-                        if (string.IsNullOrEmpty(userFamilyMember.FirstName))
-                        {
-                            userFamilyMember.FirstName = message.Text;
-                            await botClient.SendMessage(message.Chat.Id, "Введите фамилию:", cancellationToken: cancellationToken);
-                        }
-                        else if (string.IsNullOrEmpty(userFamilyMember.LastName))
-                        {
-                            userFamilyMember.LastName = message.Text;
-                            await botClient.SendMessage(message.Chat.Id, "Введите дату рождения (ГГГГ-ММ-ДД):", cancellationToken: cancellationToken);
-                        }
-                        else if (userFamilyMember.DateOfBirth == DateTime.MinValue)
-                        {
-                            if (DateTime.TryParse(message.Text, out DateTime birthDate))
-                            {
-                                userFamilyMember.DateOfBirth = birthDate;
-                                await botClient.SendMessage(message.Chat.Id, "Введите биографию:", cancellationToken: cancellationToken);
-                            }
-                            else
-                            {
-                                await botClient.SendMessage(message.Chat.Id, "Неверный формат даты. Попробуйте еще раз (ГГГГ-ММ-ДД):", cancellationToken: cancellationToken);
-                            }
-                        }
-                        else if (string.IsNullOrEmpty(userFamilyMember.Biography))
-                        {
-                            userFamilyMember.Biography = message.Text;
-                            await botClient.SendMessage(message.Chat.Id, "Введите степень родства:", cancellationToken: cancellationToken);
-                        }
-                        else if (string.IsNullOrEmpty(userFamilyMember.RelationshipDegree))
-                        {
-                            userFamilyMember.RelationshipDegree = message.Text;
+                            string serverError = string.Empty;
 
-                            try
+                            if (!response.IsSuccessStatusCode)
                             {
-                                // Отправка данных на сервер
-                                var jsonContent = JsonConvert.SerializeObject(userFamilyMember);
-                                var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
-                                var response = await httpClient.PostAsync("http://localhost:5000/api/family", content, cancellationToken);
-
-                                if (response.IsSuccessStatusCode)
-                                {
-                                    await botClient.SendMessage(message.Chat.Id, "Член семьи добавлен успешно!", cancellationToken: cancellationToken);
-                                }
-                                else
-                                {
-                                    await botClient.SendMessage(message.Chat.Id, "Ошибка при добавлении члена семьи.", cancellationToken: cancellationToken);
-                                }
+                                // Прочитать тело ответа с ошибкой
+                                serverError = await response.Content.ReadAsStringAsync();
                             }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex.Message);
-                                await botClient.SendMessage(message.Chat.Id, $"Ошибка соединения: {ex.Message}", cancellationToken: cancellationToken);
-                            }
-
-                            userInputs.Remove(message.Chat.Id); // Удаляем временные данные
+                            string result = response.IsSuccessStatusCode
+                                ? "Член семьи добавлен успешно!"
+                                : $"Ошибка при добавлении члена семьи.{serverError}";
+                            await botClient.SendMessage(chatId, result, cancellationToken: cancellationToken);
                         }
+                        catch (Exception ex)
+                        {
+                            await botClient.SendMessage(chatId, $"Ошибка соединения: {ex.Message}", cancellationToken: cancellationToken);
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(nextPrompt))
+                    {
+                        await botClient.SendMessage(chatId, nextPrompt, cancellationToken: cancellationToken);
                     }
                     else
                     {
-                        await botClient.SendMessage(message.Chat.Id, "Команда не распознана. Используйте /start, чтобы начать.", cancellationToken: cancellationToken);
+                        await botClient.SendMessage(chatId, "Команда не распознана. Используйте /start, чтобы начать.", cancellationToken: cancellationToken);
                     }
                     break;
             }
         }
     }
-
     private static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
         var errorMessage = exception switch

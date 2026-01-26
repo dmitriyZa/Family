@@ -7,5 +7,5 @@ public class FamilyMember
     public string Biography { get; set; }
     public string RelationshipDegree { get; set; }
     // Навигационные свойства
-    public ICollection<Relationship> Relationships { get; set; }
+    public ICollection<Relationship>? Relationships { get; set; }
 }
