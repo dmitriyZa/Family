@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IRelationshipRepository, RelationshipRepository>();
 
 
 var app = builder.Build();

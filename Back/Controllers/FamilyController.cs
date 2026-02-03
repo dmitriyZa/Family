@@ -24,6 +24,13 @@ public class FamilyController : ControllerBase
         return Ok(familyMember);
     }
 
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAllFamilyMembers()
+    {
+        var members = await _familyRepository.GetAllFamilyMembersAsync();
+        return Ok(members);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateFamily([FromBody] FamilyMember familyMember)
     {

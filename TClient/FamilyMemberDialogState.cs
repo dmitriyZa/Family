@@ -13,7 +13,6 @@ public class FamilyMemberDialogState
         LastName,
         DateOfBirth,
         Biography,
-        RelationshipDegree,
         Finished
     }
 }

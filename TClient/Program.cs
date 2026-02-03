@@ -17,6 +17,9 @@ class Program
     private static readonly HttpClient httpClient = new();
     private static readonly Dictionary<long, FamilyMember> userInputs = new();
     private static readonly FamilyMemberDialogManager dialogManager = new();
+    private static readonly RelationshipDialogManager relationshipDialogManager = new();
+    private static readonly Dictionary<long, int> lastAddedMemberIds = new(); // chatId -> 
+
     static async Task Main()
     {
         var token = "8273248222:AAFvNsMk8ZORnv1Jdbs1r20WgJDPEK3vT9U";
@@ -49,6 +52,7 @@ class Program
             var chatId = update.Message.Chat.Id;
             var text = update.Message.Text.Trim();
 
+            // 1. Обычный диалог добавления FamilyMember
             switch (text.ToLowerInvariant())
             {
                 case "/start":
@@ -59,50 +63,126 @@ class Program
                 })
                     { ResizeKeyboard = true };
                     await botClient.SendMessage(chatId, "Добро пожаловать! Выберите действие:", replyMarkup: keyboard, cancellationToken: cancellationToken);
-                    break;
+                    return;
                 case "добавить члена семьи👨‍👩‍👧‍👦":
                     var reply = dialogManager.StartDialog(chatId);
                     await botClient.SendMessage(chatId, reply, cancellationToken: cancellationToken);
-                    break;
-                default:
-                    var (nextPrompt, completedMember) = dialogManager.ProcessInput(chatId, text);
-                    if (completedMember != null)
-                    {
-                        try
-                        {
-                            var jsonContent = JsonConvert.SerializeObject(completedMember);
-                            var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
-                            var response = await httpClient.PostAsync("http://localhost:5274/api/family", content, cancellationToken);
+                    return;
+            }
 
-                            string serverError = string.Empty;
+            // 2. Финализация FamilyMember и предложение добавить связь
+            var (nextPrompt, completedMember) = dialogManager.ProcessInput(chatId, text);
+            if (completedMember != null)
+            {
+                try
+                {
+                    var jsonContent = JsonConvert.SerializeObject(completedMember);
+                    var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
+                    var response = await httpClient.PostAsync("http://localhost:5274/api/family", content, cancellationToken);
 
-                            if (!response.IsSuccessStatusCode)
-                            {
-                                // Прочитать тело ответа с ошибкой
-                                serverError = await response.Content.ReadAsStringAsync();
-                            }
-                            string result = response.IsSuccessStatusCode
-                                ? "Член семьи добавлен успешно!"
-                                : $"Ошибка при добавлении члена семьи.{serverError}";
-                            await botClient.SendMessage(chatId, result, cancellationToken: cancellationToken);
-                        }
-                        catch (Exception ex)
-                        {
-                            await botClient.SendMessage(chatId, $"Ошибка соединения: {ex.Message}", cancellationToken: cancellationToken);
-                        }
-                    }
-                    else if (!string.IsNullOrEmpty(nextPrompt))
+                    if (response.IsSuccessStatusCode)
                     {
-                        await botClient.SendMessage(chatId, nextPrompt, cancellationToken: cancellationToken);
+                        var responseBody = await response.Content.ReadAsStringAsync();
+                        var memberFromServer = JsonConvert.DeserializeObject<FamilyMember>(responseBody);
+                        int newId = memberFromServer?.Id ?? 0;
+                        lastAddedMemberIds[chatId] = newId;
+
+                        var inlineKeyboard = new InlineKeyboardMarkup(new[]
+                        {
+                        new[] {
+                            InlineKeyboardButton.WithCallbackData("Да ✅", "add_relationship_yes"),
+                            InlineKeyboardButton.WithCallbackData("Нет ❌", "add_relationship_no")
+                        }
+                    });
+
+                        await botClient.SendMessage(chatId, "Член семьи добавлен! Хотите добавить связь с родственником?", replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
                     }
                     else
                     {
-                        await botClient.SendMessage(chatId, "Команда не распознана. Используйте /start, чтобы начать.", cancellationToken: cancellationToken);
+                        var serverError = await response.Content.ReadAsStringAsync();
+                        await botClient.SendMessage(chatId, $"Ошибка при добавлении: {serverError}", cancellationToken: cancellationToken);
                     }
-                    break;
+                }
+                catch (Exception ex)
+                {
+                    await botClient.SendMessage(chatId, $"Ошибка соединения: {ex.Message}", cancellationToken: cancellationToken);
+                }
+            }
+            else if (!string.IsNullOrEmpty(nextPrompt))
+            {
+                await botClient.SendMessage(chatId, nextPrompt, cancellationToken: cancellationToken);
+            }
+            // 3. Вблизи RelationshipDialogManager после выбора родственника и описания связи
+            else if (relationshipDialogManager.IsActive(chatId))
+            {
+                var (relPrompt, completedRel) = relationshipDialogManager.ProcessInput(chatId, text);
+                if (completedRel != null)
+                {
+                    var relJson = JsonConvert.SerializeObject(completedRel);
+                    var relContent = new StringContent(relJson, System.Text.Encoding.UTF8, "application/json");
+                    var relResponse = await httpClient.PostAsync("http://localhost:5274/api/relationship", relContent, cancellationToken);
+
+                    var replyText = relResponse.IsSuccessStatusCode
+                        ? "Связь успешно добавлена!"
+                        : $"Ошибка создания связи: {await relResponse.Content.ReadAsStringAsync()}";
+                    await botClient.SendMessage(chatId, replyText, cancellationToken: cancellationToken);
+                }
+                else if (!string.IsNullOrEmpty(relPrompt))
+                {
+                    await botClient.SendMessage(chatId, relPrompt, cancellationToken: cancellationToken);
+                }
+            }
+            else
+            {
+                await botClient.SendMessage(chatId, "Команда не распознана. Используйте /start, чтобы начать.", cancellationToken: cancellationToken);
+            }
+        }
+        else if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery != null)
+        {
+            var callback = update.CallbackQuery;
+            var chatId = callback.Message.Chat.Id;
+            if (callback.Data == "add_relationship_yes")
+            {
+                await botClient.AnswerCallbackQuery(callback.Id, cancellationToken: cancellationToken);
+
+                // Получение списка родственников и отображение inline-кнопок
+                var response = await httpClient.GetAsync("http://localhost:5274/api/family/all", cancellationToken);
+                var familyList = JsonConvert.DeserializeObject<List<FamilyMember>>(await response.Content.ReadAsStringAsync());
+
+                var buttons = new List<InlineKeyboardButton[]>();
+                foreach (var member in familyList)
+                {
+                    if (lastAddedMemberIds.TryGetValue(chatId, out var newId) && member.Id == newId)
+                        continue; // не показываем только что созданного
+
+                    buttons.Add(new[]
+                    {
+                    InlineKeyboardButton.WithCallbackData($"{member.FirstName} {member.LastName}", $"choose_relative_{member.Id}")
+                });
+                }
+                var relativesKeyboard = new InlineKeyboardMarkup(buttons);
+
+                await botClient.SendMessage(chatId, "Выберите родственника из списка:", replyMarkup: relativesKeyboard, cancellationToken: cancellationToken);
+            }
+            else if (callback.Data == "add_relationship_no")
+            {
+                await botClient.AnswerCallbackQuery(callback.Id, cancellationToken: cancellationToken);
+                await botClient.SendMessage(chatId, "Ок! Если захотите добавить связь — используйте меню.", cancellationToken: cancellationToken);
+            }
+            else if (callback.Data.StartsWith("choose_relative_"))
+            {
+                await botClient.AnswerCallbackQuery(callback.Id, cancellationToken: cancellationToken);
+                int relatedMemberId = int.Parse(callback.Data.Replace("choose_relative_", ""));
+                if (lastAddedMemberIds.TryGetValue(chatId, out int familyMemberId))
+                {
+                    relationshipDialogManager.Start(chatId, familyMemberId);
+                    relationshipDialogManager.SetRelatedMember(chatId, relatedMemberId);
+                    await botClient.SendMessage(chatId, "Введите тип связи (например, отец, сестра, жена ...):", cancellationToken: cancellationToken);
+                }
             }
         }
     }
+
     private static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
         var errorMessage = exception switch

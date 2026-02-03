@@ -39,11 +39,6 @@ public class FamilyMemberDialogManager
 
             case FamilyMemberDialogState.DialogStep.Biography:
                 state.Biography = input;
-                state.Step = FamilyMemberDialogState.DialogStep.RelationshipDegree;
-                return ("Введите степень родства:", null);
-
-            case FamilyMemberDialogState.DialogStep.RelationshipDegree:
-                state.RelationshipDegree = input;
                 state.Step = FamilyMemberDialogState.DialogStep.Finished;
 
                 var member = new FamilyMember
@@ -51,8 +46,7 @@ public class FamilyMemberDialogManager
                     FirstName = state.FirstName,
                     LastName = state.LastName,
                     DateOfBirth = state.DateOfBirth ?? DateTime.MinValue,
-                    Biography = state.Biography,
-                    RelationshipDegree = state.RelationshipDegree
+                    Biography = state.Biography
                 };
                 _dialogs.Remove(chatId);
                 return (null, member); // всё заполнено, форма готова
