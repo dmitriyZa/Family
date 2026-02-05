@@ -26,11 +26,11 @@ public class RelationshipDialogManager
         }
     }
 
-    public (string? nextPrompt, Relationship? result) ProcessInput(long chatId, string input)
+    public (string? nextPrompt, Relationship? result) ProcessInput(long chatId, string input, bool isRelationType = false)
     {
         if (!_dialogStates.TryGetValue(chatId, out var state)) return (null, null);
 
-        if (state.Stage == State.Step.WaitingForDescription)
+        if (state.Stage == State.Step.WaitingForDescription || isRelationType)
         {
             state.Description = input;
             state.Stage = State.Step.Finished;
@@ -48,5 +48,6 @@ public class RelationshipDialogManager
             return ("Ошибка состояния. Начните сначала.", null);
         }
     }
+
 }
 

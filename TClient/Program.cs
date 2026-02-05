@@ -19,6 +19,11 @@ class Program
     private static readonly FamilyMemberDialogManager dialogManager = new();
     private static readonly RelationshipDialogManager relationshipDialogManager = new();
     private static readonly Dictionary<long, int> lastAddedMemberIds = new(); // chatId -> 
+    static readonly string[] relationTypes = new[]
+{
+    "Отец", "Мать", "Брат", "Сестра", "Жена", "Муж", "Дочь", "Сын", "Внук", "Внучка"
+};
+
 
     static async Task Main()
     {
@@ -177,9 +182,58 @@ class Program
                 {
                     relationshipDialogManager.Start(chatId, familyMemberId);
                     relationshipDialogManager.SetRelatedMember(chatId, relatedMemberId);
-                    await botClient.SendMessage(chatId, "Введите тип связи (например, отец, сестра, жена ...):", cancellationToken: cancellationToken);
+
+                    // Формируем сетку для выбора типа связи
+                    var buttons = new List<List<InlineKeyboardButton>>();
+                    int rowLen = 3;
+                    for (int i = 0; i < relationTypes.Length; i += rowLen)
+                    {
+                        var row = new List<InlineKeyboardButton>();
+                        for (int j = i; j < i + rowLen && j < relationTypes.Length; j++)
+                        {
+                            var type = relationTypes[j];
+                            row.Add(InlineKeyboardButton.WithCallbackData(type, $"relation_type_{type}"));
+                        }
+                        buttons.Add(row);
+                    }
+
+                    var relationTypesKeyboard = new InlineKeyboardMarkup(buttons);
+
+                    await botClient.SendMessage(
+                        chatId,
+                        "Выберите тип связи:",
+                        replyMarkup: relationTypesKeyboard,
+                        cancellationToken: cancellationToken
+                    );
                 }
             }
+            else if (callback.Data.StartsWith("relation_type_"))
+            {
+                await botClient.AnswerCallbackQuery(callback.Id, cancellationToken: cancellationToken);
+                string relationType = callback.Data.Replace("relation_type_", "");
+
+                if (relationshipDialogManager.IsActive(chatId))
+                {
+                    // Передай relationType в менеджер, чтобы он мог "финализировать" диалог
+                    var (relPrompt, completedRel) = relationshipDialogManager.ProcessInput(chatId, relationType, isRelationType: true);
+                    if (completedRel != null)
+                    {
+                        var relJson = JsonConvert.SerializeObject(completedRel);
+                        var relContent = new StringContent(relJson, System.Text.Encoding.UTF8, "application/json");
+                        var relResponse = await httpClient.PostAsync("http://localhost:5274/api/relationship", relContent, cancellationToken);
+
+                        var replyText = relResponse.IsSuccessStatusCode
+                            ? "Связь успешно добавлена!"
+                            : $"Ошибка создания связи: {await relResponse.Content.ReadAsStringAsync()}";
+                        await botClient.SendMessage(chatId, replyText, cancellationToken: cancellationToken);
+                    }
+                    else if (!string.IsNullOrEmpty(relPrompt))
+                    {
+                        await botClient.SendMessage(chatId, relPrompt, cancellationToken: cancellationToken);
+                    }
+                }
+            }
+
         }
     }
 

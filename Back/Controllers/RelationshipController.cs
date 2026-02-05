@@ -12,11 +12,15 @@ public class RelationshipController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateRelationship([FromBody] Relationship relationship)
+    public async Task<IActionResult> CreateRelationship([FromBody] RelationshipCreateDto dto)
     {
-        if (relationship == null)
-            return BadRequest("Неверный формат данных.");
-
+        if (dto == null) return BadRequest();
+        var relationship = new Relationship
+        {
+            FamilyMemberId = dto.FamilyMemberId,
+            RelatedMemberId = dto.RelatedMemberId,
+            Description = dto.Description
+        };
         await _relationshipRepository.AddRelationshipAsync(relationship);
         return Ok(relationship);
     }
