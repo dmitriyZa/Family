@@ -162,7 +162,7 @@ class Program
 
                     buttons.Add(new[]
                     {
-                    InlineKeyboardButton.WithCallbackData($"{member.FirstName} {member.LastName}", $"choose_relative_{member.Id}")
+                    InlineKeyboardButton.WithCallbackData($"{member.FirstName} {member.LastName} {member.ParentName}", $"choose_relative_{member.Id}")
                 });
                 }
                 var relativesKeyboard = new InlineKeyboardMarkup(buttons);

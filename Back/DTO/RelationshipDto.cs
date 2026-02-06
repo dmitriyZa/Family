@@ -1,4 +1,4 @@
-public class RelationshipCreateDto
+public class RelationshipDto
 {
     public int FamilyMemberId { get; set; }
     public int RelatedMemberId { get; set; }
