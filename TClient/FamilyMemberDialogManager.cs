@@ -22,6 +22,11 @@ public class FamilyMemberDialogManager
 
             case FamilyMemberDialogState.DialogStep.LastName:
                 state.LastName = input;
+                state.Step = FamilyMemberDialogState.DialogStep.ParentName;
+                return ("Введите Отчество", null);
+
+            case FamilyMemberDialogState.DialogStep.ParentName:
+                state.ParentName = input;
                 state.Step = FamilyMemberDialogState.DialogStep.DateOfBirth;
                 return ("Введите дату рождения (ГГГГ-ММ-ДД):", null);
 
@@ -45,6 +50,7 @@ public class FamilyMemberDialogManager
                 {
                     FirstName = state.FirstName,
                     LastName = state.LastName,
+                    ParentName = state.ParentName,
                     DateOfBirth = state.DateOfBirth ?? DateTime.MinValue,
                     Biography = state.Biography
                 };
