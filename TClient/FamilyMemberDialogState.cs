@@ -6,15 +6,9 @@ public class FamilyMemberDialogState
     public DateTime? DateOfBirth { get; set; }
     public string? Biography { get; set; }
     public string? RelationshipDegree { get; set; }
+    public Gender? Gender { get; set; }
     public DialogStep Step { get; set; } = DialogStep.FirstName;
 
-    public enum DialogStep
-    {
-        FirstName,
-        LastName,
-        ParentName,
-        DateOfBirth,
-        Biography,
-        Finished
-    }
+    public enum DialogStep { FirstName, LastName, ParentName, DateOfBirth, Gender, Biography, Finished }
+
 }

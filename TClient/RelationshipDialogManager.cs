@@ -3,10 +3,10 @@ public class RelationshipDialogManager
     private class State
     {
         public int FamilyMemberId;
-        public int? RelatedMemberId;
-        public string? Description;
+        public int RelatedMemberId;
+        public int RelationTypeId;
         public Step Stage = Step.WaitingForRelative;
-        public enum Step { WaitingForRelative, WaitingForDescription, Finished }
+        public enum Step { WaitingForRelative, WaitingForType, Finished }
     }
 
     private readonly Dictionary<long, State> _dialogStates = new();
@@ -15,6 +15,7 @@ public class RelationshipDialogManager
     {
         _dialogStates[chatId] = new State { FamilyMemberId = familyMemberId };
     }
+
     public bool IsActive(long chatId) => _dialogStates.ContainsKey(chatId);
 
     public void SetRelatedMember(long chatId, int relatedMemberId)
@@ -22,24 +23,20 @@ public class RelationshipDialogManager
         if (_dialogStates.TryGetValue(chatId, out var state))
         {
             state.RelatedMemberId = relatedMemberId;
-            state.Stage = State.Step.WaitingForDescription;
+            state.Stage = State.Step.WaitingForType;
         }
     }
 
-    public (string? nextPrompt, Relationship? result) ProcessInput(long chatId, string input, bool isRelationType = false)
+    public (string? nextPrompt, Relationship? result) ProcessInput(long chatId, int relationTypeId)
     {
-        if (!_dialogStates.TryGetValue(chatId, out var state)) return (null, null);
+        if (!_dialogStates.TryGetValue(chatId, out var state))
+            return ("Ошибка состояния. Начните сначала.", null);
 
-        if (state.Stage == State.Step.WaitingForDescription || isRelationType)
+        if (state.Stage == State.Step.WaitingForType)
         {
-            state.Description = input;
+            state.RelationTypeId = relationTypeId;
             state.Stage = State.Step.Finished;
-            var rel = new Relationship
-            {
-                FamilyMemberId = state.FamilyMemberId,
-                RelatedMemberId = state.RelatedMemberId ?? 0,
-                Description = state.Description
-            };
+            var rel = new Relationship(state.FamilyMemberId, state.RelatedMemberId, state.RelationTypeId);
             _dialogStates.Remove(chatId);
             return (null, rel);
         }
@@ -48,6 +45,4 @@ public class RelationshipDialogManager
             return ("Ошибка состояния. Начните сначала.", null);
         }
     }
-
 }
-

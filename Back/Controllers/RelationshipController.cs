@@ -29,7 +29,7 @@ public class RelationshipController : ControllerBase
         {
             FamilyMemberId = fm.FamilyMemberId,
             RelatedMemberId = fm.RelatedMemberId,
-            Description = fm.Description
+            RelationTypeId = fm.RelationTypeId
         }).ToList();
 
         return Ok(relationshipsDto);
@@ -40,30 +40,32 @@ public class RelationshipController : ControllerBase
     public async Task<IActionResult> CreateRelationship([FromBody] RelationshipDto dto)
     {
         if (dto == null) return BadRequest();
+
         var relationship = new Relationship
         {
             FamilyMemberId = dto.FamilyMemberId,
             RelatedMemberId = dto.RelatedMemberId,
-            Description = dto.Description
+            RelationTypeId = dto.RelationTypeId
         };
         await _relationshipRepository.AddRelationshipAsync(relationship);
 
-        // Найди RelatedMember и его пол!
-        var relatedMember = await _familyRepository.GetFamilyByIdAsync(dto.FamilyMemberId); // кто обратный? (или поменяй направление если нужно)
+        var relatedMember = await _familyRepository.GetFamilyByIdAsync(dto.FamilyMemberId);
         var relatedGender = relatedMember?.Gender;
-        // Обратная связь
-        string reversed = _relationshipService.GetReverseRelation(dto.Description, relatedGender);
-        if (!string.IsNullOrEmpty(reversed))
+        // Предположим, что dto.RelationTypeId теперь обязательно есть (ты должен передавать его с клиента)
+        var reverseType = await _relationshipService.GetReverseRelationAsync(dto.RelationTypeId, relatedGender);
+
+        if (reverseType != null)
         {
             var reverseRelationship = new Relationship
             {
                 FamilyMemberId = dto.RelatedMemberId,
                 RelatedMemberId = dto.FamilyMemberId,
-                Description = reversed
+                Description = reverseType.DisplayName // или reverseType.Code
             };
             await _relationshipRepository.AddRelationshipAsync(reverseRelationship);
         }
 
         return Ok(relationship);
     }
+
 }

@@ -8,6 +8,24 @@ public class FamilyMemberDialogManager
         return "Введите имя:";
     }
 
+    public bool AtStepGender(long chatId)
+    {
+        if (!_dialogs.TryGetValue(chatId, out var state))
+            return false;
+        return state.Step == FamilyMemberDialogState.DialogStep.Gender;
+    }
+
+    public void SetGender(long chatId, Gender gender)
+    {
+        if (_dialogs.TryGetValue(chatId, out var state))
+        {
+            state.Gender = gender;
+            state.Step = FamilyMemberDialogState.DialogStep.Biography; // переход к следующему этапу диалога
+        }
+    }
+
+
+
     public (string? reply, FamilyMember? result) ProcessInput(long chatId, string input)
     {
         if (!_dialogs.TryGetValue(chatId, out var state))
@@ -34,14 +52,22 @@ public class FamilyMemberDialogManager
                 if (DateTime.TryParse(input, out var date))
                 {
                     state.DateOfBirth = date;
-                    state.Step = FamilyMemberDialogState.DialogStep.Biography;
-                    return ("Введите биографию:", null);
+                    state.Step = FamilyMemberDialogState.DialogStep.Gender;
+                    return ("Введите пол:", null);
                 }
                 else
                 {
                     return ("Неверный формат даты. Попробуйте ещё раз (ГГГГ-ММ-ДД):", null);
                 }
-
+            case FamilyMemberDialogState.DialogStep.Gender:
+                if (input.Equals("мужской", StringComparison.OrdinalIgnoreCase) || input == "1")
+                    state.Gender = Gender.Male;
+                else if (input.Equals("женский", StringComparison.OrdinalIgnoreCase) || input == "2")
+                    state.Gender = Gender.Female;
+                else
+                    return ("Укажите 'Мужской' или 'Женский' (или используйте кнопки):", null);
+                state.Step = FamilyMemberDialogState.DialogStep.Biography;
+                return ("Введите биографию:", null);
             case FamilyMemberDialogState.DialogStep.Biography:
                 state.Biography = input;
                 state.Step = FamilyMemberDialogState.DialogStep.Finished;

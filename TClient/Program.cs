@@ -52,12 +52,19 @@ class Program
 
     private static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+        var chatId = update.Type switch
+        {
+            UpdateType.Message => update.Message?.Chat.Id ?? 0,
+            UpdateType.CallbackQuery => update.CallbackQuery?.Message?.Chat.Id ?? 0,
+            _ => 0
+        };
+        if (chatId == 0) return;
+
         if (update.Type == UpdateType.Message && update.Message.Text != null)
         {
-            var chatId = update.Message.Chat.Id;
             var text = update.Message.Text.Trim();
 
-            // 1. Обычный диалог добавления FamilyMember
+            // Шаг 1: командное меню
             switch (text.ToLowerInvariant())
             {
                 case "/start":
@@ -69,14 +76,27 @@ class Program
                     { ResizeKeyboard = true };
                     await botClient.SendMessage(chatId, "Добро пожаловать! Выберите действие:", replyMarkup: keyboard, cancellationToken: cancellationToken);
                     return;
+
                 case "добавить члена семьи👨‍👩‍👧‍👦":
                     var reply = dialogManager.StartDialog(chatId);
                     await botClient.SendMessage(chatId, reply, cancellationToken: cancellationToken);
                     return;
             }
 
-            // 2. Финализация FamilyMember и предложение добавить связь
+            // Шаг 2: Пошаговый диалог FamilyMember
             var (nextPrompt, completedMember) = dialogManager.ProcessInput(chatId, text);
+            if (dialogManager.AtStepGender(chatId))
+            {
+                var genderKeyboard = new InlineKeyboardMarkup(new[]
+                {
+                new[] {
+                    InlineKeyboardButton.WithCallbackData("Мужской ♂️", "gender_male"),
+                    InlineKeyboardButton.WithCallbackData("Женский ♀️", "gender_female")
+                }
+            });
+                await botClient.SendMessage(chatId, "Выберите пол:", replyMarkup: genderKeyboard, cancellationToken: cancellationToken);
+                return;
+            }
             if (completedMember != null)
             {
                 try
@@ -99,7 +119,6 @@ class Program
                             InlineKeyboardButton.WithCallbackData("Нет ❌", "add_relationship_no")
                         }
                     });
-
                         await botClient.SendMessage(chatId, "Член семьи добавлен! Хотите добавить связь с родственником?", replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
                     }
                     else
@@ -117,40 +136,24 @@ class Program
             {
                 await botClient.SendMessage(chatId, nextPrompt, cancellationToken: cancellationToken);
             }
-            // 3. Вблизи RelationshipDialogManager после выбора родственника и описания связи
-            else if (relationshipDialogManager.IsActive(chatId))
-            {
-                var (relPrompt, completedRel) = relationshipDialogManager.ProcessInput(chatId, text);
-                if (completedRel != null)
-                {
-                    var relJson = JsonConvert.SerializeObject(completedRel);
-                    var relContent = new StringContent(relJson, System.Text.Encoding.UTF8, "application/json");
-                    var relResponse = await httpClient.PostAsync("http://localhost:5274/api/relationship", relContent, cancellationToken);
-
-                    var replyText = relResponse.IsSuccessStatusCode
-                        ? "Связь успешно добавлена!"
-                        : $"Ошибка создания связи: {await relResponse.Content.ReadAsStringAsync()}";
-                    await botClient.SendMessage(chatId, replyText, cancellationToken: cancellationToken);
-                }
-                else if (!string.IsNullOrEmpty(relPrompt))
-                {
-                    await botClient.SendMessage(chatId, relPrompt, cancellationToken: cancellationToken);
-                }
-            }
-            else
-            {
-                await botClient.SendMessage(chatId, "Команда не распознана. Используйте /start, чтобы начать.", cancellationToken: cancellationToken);
-            }
         }
         else if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery != null)
         {
             var callback = update.CallbackQuery;
-            var chatId = callback.Message.Chat.Id;
-            if (callback.Data == "add_relationship_yes")
+
+            if (callback.Data == "gender_male")
+            {
+                dialogManager.SetGender(chatId, Gender.Male);
+                await botClient.SendMessage(chatId, "Введите биографию:", cancellationToken: cancellationToken);
+            }
+            else if (callback.Data == "gender_female")
+            {
+                dialogManager.SetGender(chatId, Gender.Female);
+                await botClient.SendMessage(chatId, "Введите биографию:", cancellationToken: cancellationToken);
+            }
+            else if (callback.Data == "add_relationship_yes")
             {
                 await botClient.AnswerCallbackQuery(callback.Id, cancellationToken: cancellationToken);
-
-                // Получение списка родственников и отображение inline-кнопок
                 var response = await httpClient.GetAsync("http://localhost:5274/api/family/all", cancellationToken);
                 var familyList = JsonConvert.DeserializeObject<List<FamilyMember>>(await response.Content.ReadAsStringAsync());
 
@@ -158,15 +161,13 @@ class Program
                 foreach (var member in familyList)
                 {
                     if (lastAddedMemberIds.TryGetValue(chatId, out var newId) && member.Id == newId)
-                        continue; // не показываем только что созданного
-
+                        continue;
                     buttons.Add(new[]
                     {
                     InlineKeyboardButton.WithCallbackData($"{member.FirstName} {member.LastName} {member.ParentName}", $"choose_relative_{member.Id}")
                 });
                 }
                 var relativesKeyboard = new InlineKeyboardMarkup(buttons);
-
                 await botClient.SendMessage(chatId, "Выберите родственника из списка:", replyMarkup: relativesKeyboard, cancellationToken: cancellationToken);
             }
             else if (callback.Data == "add_relationship_no")
@@ -183,42 +184,38 @@ class Program
                     relationshipDialogManager.Start(chatId, familyMemberId);
                     relationshipDialogManager.SetRelatedMember(chatId, relatedMemberId);
 
-                    // Формируем сетку для выбора типа связи
+                    // Получаем типы связей с API
+                    var relationTypes = await Relationship.GetRelationTypesAsync();
+
+                    // Строим сетку
                     var buttons = new List<List<InlineKeyboardButton>>();
                     int rowLen = 3;
-                    for (int i = 0; i < relationTypes.Length; i += rowLen)
+                    for (int i = 0; i < relationTypes.Count; i += rowLen)
                     {
                         var row = new List<InlineKeyboardButton>();
-                        for (int j = i; j < i + rowLen && j < relationTypes.Length; j++)
+                        for (int j = i; j < i + rowLen && j < relationTypes.Count; j++)
                         {
                             var type = relationTypes[j];
-                            row.Add(InlineKeyboardButton.WithCallbackData(type, $"relation_type_{type}"));
+                            row.Add(InlineKeyboardButton.WithCallbackData(type.DisplayName, $"relation_type_{type.Id}"));
                         }
                         buttons.Add(row);
                     }
-
                     var relationTypesKeyboard = new InlineKeyboardMarkup(buttons);
-
-                    await botClient.SendMessage(
-                        chatId,
-                        "Выберите тип связи:",
-                        replyMarkup: relationTypesKeyboard,
-                        cancellationToken: cancellationToken
-                    );
+                    await botClient.SendMessage(chatId, "Выберите тип связи:", replyMarkup: relationTypesKeyboard, cancellationToken: cancellationToken);
                 }
             }
             else if (callback.Data.StartsWith("relation_type_"))
             {
                 await botClient.AnswerCallbackQuery(callback.Id, cancellationToken: cancellationToken);
-                string relationType = callback.Data.Replace("relation_type_", "");
-
+                int relationTypeId = int.Parse(callback.Data.Replace("relation_type_", ""));
                 if (relationshipDialogManager.IsActive(chatId))
                 {
-                    // Передай relationType в менеджер, чтобы он мог "финализировать" диалог
-                    var (relPrompt, completedRel) = relationshipDialogManager.ProcessInput(chatId, relationType, isRelationType: true);
+                    var (relPrompt, completedRel) = relationshipDialogManager.ProcessInput(chatId, relationTypeId);
                     if (completedRel != null)
                     {
-                        var relJson = JsonConvert.SerializeObject(completedRel);
+                        var relDto = new Relationship(completedRel.FamilyMemberId, completedRel.RelatedMemberId, relationTypeId);
+
+                        var relJson = JsonConvert.SerializeObject(relDto);
                         var relContent = new StringContent(relJson, System.Text.Encoding.UTF8, "application/json");
                         var relResponse = await httpClient.PostAsync("http://localhost:5274/api/relationship", relContent, cancellationToken);
 
@@ -233,9 +230,10 @@ class Program
                     }
                 }
             }
-
         }
     }
+
+
 
     private static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
