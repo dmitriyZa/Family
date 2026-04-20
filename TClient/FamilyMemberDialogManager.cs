@@ -78,6 +78,7 @@ public class FamilyMemberDialogManager
                     LastName = state.LastName,
                     ParentName = state.ParentName,
                     DateOfBirth = state.DateOfBirth ?? DateTime.MinValue,
+                    Gender = state.Gender,
                     Biography = state.Biography
                 };
                 _dialogs.Remove(chatId);
