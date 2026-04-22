@@ -1,0 +1,57 @@
+﻿@inherits LayoutComponentBase
+
+<div class="bb-page">
+
+    <Sidebar @ref="sidebar" IconName="IconName.BootstrapFill" Title="Blazor Bootstrap"
+             DataProvider="SidebarDataProvider" />
+    <main>
+
+       
+        
+        <div class="bb-top-row px-4 d-flex justify-content-end">
+            <div class="mx-3"><ThemeSwitcher Position="DropdownMenuPosition.End" /></div>
+            
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        
+        <article class="content px-4">
+            <div class="py-2">@Body</div>
+        </article>
+    </main>
+
+</div>
+
+@code {
+    Sidebar sidebar;
+    IEnumerable<NavItem> navItems;
+    [Inject]
+    ToastService ToastService { get; set; } = default!;
+
+    private void OnThemeChanged(string themeName)
+    {
+        // do something when the theme changes
+        ToastService.Notify(new(ToastType.Success, $"Theme changed to {themeName}"));
+    }
+
+    
+    private async Task<SidebarDataProviderResult> SidebarDataProvider(SidebarDataProviderRequest request)
+    {
+        if (navItems is null)
+            navItems = GetNavItems();
+
+        return await Task.FromResult(request.ApplyTo(navItems));
+    }
+
+    private IEnumerable<NavItem> GetNavItems()
+    {
+        navItems = new List<NavItem>
+        {
+            new NavItem { Id = "1", Href = "/", IconName = IconName.HouseDoorFill, Text = "Домашняя", Match=NavLinkMatch.All},
+            new NavItem { Id = "2", Href = "/test2", IconName = IconName.TreeFill, Text = "Семейное Дерево"},
+            new NavItem { Id = "3", Href = "/weather", IconName = IconName.PeopleFill, Text = "Добавить человека"},
+        };
+
+        return navItems;
+    }
+}
