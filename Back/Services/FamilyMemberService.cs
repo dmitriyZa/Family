@@ -6,8 +6,8 @@ public class FamilyMemberService
     private readonly IRelationshipRepository _relationshipRepository;
 
     public FamilyMemberService(
-        FamilyRepository familyRepository,
-        RelationshipRepository relationshipRepository)
+        IFamilyRepository familyRepository,
+        IRelationshipRepository relationshipRepository)
     {
         _familyRepository = familyRepository;
         _relationshipRepository = relationshipRepository;
