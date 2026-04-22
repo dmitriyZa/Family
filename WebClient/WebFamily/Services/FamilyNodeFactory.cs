@@ -17,14 +17,14 @@ namespace WebFamily.Services
                 FatherId =dto.FatherId?.ToString(),
                 MotherId = dto.MotherId?.ToString(),             
                 
-                PartnerIds = dto.SpouseIds != null ? new[] { dto.SpouseIds.ToString() } : null,                
+                PartnerIds = dto.SpouseIds?.Select(id => id.ToString()).ToArray(),                
                 Gender = dto.Gender == MyGender.Male ? BTJS.Male : BTJS.Female,
                 Biography = dto.Biography,
                 BirthDate = dto.DateOfBirth.ToString("dd.MM.yyyy")
             };
         }
 
-        public List<CustomNode> CreateTree(IEnumerable<FamilyMemberDto> dtos, List<RelationshipDto> relations)
+        public List<CustomNode> CreateTree(IEnumerable<FamilyMemberDto> dtos)
         {
             return dtos.Select(CreateNode).ToList();
         }

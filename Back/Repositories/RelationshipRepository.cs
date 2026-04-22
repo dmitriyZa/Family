@@ -6,6 +6,7 @@ public interface IRelationshipRepository
     Task<List<Relationship>> GetRelationshipsByMemberIdAsync(int memberId);
     Task AddRelationshipAsync(Relationship relationship);
     Task DeleteRelationshipAsync(int id);
+    Task<List<Relationship>> GetAllRelationshipsAsync();
 }
 
 public class RelationshipRepository : IRelationshipRepository
@@ -15,6 +16,13 @@ public class RelationshipRepository : IRelationshipRepository
     public RelationshipRepository(ApplicationDbContext context)
     {
         _context = context;
+    }
+
+    public async Task<List<Relationship>> GetAllRelationshipsAsync()
+    {
+        return await _context.Relationships
+            .Include(r => r.RelationType) // Полезно загрузить тип связи
+            .ToListAsync();
     }
 
     public async Task<Relationship> GetRelationshipByIdAsync(int id)
@@ -37,7 +45,6 @@ public class RelationshipRepository : IRelationshipRepository
     public async Task AddRelationshipAsync(Relationship relationship)
     {
         _context.Relationships.Add(relationship);
-        //todo не передается relationtypeID
         await _context.SaveChangesAsync();
     }
 

@@ -16,6 +16,21 @@ public class RelationshipController : ControllerBase
         _relationshipService = relationshipService;
         _familyRepository = familyRepository;
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllRelationships()
+    {
+        var relationships = await _relationshipRepository.GetAllRelationshipsAsync();
+        var dtos = relationships.Select(r => new RelationshipDto
+        {
+            FamilyMemberId = r.FamilyMemberId,
+            RelatedMemberId = r.RelatedMemberId,
+            RelationTypeId = r.RelationTypeId
+        });
+        return Ok(dtos);
+    }
+
+
     [HttpGet("{memberId}")]
     public async Task<IActionResult> GetRelationshipById(int memberId)
     {
@@ -42,31 +57,16 @@ public class RelationshipController : ControllerBase
     {
         if (dto == null) return BadRequest();
 
-        var relationship = new Relationship
+        try
         {
-            FamilyMemberId = dto.FamilyMemberId,
-            RelatedMemberId = dto.RelatedMemberId,
-            RelationTypeId = dto.RelationTypeId
-        };
-        await _relationshipRepository.AddRelationshipAsync(relationship);
-
-        var relatedMember = await _familyRepository.GetFamilyByIdAsync(dto.FamilyMemberId);
-        var relatedGender = relatedMember?.Gender;
-        // Предположим, что dto.RelationTypeId теперь обязательно есть (ты должен передавать его с клиента)
-        var reverseType = await _relationshipService.GetReverseRelationAsync(dto.RelationTypeId, relatedGender);
-
-        if (reverseType != null)
-        {
-            var reverseRelationship = new Relationship
-            {
-                FamilyMemberId = dto.RelatedMemberId,
-                RelatedMemberId = dto.FamilyMemberId,
-                Description = reverseType.DisplayName // или reverseType.Code
-            };
-            await _relationshipRepository.AddRelationshipAsync(reverseRelationship);
+            await _relationshipService.CreateFullRelationshipAsync(dto);
+            return Ok(new { Message = "Связи успешно созданы" });
         }
-
-        return Ok(relationship);
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Ошибка при создании связи: {ex.Message}");
+        }
     }
+
 
 }
