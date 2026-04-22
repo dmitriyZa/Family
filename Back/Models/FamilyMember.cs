@@ -1,3 +1,5 @@
+using Family.Shared;
+
 public class FamilyMember
 {
     public int Id { get; set; }
@@ -10,11 +12,6 @@ public class FamilyMember
     public ICollection<Relationship>? Relationships { get; set; }
 }
 
-public enum Gender
-{
-    Unknown = 0,
-    Male = 1,
-    Female = 2
-}
+
 
 
