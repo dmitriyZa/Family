@@ -1,30 +1,33 @@
 ﻿using Blazor.FamilyTreeJS.Components.Interop.Options;
+using Family.Shared;
+using WebFamily.Models;
+using BTJS = Blazor.FamilyTreeJS.Components.Interop.Options.Gender; // Алиас для библиотеки
+using MyGender = Family.Shared.Gender;    // Алиас для твоего Enum
 
 namespace WebFamily.Services
 {
     public class FamilyNodeFactory
     {
-    //    public CustomNode CreateNode(PersonDto dto)
-    //    {
-    //        return new CustomNode
-    //        {
-    //            Id = dto.Id.ToString(),
-    //            Fid = dto.FatherId?.ToString(),
-    //            Mid = dto.MotherId?.ToString(),
-    //            Pids = dto.SpouseId != null ? new[] { dto.SpouseId.ToString() } : null,
-    //            Name = $"{dto.FirstName} {dto.LastName}",
-    //            Gender = dto.Gender == 1 ? Gender.Male : Gender.Female,
-    //            // Доп. поля нашего CustomNode
-    //            Title = dto.Occupation ?? "Член семьи",
-    //            // Пример логики: если есть дата смерти, добавляем тег для стилизации
-    //            Tags = dto.DeathDate.HasValue ? new[] { "deceased" } : null
-    //        };
-    //    }
+        public CustomNode CreateNode(FamilyMemberDto dto)
+        {
+            return new CustomNode
+            {
+                Id = dto.Id.ToString(),
+                Name = $"{dto.FirstName} {dto.LastName}",
+                FatherId =dto.FatherId?.ToString(),
+                MotherId = dto.MotherId?.ToString(),             
+                
+                PartnerIds = dto.SpouseIds != null ? new[] { dto.SpouseIds.ToString() } : null,                
+                Gender = dto.Gender == MyGender.Male ? BTJS.Male : BTJS.Female,
+                Biography = dto.Biography,
+                BirthDate = dto.DateOfBirth.ToString("dd.MM.yyyy")
+            };
+        }
 
-    //    public List<CustomNode> CreateTree(IEnumerable<PersonDto> dtos)
-    //    {
-    //        return dtos.Select(CreateNode).ToList();
-    //    }
+        public List<CustomNode> CreateTree(IEnumerable<FamilyMemberDto> dtos, List<RelationshipDto> relations)
+        {
+            return dtos.Select(CreateNode).ToList();
+        }
     }
 
 }

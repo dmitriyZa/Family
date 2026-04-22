@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -27,6 +27,16 @@
 
   <ItemGroup>
     <None Include="Pages\FamilyTree.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Family.Shared\Family.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Family.Shared">
+      <HintPath>..\..\Family.Shared\bin\Debug\net8.0\Family.Shared.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

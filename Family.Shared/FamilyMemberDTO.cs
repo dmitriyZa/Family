@@ -6,11 +6,17 @@ public class FamilyMemberDto
     public int Id { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
+    public string? ParentName { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
     [JsonIgnore]
     public Gender Gender { get; set; } // Теперь здесь ENUM
     public string? Biography { get; set; }
-    public string? ParentName { get; set; }
+    public int? FatherId { get; set; }
+    public int? MotherId { get; set; }
+    public List<int> SpouseIds { get; set; } = new();
+    public string? PhotoUrl { get; set; } // Ссылка на изображение
+
+
 
 
     [JsonPropertyName("gender")]
