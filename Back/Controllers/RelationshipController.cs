@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Family.Shared;
 
 [ApiController]
 [Route("api/[controller]")]

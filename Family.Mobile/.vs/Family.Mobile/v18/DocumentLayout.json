@@ -1,0 +1,172 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|c:\\users\\admin\\source\\repos\\family\\family.mobile\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|solutionrelative:mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|c:\\users\\admin\\source\\repos\\family\\family.mobile\\views\\modalpage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|solutionrelative:views\\modalpage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|c:\\users\\admin\\source\\repos\\family\\family.mobile\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|solutionrelative:mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|c:\\users\\admin\\source\\repos\\family\\family.mobile\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|solutionrelative:mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|c:\\users\\admin\\source\\repos\\family\\family.mobile\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|c:\\users\\admin\\source\\repos\\family\\family.mobile\\appshell.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|solutionrelative:appshell.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|c:\\users\\admin\\source\\repos\\family\\family.mobile\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|solutionrelative:viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|c:\\users\\admin\\source\\repos\\family\\family.mobile\\viewmodels\\addmemberviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|solutionrelative:viewmodels\\addmemberviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|c:\\users\\admin\\source\\repos\\family\\family.mobile\\services\\familyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B89F36B8-E11C-BABA-FDAC-E4020D1D82D9}|Family.Mobile.csproj|solutionrelative:services\\familyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ModalPage.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\Views\\ModalPage.cs",
+              "RelativeDocumentMoniker": "Views\\ModalPage.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\Views\\ModalPage.cs",
+              "RelativeToolTip": "Views\\ModalPage.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T14:14:53.197Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\ViewModels\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\MainViewModel.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\ViewModels\\MainViewModel.cs",
+              "RelativeToolTip": "ViewModels\\MainViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T13:55:07.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\MainPage.xaml.cs",
+              "RelativeDocumentMoniker": "MainPage.xaml.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\MainPage.xaml.cs",
+              "RelativeToolTip": "MainPage.xaml.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAswC8AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T12:55:39.91Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MauiProgram.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\MauiProgram.cs",
+              "RelativeDocumentMoniker": "MauiProgram.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\MauiProgram.cs",
+              "RelativeToolTip": "MauiProgram.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAmwBgAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T12:55:05.143Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AddMemberViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\ViewModels\\AddMemberViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\AddMemberViewModel.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\ViewModels\\AddMemberViewModel.cs",
+              "RelativeToolTip": "ViewModels\\AddMemberViewModel.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T12:13:52.129Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AppShell.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\AppShell.xaml.cs",
+              "RelativeDocumentMoniker": "AppShell.xaml.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\AppShell.xaml.cs",
+              "RelativeToolTip": "AppShell.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T12:13:28.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FamilyService.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\Services\\FamilyService.cs",
+              "RelativeDocumentMoniker": "Services\\FamilyService.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\Services\\FamilyService.cs",
+              "RelativeToolTip": "Services\\FamilyService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T12:02:47.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainPage.xaml",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\MainPage.xaml",
+              "RelativeDocumentMoniker": "MainPage.xaml",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\MainPage.xaml",
+              "RelativeToolTip": "MainPage.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-04-10T10:30:36.065Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\App.xaml.cs",
+              "RelativeDocumentMoniker": "App.xaml.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\Family.Mobile\\App.xaml.cs",
+              "RelativeToolTip": "App.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-13T12:18:08.728Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

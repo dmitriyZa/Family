@@ -5,6 +5,7 @@ public interface IFamilyRepository
     Task<FamilyMember> GetFamilyByIdAsync(int id);
     Task AddFamilyMemberAsync(FamilyMember familyMember);
     Task<List<FamilyMember>> GetAllFamilyMembersAsync();
+    Task DeleteFamilyMemberAsync(int id);
 }
 
 public class FamilyRepository : IFamilyRepository
@@ -31,4 +32,15 @@ public class FamilyRepository : IFamilyRepository
         _context.FamilyMembers.Add(familyMember);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteFamilyMemberAsync(int id)
+    {
+        var member = await _context.FamilyMembers.FindAsync(id);
+        if (member != null)
+        {
+            _context.FamilyMembers.Remove(member);
+            await _context.SaveChangesAsync();
+        }
+    }
+
 }

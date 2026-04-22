@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Family.Mobile.Views.AddMemberPage"
+             Title="Добавить родственника">
+
+    <VerticalStackLayout Padding="20"
+                         Spacing="10">
+        <Entry Placeholder="Имя"
+               Text="{Binding NewMember.FirstName}"/>
+        <Entry Placeholder="Фамилия"
+               Text="{Binding NewMember.LastName}"/>
+
+        <Label Text="Дата рождения:"
+               Margin="0,10,0,0"/>
+        <DatePicker Date="{Binding NewMember.DateOfBirth}"/>
+
+        <Picker Title="Пол"
+                ItemsSource="{Binding Genders}"
+                SelectedItem="{Binding SelectedGender}"/>
+
+        <Editor Placeholder="Биография"
+                Text="{Binding NewMember.Biography}"
+                HeightRequest="100"/>
+
+        <Button Text="Сохранить"
+                Command="{Binding SaveCommand}"
+                BackgroundColor="#2196F3"
+                TextColor="White"
+                Margin="0,20,0,0"/>
+    </VerticalStackLayout>
+</ContentPage>

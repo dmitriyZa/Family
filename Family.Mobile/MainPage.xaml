@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Family.Mobile.ViewModels"
+             xmlns:shared="clr-namespace:Family.Shared;assembly=Family.Shared"
+             x:Class="Family.Mobile.MainPage"
+             x:DataType="vm:MainViewModel"
+             Title="Моя Семья">
+
+	<ContentPage.ToolbarItems>
+		<!-- Используем Clicked, так как в MainPage.xaml.cs есть метод OnAddClicked -->
+		<ToolbarItem Text="Добавить"
+                     Clicked="OnAddClicked" />
+		<ToolbarItem Text="ПРОВЕРКА"
+                     Clicked="OnAddClicked" />		
+		
+	</ContentPage.ToolbarItems>
+
+	
+
+	<RefreshView IsRefreshing="{Binding IsRefreshing}"
+                 Command="{Binding LoadMembersCommand}">
+
+		<CollectionView ItemsSource="{Binding Members}"
+                        SelectionMode="None">
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="shared:FamilyMemberDto">
+					<SwipeView>
+						<SwipeView.RightItems>
+							<SwipeItems Mode="Reveal">
+								<SwipeItem Text="Удалить"
+										   BackgroundColor="Red"
+										   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=DeleteMemberCommand}"
+										   CommandParameter="{Binding .}" />
+							</SwipeItems>
+						</SwipeView.RightItems>
+
+						<Frame Margin="10"
+                               Padding="15"
+                               CornerRadius="10"
+                               HasShadow="True"
+                               BorderColor="#E0E0E0">
+							<VerticalStackLayout Spacing="5">
+								<Label Text="{Binding LastName}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="Black"/>
+								<Label Text="{Binding FirstName}"
+                                       FontSize="16"
+                                       TextColor="#333333"/>
+								<Label Text="{Binding ParentName, StringFormat='Родитель: {0}'}"
+									FontSize="14"
+									TextColor="DimGray">
+									<Label.Triggers>
+										<!-- Триггер: если ParentName null или пусто, скрываем метку -->
+										<DataTrigger TargetType="Label" Binding="{Binding ParentName}" Value="{x:Null}">
+											<Setter Property="IsVisible" Value="False" />
+										</DataTrigger>
+										<DataTrigger TargetType="Label" Binding="{Binding ParentName}" Value="">
+											<Setter Property="IsVisible" Value="False" />
+										</DataTrigger>
+									</Label.Triggers>
+								</Label>
+								<Label Text="{Binding Gender}"
+                                       FontSize="14"
+                                       TextColor="#555555"/>
+								<Label Text="{Binding DateOfBirth, StringFormat='{0:dd.MM.yyyy}'}"
+                                       TextColor="Gray"
+                                       FontSize="13"/>
+								<BoxView HeightRequest="1" Color="#EEEEEE" Margin="0,5"/>
+								<Label Text="{Binding Biography}"
+                                       FontSize="14"
+                                       MaxLines="3"
+                                       LineBreakMode="TailTruncation"
+                                       FontAttributes="Italic"/>
+							</VerticalStackLayout>
+						</Frame>
+					</SwipeView>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+	</RefreshView>
+</ContentPage>
+

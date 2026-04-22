@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Family.Shared; // Подключаем нашу общую библиотеку
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,35 +13,76 @@ public class FamilyController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetFamilyById(int id)
+    public async Task<ActionResult<FamilyMemberDto>> GetFamilyById(int id)
     {
-        var familyMember = await _familyRepository.GetFamilyByIdAsync(id);
+        var member = await _familyRepository.GetFamilyByIdAsync(id);
 
-        if (familyMember == null)
-        {
-            return NotFound();
-        }
+        if (member == null) return NotFound();
 
-        return Ok(familyMember);
+        // Превращаем сущность БД в DTO для передачи в MAUI
+        return Ok(MapToDto(member));
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllFamilyMembers()
+    public async Task<ActionResult<IEnumerable<FamilyMemberDto>>> GetAllFamilyMembers()
     {
         var members = await _familyRepository.GetAllFamilyMembersAsync();
-        return Ok(members);
+        // Превращаем список из БД в список DTO
+        var dtos = members.Select(m => MapToDto(m));
+        return Ok(dtos);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateFamily([FromBody] FamilyMember familyMember)
+    public async Task<IActionResult> CreateFamily([FromBody] FamilyMemberDto dto)
     {
-        if (familyMember == null)
+        if (dto == null) return BadRequest("Неверный формат данных.");
+
+        // Превращаем DTO обратно в сущность БД для сохранения
+        var entity = new FamilyMember
         {
-            return BadRequest("Неверный формат данных.");
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            ParentName = dto.ParentName,
+            DateOfBirth = dto.DateOfBirth,
+            Biography = dto.Biography,
+            Gender = dto.Gender
+        };
+
+        await _familyRepository.AddFamilyMemberAsync(entity);
+
+        // Возвращаем ID созданной записи
+        dto.Id = entity.Id;
+        return CreatedAtAction(nameof(GetFamilyById), new { id = dto.Id }, dto);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteFamilyMember(int id)
+    {
+        // 1. Проверяем, существует ли такой родственник
+        var member = await _familyRepository.GetFamilyByIdAsync(id);
+        if (member == null)
+        {
+            return NotFound($"Родственник с ID {id} не найден.");
         }
 
-        await _familyRepository.AddFamilyMemberAsync(familyMember);
-        return CreatedAtAction(nameof(GetFamilyById), new { id = familyMember.Id }, familyMember);
+        // 2. Удаляем из репозитория
+        await _familyRepository.DeleteFamilyMemberAsync(id);
+
+        // 3. Возвращаем 204 No Content (успешное удаление без тела ответа)
+        return NoContent();
     }
+
+    // Вспомогательный метод маппинга (в идеале использовать AutoMapper)
+    private static FamilyMemberDto MapToDto(FamilyMember m) => new FamilyMemberDto
+    {
+        Id = m.Id,
+        FirstName = m.FirstName,
+        LastName = m.LastName,
+        DateOfBirth = m.DateOfBirth,
+        Biography = m.Biography,
+        Gender = m.Gender,
+        ParentName = m.ParentName
+    };
 }
+
 

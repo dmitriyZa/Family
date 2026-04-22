@@ -1,3 +1,5 @@
+using Family.Shared;
+
 public interface IRelationshipService
 {
     //todo здесь наверняка будут еще хендлеры ...
