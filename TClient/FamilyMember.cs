@@ -6,5 +6,5 @@ public record FamilyMember
     public string ParentName { get; set; }
     public DateTime DateOfBirth { get; set; }
     public string Biography { get; set; }
-    public string Gender { get; set; }
+    public Gender Gender { get; set; }
 }

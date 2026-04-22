@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 public class ApplicationDbContext : DbContext
 {
@@ -29,7 +30,7 @@ public class ApplicationDbContext : DbContext
             .WithMany()
             .HasForeignKey(frt => frt.ReverseRelationTypeId)
             .OnDelete(DeleteBehavior.Restrict);
-
     }
+
 }
 

@@ -1,0 +1,29 @@
+﻿@page "/counter"
+
+<h3>Мое Дерево</h3>
+
+@foreach (var member in FamilyMembers)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>@member.FullName</h5>
+            <p>@member.Bio</p>
+        </div>
+    </div>
+}
+
+@code {
+    List<FamilyMember> FamilyMembers = new()
+    {
+        new FamilyMember { FullName = "Иванов Иван Иванович", Bio = "Дедушка. Военный." },
+        new FamilyMember { FullName = "Петрова Мария Ивановна", Bio = "Бабушка. Учительница." },
+        // добавь других родственников
+    };
+
+    class FamilyMember
+    {
+        public string FullName { get; set; }
+        public string Bio { get; set; }
+    }
+}
+

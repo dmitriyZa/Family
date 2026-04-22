@@ -7,5 +7,5 @@ public class Relationship
     public FamilyMember RelatedMember { get; set; }
     public int RelationTypeId { get; set; }           // FK на FamilyRelationTypes
     public FamilyRelationType? RelationType { get; set; }
-    public string Description { get; set; } // Описание связи (например, "брат", "сестра")
+    public string? Description { get; set; } // Описание связи (например, "брат", "сестра")
 }

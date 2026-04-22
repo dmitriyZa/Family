@@ -37,6 +37,7 @@ public class RelationshipRepository : IRelationshipRepository
     public async Task AddRelationshipAsync(Relationship relationship)
     {
         _context.Relationships.Add(relationship);
+        //todo не передается relationtypeID
         await _context.SaveChangesAsync();
     }
 

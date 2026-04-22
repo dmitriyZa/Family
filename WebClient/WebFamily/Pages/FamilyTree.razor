@@ -1,0 +1,33 @@
+﻿@page "/family-tree"
+@inject IJSRuntime JS
+
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Семейное древо</h2>
+        <div class="btn-group">
+            <button class="btn btn-outline-primary" onclick="zoomIn()">+</button>
+            <button class="btn btn-outline-primary" onclick="zoomOut()">-</button>
+        </div>
+    </div>
+
+    <!-- Контейнер, куда JS отрисует дерево -->
+    <div id="tree" class="shadow-sm border rounded bg-light" style="width: 100%; height: 700px;"></div>
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Пример данных (в реальности загрузи из БД)
+            var familyMembers = new[]
+            {
+                new { id = 1, pids = new[] { 2 }, name = "Иван Иванов", title = "Дедушка", img = "https://placeholder.com" },
+                new { id = 2, pids = new[] { 1 }, name = "Мария Иванова", title = "Бабушка", img = "https://placeholder.com" },
+                new { id = 3, mid = 2, fid = 1, name = "Петр Иванов", title = "Отец", img = "https://placeholder.com" }
+            };
+
+            await JS.InvokeVoidAsync("initFamilyTree", familyMembers);
+        }
+    }
+}
