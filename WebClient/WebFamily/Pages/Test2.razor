@@ -1,133 +1,115 @@
 ﻿@page "/test2"
-@inject IJSRuntime JS
+@using WebFamily.Services
+@using Family.Shared
+@using WebFamily.Models
+@inject HttpClient Http
+@inject FamilyNodeFactory NodeFactory
 
-<PageTitle>Tree with Custom Node</PageTitle>
+<PageTitle>Семейное дерево</PageTitle>
 
-<h1>Tree with Custom Node</h1>
+<h1>Мое семейное дерево</h1>
 
-<button class="btn btn-primary" style="margin-bottom: 0.5rem;" @onclick=@OnResetClick>
-    Reset
-</button>
-
-<p>Number of nodes in family tree: @_nodesCount</p>
-
-<div style="margin-left: 5rem; margin-right: 5rem; height: 600px;">
-    <FamilyTree @ref=@_familyTree
-                TNode="CustomNode"
-                OnUpdatedNode=@OnUpdateNode
-                OnDefaultFirstNode=@OnDefaultFirstNode
-                TreeId="tree-with-custom-node"
-                Options=@_options />
-</div>
-
-@code
+@if (_isLoading)
 {
-    private record CustomNode : Node
-    {
-        public string Title { get; init; } = string.Empty;
-    }
+    <p><em>Загрузка данных...</em></p>
+}
+else
+{
+    <div style="height: 700px; border: 1px solid #ccc;">
+        <FamilyTree @ref=@_familyTree
+                    TNode="CustomNode"
+                    OnUpdatedNode=@OnUpdateNode
+                    TreeId="family-tree-main"
+                    Options=@_options />
+    </div>
+}
 
+@code {
     private RootOptions<CustomNode> _options = null!;
-
     private FamilyTree<CustomNode> _familyTree = null!;
+    private bool _isLoading = true;
 
-    private int _nodesCount = 1;
-
-    private Task OnUpdateNode(UpdateNodeArgs<CustomNode> args)
+    protected override async Task OnInitializedAsync()
     {
-        _nodesCount += args.AddNodesData.Count;
-        if (args.RemoveNodeId is not null)
-        {
-            _nodesCount -= 1;
-        }
-        return Task.CompletedTask;
+        await ReloadTree();
     }
 
-    private CustomNode OnDefaultFirstNode()
-    {
-        _nodesCount += 1;
-        StateHasChanged();
-        return new() { Id = "_", Gender = Gender.Male, Title = "Accountant" };
-    }
-
-    private async Task OnResetClick()
-    {
-        await _familyTree.ResetAsync();
-        _nodesCount = 0;
-    }
-
-    protected override void OnInitialized()
+    private void InitializeOptions(List<CustomNode> nodes)
     {
         _options = new(
-          FamilyTreeOptions: new(
-            Mode: "light",
-            Template: Template.Tommy,
-            NodeBinding: new Dictionary<string, string>()
-                {
-          { NodeBinding.Field0, "name" },
-          { NodeBinding.Field1, "title" },
-          { NodeBinding.Img0, "photo" },
-                },
-            Nodes: new List<CustomNode>
-                {
-          new() { Id = "123", Gender = Gender.Male, Name = "Загарий Дмитрий", Title = "Консультант"}
-                },
-            NodeMenu: new()
-                {
-                    Details = new(Text: "Показать Детали"),
-                    Edit = new(Text: "Редактировать"),                    
-                    Remove = new(
-                    Text: "Удалить узел",
-                    // Although Action means "void" and the lambda is async,
-                    // we can just let it run without awaiting and not needing
-                    // to know whether the async lambda succeeds or not
-                    // Unfortunately FamilyTreeJS does not use async callback.
-                    OnClick: (Action<string, object?>)
-                     (async (nodeId, _) => await _familyTree.RemoveNodeAsync(nodeId))
-                  )
-                },
-            
-            NodeTreeMenu: true,           
-            
-            EditForm: new(
-              ReadOnly: false,
-              PhotoBinding: "photo",
-              AddMore: string.Empty,
-              Buttons: new Dictionary<string, ButtonEdit?>()
-                  {
-            { "pdf", null },
-            { "share", null},
-            { "remove", null}
-                  },
-              Elements: new List<EditFormElement>()
-                  {
-            new(Type: "date", Label: "Дата рождения", Binding: "birthDate"),
-            new(Type: "date", Label: "Дата смерти", Binding: "deathDate"),
-            new(Type: "textbox", Label: "Фото", Binding: "photo", Btn: "Upload photo"),
-            new(Type: "textbox", Label: "ФИО", Binding: "name"),
-            new(Type: "textbox", Label: "Описание", Binding: "title"),
-            new(
-              Type: "select", Label: "Пол", Binding: "gender",
-              Options: new List<Dictionary<string, string>>()
-              {
-                new() { { "value", "male" }, { "text", "Мужчина" } },
-                new() { { "value", "female" }, { "text", "Женщина" } }
-              }
+            FamilyTreeOptions: new(
+                Mode: "light",
+                Template: Template.Tommy,
+                NodeBinding: new Dictionary<string, string>()
+                    {
+                    { NodeBinding.Field0, "name" },
+                    { NodeBinding.Field1, "birthDate" },
+                    { NodeBinding.Img0, "photo" }
+                    },
+                Nodes: nodes,
+                NodeMenu: new()
+                    {
+                        Details = new(Text: "Открыть анкету"),
+                        Edit = new(Text: "Редактировать")
+                    },
+                EditForm: new(
+                    Elements: new List<EditFormElement>()
+                        {
+                        new(Type: "textbox", Label: "ФИО", Binding: "name"),
+                        new(Type: "textbox", Label: "Дата рождения", Binding: "birthDate"),
+                        new(Type: "textbox", Label: "Биография", Binding: "biography")
+                        }
+                )
             )
-                  }
-            )
-          )
         );
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private async Task OnUpdateNode(UpdateNodeArgs<CustomNode> args)
     {
-        if (firstRender)
+        foreach (var newNode in args.AddNodesData)
         {
-            // Даем небольшую задержку, чтобы библиотека успела создать объект в JS
-            await Task.Delay(500);
-            await JS.InvokeVoidAsync("applyRussianMenu");
+            var names = newNode.Name.Split(' ');
+            var dto = new FamilyMemberDto
+                {
+                    FirstName = names.ElementAtOrDefault(0) ?? "Имя",
+                    LastName = names.ElementAtOrDefault(1) ?? "Фамилия",
+                    Biography = newNode.Biography,
+                    // Добавьте маппинг других полей, если нужно
+                };
+
+            await Http.PostAsJsonAsync("api/Family/add", dto);
         }
+
+        await ReloadTree();
     }
 
+    private async Task ReloadTree()
+    {
+        try
+        {
+            _isLoading = true;
+            StateHasChanged();
+
+            var members = await Http.GetFromJsonAsync<List<FamilyMemberDto>>("api/Family/all");
+
+            if (members != null)
+            {
+                var nodes = NodeFactory.CreateTree(members);
+                // Используем наш метод для создания/обновления опций
+                InitializeOptions(nodes);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
 }
+
+
+
