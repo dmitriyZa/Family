@@ -44,58 +44,47 @@ public class FamilyController : ControllerBase
         }
     }
 
+
+    [HttpPost("add")]
+    public async Task<IActionResult> AddMember([FromBody] FamilyMemberDto dto)
+    {
+        if (dto == null) return BadRequest();
+
+        // Вызываем твой сервис (убедись, что в сервисе есть этот метод)
+        var newMember = await _familyMemberService.AddMemberAsync(dto);
+
+        return Ok(newMember);
+    }
+
     /*
-        [HttpPost]
-        public async Task<IActionResult> CreateFamily([FromBody] FamilyMemberDto dto)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteFamilyMember(int id)
+    {
+        // 1. Проверяем, существует ли такой родственник
+        var member = await _familyRepository.GetFamilyByIdAsync(id);
+        if (member == null)
         {
-            if (dto == null) return BadRequest("Неверный формат данных.");
-
-            // Превращаем DTO обратно в сущность БД для сохранения
-            var entity = new FamilyMember
-            {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                ParentName = dto.ParentName,
-                DateOfBirth = dto.DateOfBirth,
-                Biography = dto.Biography,
-                Gender = dto.Gender
-            };
-
-            await _familyRepository.AddFamilyMemberAsync(entity);
-
-            // Возвращаем ID созданной записи
-            dto.Id = entity.Id;
-            return CreatedAtAction(nameof(GetFamilyById), new { id = dto.Id }, dto);
+            return NotFound($"Родственник с ID {id} не найден.");
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFamilyMember(int id)
-        {
-            // 1. Проверяем, существует ли такой родственник
-            var member = await _familyRepository.GetFamilyByIdAsync(id);
-            if (member == null)
-            {
-                return NotFound($"Родственник с ID {id} не найден.");
-            }
+        // 2. Удаляем из репозитория
+        await _familyRepository.DeleteFamilyMemberAsync(id);
 
-            // 2. Удаляем из репозитория
-            await _familyRepository.DeleteFamilyMemberAsync(id);
+        // 3. Возвращаем 204 No Content (успешное удаление без тела ответа)
+        return NoContent();
+    }
 
-            // 3. Возвращаем 204 No Content (успешное удаление без тела ответа)
-            return NoContent();
-        }
-
-        // Вспомогательный метод маппинга (в идеале использовать AutoMapper)
-        private static FamilyMemberDto MapToDto(FamilyMember m) => new FamilyMemberDto
-        {
-            Id = m.Id,
-            FirstName = m.FirstName,
-            LastName = m.LastName,
-            DateOfBirth = m.DateOfBirth,
-            Biography = m.Biography,
-            Gender = m.Gender,
-            ParentName = m.ParentName
-        };*/
+    // Вспомогательный метод маппинга (в идеале использовать AutoMapper)
+    private static FamilyMemberDto MapToDto(FamilyMember m) => new FamilyMemberDto
+    {
+        Id = m.Id,
+        FirstName = m.FirstName,
+        LastName = m.LastName,
+        DateOfBirth = m.DateOfBirth,
+        Biography = m.Biography,
+        Gender = m.Gender,
+        ParentName = m.ParentName
+    };*/
 }
 
 

@@ -1,0 +1,115 @@
+﻿@page "/add-member"
+@using Family.Shared
+@inject HttpClient Http
+@inject NavigationManager Nav
+@using MyGender = Family.Shared.Gender
+
+<div class="container mt-4" style="max-width: 600px;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Добавить родственника</h3>
+        </div>
+        <div class="card-body">
+            @if (_allMembers == null)
+            {
+                <p>Загрузка списка родственников...</p>
+            }
+            else
+            {
+                <EditForm Model="@_newMember" OnValidSubmit="HandleSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary class="text-danger" />
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Имя</label>
+                            <InputText @bind-Value="_newMember.FirstName" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Фамилия</label>
+                            <InputText @bind-Value="_newMember.LastName" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Отец</label>
+                        <InputSelect @bind-Value="_newMember.FatherId" class="form-select">
+                            <option value="">-- Выберите отца --</option>
+                            @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Male))
+                            {
+                                <option value="@m.Id">@m.FirstName @m.LastName</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Мать</label>
+                        <InputSelect @bind-Value="_newMember.MotherId" class="form-select">
+                            <option value="">-- Выберите мать --</option>
+                            @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Female))
+                            {
+                                <option value="@m.Id">@m.FirstName @m.LastName</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Пол</label>
+                            <InputSelect @bind-Value="_newMember.Gender" class="form-control">
+                                <option value="@MyGender.Male">Мужчина</option>
+                                <option value="@MyGender.Female">Женщина</option>
+                            </InputSelect>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Дата рождения</label>
+                            @* InputDate создаст стандартный календарь *@
+                            <InputDate TValue="DateTime"
+                                       Value="_newMember.DateOfBirth"
+                                       ValueChanged="@(d => _newMember.DateOfBirth = d)"
+                                       ValueExpression="@(() => _newMember.DateOfBirth)"
+                                       class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Биография</label>
+                        <InputTextArea @bind-Value="_newMember.Biography" class="form-control" rows="3" placeholder="Краткая история жизни..." />
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-outline-secondary" @onclick="GoBack">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Создать и связать</button>
+                    </div>
+                </EditForm>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private FamilyMemberDto _newMember = new()
+        {
+            DateOfBirth = DateTime.Today // Устанавливаем значение сразу
+        };
+    private List<FamilyMemberDto>? _allMembers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Загружаем список всех людей, чтобы выбрать из них родителей
+        _allMembers = await Http.GetFromJsonAsync<List<FamilyMemberDto>>("api/Family/all");
+    }
+
+    private async Task HandleSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("api/Family/add", _newMember);
+        if (response.IsSuccessStatusCode)
+        {
+            Nav.NavigateTo("/test");
+        }
+    }    
+
+    private void GoBack() => Nav.NavigateTo("/test");
+}
+
+
