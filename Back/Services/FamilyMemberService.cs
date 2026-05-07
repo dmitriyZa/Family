@@ -25,6 +25,7 @@ public class FamilyMemberService
             Id = m.Id,
             FirstName = m.FirstName,
             LastName = m.LastName,
+            ParentName = m.ParentName,
             DateOfBirth = m.DateOfBirth,
             Gender = m.Gender,
             Biography = m.Biography,
@@ -47,11 +48,12 @@ public class FamilyMemberService
 
     public async Task<FamilyMemberDto> AddMemberAsync(FamilyMemberDto dto)
     {
-        // 1. Создаем сущность для БД (убедись, что тип FamilyMember соответствует твоей Entity)
+
         var newMember = new FamilyMember
         {
             FirstName = dto.FirstName,
             LastName = dto.LastName,
+            ParentName = dto.ParentName,
             DateOfBirth = dto.DateOfBirth,
             Gender = dto.Gender,
             Biography = dto.Biography
@@ -82,8 +84,83 @@ public class FamilyMemberService
             });
         }
 
-        // 4. Возвращаем созданный объект (обновляем ID из базы)
+        if (dto.SpouseIds != null && dto.SpouseIds.Any())
+        {
+            foreach (var spouseId in dto.SpouseIds)
+            {
+                await _relationshipRepository.AddRelationshipAsync(new Relationship
+                {
+                    FamilyMemberId = newMember.Id,
+                    RelatedMemberId = spouseId,
+                    RelationTypeId = 3 // Супруг
+                });
+
+                // Для FamilyTreeJS важно создать и обратную связь!
+                await _relationshipRepository.AddRelationshipAsync(new Relationship
+                {
+                    FamilyMemberId = spouseId,
+                    RelatedMemberId = newMember.Id,
+                    RelationTypeId = 3
+                });
+            }
+        }
+
         dto.Id = newMember.Id;
         return dto;
+    }
+    public async Task UpdateMemberAsync(int id, FamilyMemberDto dto)
+    {
+        // 1. Обновляем основные данные человека
+        var member = await _familyRepository.GetFamilyByIdAsync(id);
+        if (member == null) return;
+
+        member.FirstName = dto.FirstName;
+        member.LastName = dto.LastName;
+        member.ParentName = dto.ParentName;
+        member.DateOfBirth = dto.DateOfBirth;
+        member.Gender = dto.Gender;
+        member.Biography = dto.Biography;
+
+        await _familyRepository.UpdateFamilyMemberAsync(member);
+
+        // 2. Обновляем связи (простой подход: удалить старые и записать новые)
+        // Удаляем все текущие связи этого человека (где он субъект)
+        await _relationshipRepository.DeleteRelationshipAsync(id);
+
+        // 3. Записываем новые связи из DTO (логика как в AddMemberAsync)
+        if (dto.FatherId.HasValue)
+        {
+            await _relationshipRepository.AddRelationshipAsync(new Relationship
+            { FamilyMemberId = id, RelatedMemberId = dto.FatherId.Value, RelationTypeId = 1 });
+        }
+
+        if (dto.MotherId.HasValue)
+        {
+            await _relationshipRepository.AddRelationshipAsync(new Relationship
+            { FamilyMemberId = id, RelatedMemberId = dto.MotherId.Value, RelationTypeId = 2 });
+        }
+
+        if (dto.SpouseIds != null)
+        {
+            foreach (var spouseId in dto.SpouseIds)
+            {
+
+                // Прямая связь
+                await _relationshipRepository.AddRelationshipAsync(new Relationship
+                { FamilyMemberId = id, RelatedMemberId = spouseId, RelationTypeId = 3 });
+                // Обратная связь
+                await _relationshipRepository.AddRelationshipAsync(new Relationship
+                { FamilyMemberId = spouseId, RelatedMemberId = id, RelationTypeId = 3 });
+            }
+        }
+    }
+
+    public async Task DeleteMemberAsync(int id)
+    {
+        // 1. Удаляем все связи, где этот человек был субъектом ИЛИ объектом
+        // Это важно, чтобы у детей не осталось "битой" ссылки на удаленного родителя
+        await _relationshipRepository.DeleteRelationshipAsync(id);
+        // 2. Удаляем самого человека
+        await _familyRepository.DeleteFamilyMemberAsync(id);
     }
 }

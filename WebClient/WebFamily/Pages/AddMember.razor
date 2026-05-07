@@ -6,7 +6,7 @@
 
 <div class="container mt-4" style="max-width: 600px;">
     <div class="card shadow">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-primary fw-semibold text-white">
             <h3 class="mb-0">Добавить родственника</h3>
         </div>
         <div class="card-body">
@@ -22,12 +22,16 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Имя</label>
-                            <InputText @bind-Value="_newMember.FirstName" class="form-control" />
-                        </div>
-                        <div class="col-md-6 mb-3">
                             <label class="form-label">Фамилия</label>
                             <InputText @bind-Value="_newMember.LastName" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Имя</label>
+                            <InputText @bind-Value="_newMember.FirstName" class="form-control" />
+                        </div>                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Отчество</label>
+                            <InputText @bind-Value="_newMember.ParentName" class="form-control" placeholder="Отчество" />
                         </div>
                     </div>
 
@@ -52,6 +56,23 @@
                             }
                         </InputSelect>
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Супруг / Супруга</label>
+                        <InputSelect TValue="int?"
+                                     Value="_selectedSpouseId"
+                                     ValueChanged="OnSpouseChanged"
+                                     ValueExpression="@(() => _selectedSpouseId)"
+                                     class="form-select">
+                            <option value="">-- Нет / Не выбрано --</option>
+                            @foreach (var m in _allMembers)
+                            {
+                                <option value="@m.Id">@m.FirstName @m.LastName</option>
+                            }
+                        </InputSelect>
+                        <small class="text-muted">Выберите человека, с которым новый родственник состоит в браке</small>
+                    </div>
+
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -90,26 +111,45 @@
 @code {
     private FamilyMemberDto _newMember = new()
         {
-            DateOfBirth = DateTime.Today // Устанавливаем значение сразу
+            DateOfBirth = DateTime.Today,
+            SpouseIds = new List<int>() 
         };
     private List<FamilyMemberDto>? _allMembers;
+    private int? _selectedSpouseId; // Для биндинга выпадающего списка
 
     protected override async Task OnInitializedAsync()
     {
-        // Загружаем список всех людей, чтобы выбрать из них родителей
-        _allMembers = await Http.GetFromJsonAsync<List<FamilyMemberDto>>("api/Family/all");
+        try
+        {
+            _allMembers = await Http.GetFromJsonAsync<List<FamilyMemberDto>>("api/Family/all");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Детальная ошибка: {ex.Message}");
+        }
     }
+
+    private void OnSpouseChanged(int? id)
+    {
+        _selectedSpouseId = id;
+        _newMember.SpouseIds.Clear();
+        if (id.HasValue)
+        {
+            _newMember.SpouseIds.Add(id.Value);
+        }
+    }
+
 
     private async Task HandleSubmit()
     {
         var response = await Http.PostAsJsonAsync("api/Family/add", _newMember);
         if (response.IsSuccessStatusCode)
         {
-            Nav.NavigateTo("/test");
+            Nav.NavigateTo("/ftree");
         }
     }    
 
-    private void GoBack() => Nav.NavigateTo("/test");
+    private void GoBack() => Nav.NavigateTo("/ftree");
 }
 
 

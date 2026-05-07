@@ -56,6 +56,23 @@ public class FamilyController : ControllerBase
         return Ok(newMember);
     }
 
+    // Обновление данных родственника
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateMember(int id, [FromBody] FamilyMemberDto dto)
+    {
+        // Вызов метода вашего сервиса для обновления в БД
+        await _familyMemberService.UpdateMemberAsync(id, dto);
+        return NoContent();
+    }
+
+    // Удаление родственника и его связей
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteMember(int id)
+    {
+        await _familyMemberService.DeleteMemberAsync(id);
+        return NoContent();
+    }
+
     /*
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFamilyMember(int id)

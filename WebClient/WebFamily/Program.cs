@@ -13,6 +13,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5274") });
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddBlazorFamilyJS();
+builder.Services.AddScoped<FamilyMappingService>();
 builder.Services.AddSingleton<FamilyNodeFactory>();
 builder.Services.AddSingleton<FamilyTreeStaticModule>();
 var webHost=builder

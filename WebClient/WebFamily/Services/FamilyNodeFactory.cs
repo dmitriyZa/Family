@@ -13,7 +13,7 @@ namespace WebFamily.Services
             return new CustomNode
             {
                 Id = dto.Id.ToString(),
-                Name = $"{dto.FirstName} {dto.LastName}",
+                Name = $"{dto.LastName} {dto.FirstName} {dto.ParentName}",
                 FatherId =dto.FatherId?.ToString(),
                 MotherId = dto.MotherId?.ToString(),             
                 

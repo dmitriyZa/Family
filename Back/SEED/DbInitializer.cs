@@ -34,9 +34,9 @@ public static class DbInitializer
         // 3. Добавляем людей
         var members = new List<FamilyMember>
     {
-        new FamilyMember { Id = 1, FirstName = "Иван", LastName = "Иванов", ParentName = "", Gender = Gender.Male, DateOfBirth = new DateTime(1960, 5, 10) },
-        new FamilyMember { Id = 2, FirstName = "Мария", LastName = "Иванова", ParentName = "", Gender = Gender.Female, DateOfBirth = new DateTime(1965, 8, 20) },
-        new FamilyMember { Id = 3, FirstName = "Петр", LastName = "Иванов", ParentName = "", Gender = Gender.Male, DateOfBirth = new DateTime(1990, 1, 15) }
+        new FamilyMember { Id = 1, FirstName = "Иван", LastName = "Иванов", ParentName = "Иванович", Gender = Gender.Male, DateOfBirth = new DateTime(1960, 5, 10) },
+        new FamilyMember { Id = 2, FirstName = "Мария", LastName = "Иванова", ParentName = "Павловна", Gender = Gender.Female, DateOfBirth = new DateTime(1965, 8, 20) },
+        new FamilyMember { Id = 3, FirstName = "Петр", LastName = "Иванов", ParentName = "Сергеевич", Gender = Gender.Male, DateOfBirth = new DateTime(1990, 1, 15) }
     };
         await context.FamilyMembers.AddRangeAsync(members);
         await context.SaveChangesAsync();

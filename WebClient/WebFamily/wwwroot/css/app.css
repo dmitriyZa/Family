@@ -10,15 +10,48 @@ a, .btn-link {
     color: #0071c1;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+:root {
+    /* Основной фиолетовый цвет */
+    --bs-primary: rgb(113, 44, 249);
+    --bs-primary-rgb: 113, 44, 249;
+    /* Цвет для ссылок */
+    --bs-link-color: rgb(113, 44, 249);
+    --bs-link-hover-color: rgb(85, 33, 187); /* Чуть темнее при наведении */
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* Переопределяем стандартную кнопку primary */
+.btn-primary {
+    --bs-btn-bg: rgb(113, 44, 249);
+    --bs-btn-border-color: rgb(113, 44, 249);
+    --bs-btn-hover-bg: rgb(85, 33, 187);
+    --bs-btn-hover-border-color: rgb(85, 33, 187);
+    --bs-btn-active-bg: rgb(75, 30, 160);
+    --bs-btn-focus-shadow-rgb: 113, 44, 249;
+    --bs-link-color: #7326d3;
+    --bs-link-hover-color: #5e1fb1;
 }
+
+/* Переопределяем фон bg-primary */
+.bg-primary {
+    background-color: rgb(113, 44, 249) !important;
+}
+
+/* Цвет выделения (фокуса) полей ввода */
+.form-control:focus, .form-select:focus {
+    border-color: rgba(113, 44, 249, 0.5);
+    box-shadow: 0 0 0 0.25rem rgba(113, 44, 249, 0.25);
+}
+
+
+/* Для элементов внутри SVG дерева */
+[treeId='family-tree-main'] path.link {
+    stroke: rgb(113, 44, 249); /* Цвет линий связи */
+}
+
+.bjs-edit-form-header {
+    background-color: rgb(113, 44, 249) !important; /* Шапка формы редактирования в дереве */
+}
+
 
 .content {
     padding-top: 1.1rem;
@@ -97,6 +130,9 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+.bjs-edit-form-buttons .remove {
+    background-color: #ff4d4d !important; /* Или ваш акцентный цвет */
+}
 
 code {
     color: #c02d76;

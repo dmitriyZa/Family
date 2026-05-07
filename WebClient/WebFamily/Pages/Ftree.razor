@@ -1,16 +1,17 @@
-﻿@page "/test"
+﻿@page "/ftree"
 @using WebFamily.Services
 @using Family.Shared
 @using WebFamily.Models
 @inject HttpClient Http
 @inject FamilyNodeFactory NodeFactory
 @inject NavigationManager Nav
+@inject FamilyMappingService MappingService
 
 <PageTitle>Семейное дерево</PageTitle>
 
 <h1>Мое семейное дерево</h1>
 
-@if (_isLoading)
+@if (_isLoading && _options == null)
 {
     <p><em>Загрузка данных...</em></p>
 }
@@ -22,7 +23,7 @@ else
     <div style="height: 700px; border: 1px solid #ccc;">
         <FamilyTree @ref=@_familyTree
                     TNode="CustomNode"
-                    OnUpdatedNode=@OnUpdateNode
+                    OnUpdatedNode=@OnUpdateNode                    
                     TreeId="family-tree-main"
                     Options=@_options />
     </div>
@@ -42,23 +43,26 @@ else
     {
         _options = new(
             FamilyTreeOptions: new(
+                MiniMap:false,                
                 Mode: "light",
                 Template: Template.Tommy,
                 NodeBinding: new Dictionary<string, string>()
-                        {
+                            {
                     { NodeBinding.Field0, "name" },
                     { NodeBinding.Field1, "birthDate" },
                     { NodeBinding.Img0, "photo" }
-                        },
+                            },
                 Nodes: nodes,
                 NodeMenu: new()
                     {
                         Details = new(Text: "Открыть анкету"),
-                        Edit = new(Text: "Редактировать")
+                        Edit = new(Text: "Редактировать"),
+                        Remove = new(Text: "Удалить",
+                            OnClick: (Action<string, object?>)((nodeId, _) => OnManualDelete(nodeId)))
                     },
                 EditForm: new(
                     Elements: new List<EditFormElement>()
-                            {
+                                {
                         new(Type: "textbox", Label: "ФИО", Binding: "name"),
                         new(Type: "textbox", Label: "Дата рождения", Binding: "birthDate"),
                         new(Type: "textbox", Label: "Биография", Binding: "biography"),
@@ -68,7 +72,7 @@ else
                 new() { { "value", "male" }, { "text", "Муж" } },
                 new() { { "value", "female" }, { "text", "Жен" } }
               })
-                            }
+                                }
                 )
             )
         );
@@ -76,28 +80,54 @@ else
 
     private async Task OnUpdateNode(UpdateNodeArgs<CustomNode> args)
     {
-        foreach (var newNode in args.AddNodesData)
+        // Обработка обновления
+        foreach (var updatedNode in args.UpdateNodesData)
         {
-            var names = newNode.Name.Split(' ');
-            var dto = new FamilyMemberDto
-                {
-                    FirstName = names.ElementAtOrDefault(0) ?? "Имя",
-                    LastName = names.ElementAtOrDefault(1) ?? "Фамилия",
-                    Biography = newNode.Biography,
-                    // Добавьте маппинг других полей, если нужно
-                };
-
-            await Http.PostAsJsonAsync("api/Family/add", dto);
-        }
+            var dto = MappingService.MapNodeToDto(updatedNode);
+            await Http.PutAsJsonAsync($"api/Family/{dto.Id}", dto);
+        }        
 
         await ReloadTree();
     }
+
+    private async void OnManualDelete(string nodeId)
+    {
+        if (string.IsNullOrEmpty(nodeId)) return;
+
+        // Библиотека иногда использует временные ID, их не шлем на бэк
+        if (int.TryParse(nodeId, out int idToDelete))
+        {
+            try
+            {
+                var response = await Http.DeleteAsync($"api/Family/{idToDelete}");
+                if (response.IsSuccessStatusCode)
+                {
+                    // Важно: после удаления на бэке нужно удалить узел визуально
+                    await _familyTree.RemoveNodeAsync(nodeId);
+                    await ReloadTree();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при удалении: {ex.Message}");
+            }
+        }
+        else
+        {
+            // Если это временная нода (не из БД), просто удаляем визуально
+            await _familyTree.RemoveNodeAsync(nodeId);
+        }
+    }
+
+
+
 
     private async Task ReloadTree()
     {
         try
         {
             _isLoading = true;
+            _options = null!; // Сбрасываем опции для чистого рендеринга
             StateHasChanged();
 
             var members = await Http.GetFromJsonAsync<List<FamilyMemberDto>>("api/Family/all");
@@ -105,7 +135,6 @@ else
             if (members != null)
             {
                 var nodes = NodeFactory.CreateTree(members);
-                // Используем наш метод для создания/обновления опций
                 InitializeOptions(nodes);
             }
         }
@@ -120,5 +149,3 @@ else
         }
     }
 }
-
-
