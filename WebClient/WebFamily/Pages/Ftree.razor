@@ -6,6 +6,8 @@
 @inject FamilyNodeFactory NodeFactory
 @inject NavigationManager Nav
 @inject FamilyMappingService MappingService
+@inject IJSRuntime JS
+
 
 <PageTitle>Семейное дерево</PageTitle>
 
@@ -20,10 +22,18 @@ else
     <div class="mb-2 text-end">
     <Button Color="ButtonColor.Primary" Class="" @onclick='(() => Nav.NavigateTo("/add-member"))'> Добавить родственника </Button>    
     </div>
+    <InputFile @ref="_fileInput" 
+               
+               id="photoUploadInput"
+               OnChange="HandleFileSelected"
+               accept=".jpg,.jpeg,.png"
+               style="display:none;" />
+
     <div style="height: 700px; border: 1px solid #ccc;">
         <FamilyTree @ref=@_familyTree
                     TNode="CustomNode"
-                    OnUpdatedNode=@OnUpdateNode                    
+                    OnUpdatedNode=@OnUpdateNode
+                    OnTextboxButtonClicked=@OnTextboxButtonClickedAsync
                     TreeId="family-tree-main"
                     Options=@_options />
     </div>
@@ -32,7 +42,9 @@ else
 @code {
     private RootOptions<CustomNode> _options = null!;
     private FamilyTree<CustomNode> _familyTree = null!;
-    private bool _isLoading = true;
+    private bool _isLoading = true;    
+    private InputFile? _fileInput;
+    private TaskCompletionSource<string?>? _photoUploadTcs;
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,7 +57,7 @@ else
             FamilyTreeOptions: new(
                 MiniMap:false,                
                 Mode: "light",
-                Template: Template.Tommy,
+                Template: Template.Tommy,                
                 NodeBinding: new Dictionary<string, string>()
                             {
                     { NodeBinding.Field0, "name" },
@@ -61,22 +73,93 @@ else
                             OnClick: (Action<string, object?>)((nodeId, _) => OnManualDelete(nodeId)))
                     },
                 EditForm: new(
+                    PhotoBinding: "photo",
+                    CancelBtn: "Отмена",
+                    SaveAndCloseBtn: "Сохранить",
                     Elements: new List<EditFormElement>()
                                 {
                         new(Type: "textbox", Label: "ФИО", Binding: "name"),
                         new(Type: "textbox", Label: "Дата рождения", Binding: "birthDate"),
-                        new(Type: "textbox", Label: "Биография", Binding: "biography"),
+                        new(Type: "textbox", Label: "Photo", Binding: "photo", Btn: "Загрузить фото"),
+                        new(Type: "textbox", Label: "Биография", Binding: "biography"),                        
                         new(Type: "textbox", Label: "Пол", Binding: "gender",
                         Options: new List<Dictionary<string, string>>()
               {
                 new() { { "value", "male" }, { "text", "Муж" } },
                 new() { { "value", "female" }, { "text", "Жен" } }
               })
-                                }
+              }
                 )
             )
         );
+    }  
+    
+
+    private async Task<string?> OnTextboxButtonClickedAsync(TextboxButtonClickedArgs args)
+    {
+        if (args.BindingName == "photo")
+        {
+            _photoUploadTcs = new TaskCompletionSource<string?>();
+
+            // Вызываем маленькую вспомогательную функцию
+            if (_fileInput?.Element != null)
+            {
+                await JS.InvokeVoidAsync("HTMLElement.prototype.click.call", _fileInput.Element);
+            }
+
+            return await _photoUploadTcs.Task;
+        }
+        return string.Empty;
     }
+
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file == null) return;
+
+        // Список разрешенных расширений
+        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+        var extension = System.IO.Path.GetExtension(file.Name).ToLower();
+
+        if (!allowedExtensions.Contains(extension))
+        {
+            // Здесь можно вывести уведомление пользователю через DialogService или Console
+            Console.WriteLine("Ошибка: Разрешены только файлы изображений (jpg, png).");
+            _photoUploadTcs?.SetResult(null); // Возвращаем пустоту в дерево
+            return;
+        }
+
+        // Ограничение по размеру (например, 2 МБ)
+        long maxFileSize = 1024 * 1024 * 2;
+        if (file.Size > maxFileSize)
+        {
+            Console.WriteLine("Ошибка: Файл слишком большой (макс. 2 МБ).");
+            _photoUploadTcs?.SetResult(null);
+            return;
+        }
+
+        try
+        {
+            // Читаем файл
+            using var stream = file.OpenReadStream(maxFileSize);
+            using var ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+
+            var photoUrl = $"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+
+            // Возвращаем результат в задачу, которую ждет дерево
+            _photoUploadTcs?.SetResult(photoUrl);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при чтении файла: {ex.Message}");
+            _photoUploadTcs?.SetResult(null);
+        }
+    }
+
+
+
 
     private async Task OnUpdateNode(UpdateNodeArgs<CustomNode> args)
     {
@@ -118,9 +201,7 @@ else
             await _familyTree.RemoveNodeAsync(nodeId);
         }
     }
-
-
-
+       
 
     private async Task ReloadTree()
     {

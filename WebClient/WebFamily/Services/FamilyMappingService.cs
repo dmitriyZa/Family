@@ -17,8 +17,8 @@ namespace WebFamily.Services
             return new FamilyMemberDto
             {
                 Id = int.TryParse(node.Id, out var id) ? id : 0,
-                FirstName = names.ElementAtOrDefault(0) ?? "",
-                LastName = names.ElementAtOrDefault(1) ?? "",
+                LastName = names.ElementAtOrDefault(0) ?? "",
+                FirstName = names.ElementAtOrDefault(1) ?? "",
                 ParentName = names.ElementAtOrDefault(2) ?? "",
 
                 // Конвертация пола: из типа библиотеки в твой Enum
