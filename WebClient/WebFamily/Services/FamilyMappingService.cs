@@ -32,7 +32,8 @@ namespace WebFamily.Services
 
                 // Связи (если библиотека их возвращает в ноде)
                 FatherId = int.TryParse(node.FatherId, out var fId) ? fId : null,
-                MotherId = int.TryParse(node.MotherId, out var mId) ? mId : null
+                MotherId = int.TryParse(node.MotherId, out var mId) ? mId : null,
+                PhotoUrl = node.Photo
             };
         }
     }

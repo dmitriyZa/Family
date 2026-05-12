@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Family.Shared; // Подключаем нашу общую библиотеку
+using Family.Shared;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -39,7 +39,6 @@ public class FamilyController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Логируем ошибку и возвращаем 500
             return StatusCode(500, $"Внутренняя ошибка сервера: {ex.Message}");
         }
     }
@@ -49,8 +48,6 @@ public class FamilyController : ControllerBase
     public async Task<IActionResult> AddMember([FromBody] FamilyMemberDto dto)
     {
         if (dto == null) return BadRequest();
-
-        // Вызываем твой сервис (убедись, что в сервисе есть этот метод)
         var newMember = await _familyMemberService.AddMemberAsync(dto);
 
         return Ok(newMember);
@@ -60,7 +57,6 @@ public class FamilyController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMember(int id, [FromBody] FamilyMemberDto dto)
     {
-        // Вызов метода вашего сервиса для обновления в БД
         await _familyMemberService.UpdateMemberAsync(id, dto);
         return NoContent();
     }
@@ -72,36 +68,38 @@ public class FamilyController : ControllerBase
         await _familyMemberService.DeleteMemberAsync(id);
         return NoContent();
     }
-
-    /*
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteFamilyMember(int id)
+    [HttpPost("{id}/upload-photo")]
+    public async Task<IActionResult> UploadPhoto(int id, IFormFile file)
     {
-        // 1. Проверяем, существует ли такой родственник
-        var member = await _familyRepository.GetFamilyByIdAsync(id);
-        if (member == null)
+        if (file == null || file.Length == 0) return BadRequest("Файл не выбран");
+
+        // 1. Определяем путь к папке (wwwroot/photos)
+        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos");
+        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+
+        // 2. Генерируем уникальное имя, чтобы избежать конфликтов
+        var fileName = $"{id}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+        var filePath = Path.Combine(folderPath, fileName);
+
+        // 3. Сохраняем файл на диск
+        using (var stream = new FileStream(filePath, FileMode.Create))
         {
-            return NotFound($"Родственник с ID {id} не найден.");
+            await file.CopyToAsync(stream);
         }
 
-        // 2. Удаляем из репозитория
-        await _familyRepository.DeleteFamilyMemberAsync(id);
+        // 4. Обновляем путь в базе данных
+        // ВАЖНО: сохраняем относительный путь для фронтенда
+        var member = await _familyMemberService.GetFamilyMember(id);
+        if (member != null)
+        {
+            member.Photo = $"photos/{fileName}";
+            await _familyMemberService.UpdateMemberAsync(member);
+        }
 
-        // 3. Возвращаем 204 No Content (успешное удаление без тела ответа)
-        return NoContent();
+        return Ok(new { url = member.Photo });
     }
 
-    // Вспомогательный метод маппинга (в идеале использовать AutoMapper)
-    private static FamilyMemberDto MapToDto(FamilyMember m) => new FamilyMemberDto
-    {
-        Id = m.Id,
-        FirstName = m.FirstName,
-        LastName = m.LastName,
-        DateOfBirth = m.DateOfBirth,
-        Biography = m.Biography,
-        Gender = m.Gender,
-        ParentName = m.ParentName
-    };*/
+
 }
 
 

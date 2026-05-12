@@ -29,7 +29,7 @@ public class FamilyMemberService
             DateOfBirth = m.DateOfBirth,
             Gender = m.Gender,
             Biography = m.Biography,
-
+            PhotoUrl = m.Photo,
             // Мапим отца (ищем связь, где текущий человек - субъект, а тип связи - 1 (Отец))
             // Предположим Id 1 - Отец, 2 - Мать, 3 - Супруг
             FatherId = relations.FirstOrDefault(r => r.FamilyMemberId == m.Id && r.RelationTypeId == 1)?.RelatedMemberId,
@@ -46,6 +46,9 @@ public class FamilyMemberService
         return dtos;
     }
 
+    public async Task<FamilyMember> GetFamilyMember(int id) => await _familyRepository.GetFamilyByIdAsync(id);
+    public async Task UpdateMemberAsync(FamilyMember member) => await _familyRepository.UpdateFamilyMemberAsync(member);
+
     public async Task<FamilyMemberDto> AddMemberAsync(FamilyMemberDto dto)
     {
 
@@ -56,7 +59,8 @@ public class FamilyMemberService
             ParentName = dto.ParentName,
             DateOfBirth = dto.DateOfBirth,
             Gender = dto.Gender,
-            Biography = dto.Biography
+            Biography = dto.Biography,
+            Photo = dto.PhotoUrl
         };
 
         // 2. Сохраняем основного человека через репозиторий
@@ -120,6 +124,10 @@ public class FamilyMemberService
         member.DateOfBirth = dto.DateOfBirth;
         member.Gender = dto.Gender;
         member.Biography = dto.Biography;
+        if (!string.IsNullOrEmpty(dto.PhotoUrl))
+        {
+            member.Photo = dto.PhotoUrl;
+        }
 
         await _familyRepository.UpdateFamilyMemberAsync(member);
 

@@ -40,6 +40,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+app.UseStaticFiles();
 app.UseCors("AllowBlazorOrigin");
 app.UseHttpsRedirection();
 app.MapControllers();

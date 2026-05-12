@@ -10,8 +10,11 @@ namespace WebFamily.Services
     {
         public CustomNode CreateNode(FamilyMemberDto dto)
         {
+            var baseAddress = "http://localhost:5274/";
+
             return new CustomNode
             {
+                
                 Id = dto.Id.ToString(),
                 Name = $"{dto.LastName} {dto.FirstName} {dto.ParentName}",
                 FatherId =dto.FatherId?.ToString(),
@@ -20,7 +23,10 @@ namespace WebFamily.Services
                 PartnerIds = dto.SpouseIds?.Select(id => id.ToString()).ToArray(),                
                 Gender = dto.Gender == MyGender.Male ? BTJS.Male : BTJS.Female,
                 Biography = dto.Biography,
-                BirthDate = dto.DateOfBirth.ToString("dd.MM.yyyy")
+                BirthDate = dto.DateOfBirth.ToString("dd.MM.yyyy"),
+                Photo = string.IsNullOrEmpty(dto.PhotoUrl)
+                ? null
+                : (dto.PhotoUrl.StartsWith("http") ? dto.PhotoUrl : baseAddress + dto.PhotoUrl),
             };
         }
 

@@ -42,7 +42,8 @@ else
 @code {
     private RootOptions<CustomNode> _options = null!;
     private FamilyTree<CustomNode> _familyTree = null!;
-    private bool _isLoading = true;    
+    private bool _isLoading = true;
+    private string? _currentNodeId;
     private InputFile? _fileInput;
     private TaskCompletionSource<string?>? _photoUploadTcs;
 
@@ -99,9 +100,9 @@ else
     {
         if (args.BindingName == "photo")
         {
+            _currentNodeId = args.NodeId; // Сохраняем ID текущего родственника
             _photoUploadTcs = new TaskCompletionSource<string?>();
 
-            // Вызываем маленькую вспомогательную функцию
             if (_fileInput?.Element != null)
             {
                 await JS.InvokeVoidAsync("HTMLElement.prototype.click.call", _fileInput.Element);
@@ -113,65 +114,71 @@ else
     }
 
 
+
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
         var file = e.File;
-        if (file == null) return;
-
-        // Список разрешенных расширений
-        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-        var extension = System.IO.Path.GetExtension(file.Name).ToLower();
-
-        if (!allowedExtensions.Contains(extension))
-        {
-            // Здесь можно вывести уведомление пользователю через DialogService или Console
-            Console.WriteLine("Ошибка: Разрешены только файлы изображений (jpg, png).");
-            _photoUploadTcs?.SetResult(null); // Возвращаем пустоту в дерево
-            return;
-        }
-
-        // Ограничение по размеру (например, 2 МБ)
-        long maxFileSize = 1024 * 1024 * 2;
-        if (file.Size > maxFileSize)
-        {
-            Console.WriteLine("Ошибка: Файл слишком большой (макс. 2 МБ).");
-            _photoUploadTcs?.SetResult(null);
-            return;
-        }
+        if (file == null || string.IsNullOrEmpty(_currentNodeId)) return;
 
         try
         {
-            // Читаем файл
-            using var stream = file.OpenReadStream(maxFileSize);
-            using var ms = new MemoryStream();
-            await stream.CopyToAsync(ms);
+            using var content = new MultipartFormDataContent();
+            var fileContent = new StreamContent(file.OpenReadStream(5 * 1024 * 1024));
+            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+            content.Add(fileContent, "file", file.Name);
 
-            var photoUrl = $"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+            var response = await Http.PostAsync($"api/Family/{_currentNodeId}/upload-photo", content);
 
-            // Возвращаем результат в задачу, которую ждет дерево
-            _photoUploadTcs?.SetResult(photoUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                // Читаем как JsonElement, чтобы динамически достать поле "url"
+                var result = await response.Content.ReadFromJsonAsync<System.Text.Json.JsonElement>();
+
+                if (result.TryGetProperty("url", out var urlProperty))
+                {
+                    var photoPath = urlProperty.GetString();
+
+                    // Передаем путь в форму дерева.
+                    // Библиотека сама подставит этот текст в TextBox.
+                    _photoUploadTcs?.SetResult(photoPath);
+                }
+                StateHasChanged();
+            }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Ошибка при чтении файла: {ex.Message}");
+            Console.WriteLine($"Ошибка загрузки: {ex.Message}");
             _photoUploadTcs?.SetResult(null);
         }
     }
+
 
 
 
 
     private async Task OnUpdateNode(UpdateNodeArgs<CustomNode> args)
     {
-        // Обработка обновления
         foreach (var updatedNode in args.UpdateNodesData)
         {
             var dto = MappingService.MapNodeToDto(updatedNode);
-            await Http.PutAsJsonAsync($"api/Family/{dto.Id}", dto);
-        }        
 
+            // ВАЖНО: убедись, что в dto поле называется Photo или PhotoUrl
+            // Если в MappingService ты его не заполнил, здесь будет null
+            if (!string.IsNullOrEmpty(dto.PhotoUrl))
+            {
+                var baseUri = Http.BaseAddress?.ToString();
+                if (!string.IsNullOrEmpty(baseUri) && dto.PhotoUrl.StartsWith(baseUri))
+                {
+                    dto.PhotoUrl = dto.PhotoUrl.Replace(baseUri, "");
+                }
+            }
+
+            await Http.PutAsJsonAsync($"api/Family/{dto.Id}", dto);
+        }
         await ReloadTree();
     }
+
+
 
     private async void OnManualDelete(string nodeId)
     {
@@ -215,6 +222,15 @@ else
 
             if (members != null)
             {
+                // Добавляем базовый адрес бэкенда к путям фото
+                foreach (var m in members.Where(x => !string.IsNullOrEmpty(x.PhotoUrl)))
+                {
+                    if (!m.PhotoUrl.StartsWith("http"))
+                    {
+                        // Http.BaseAddress обычно содержит "https://localhost:7001/"
+                        m.PhotoUrl = $"{Http.BaseAddress}{m.PhotoUrl}";
+                    }
+                }
                 var nodes = NodeFactory.CreateTree(members);
                 InitializeOptions(nodes);
             }

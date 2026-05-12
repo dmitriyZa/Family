@@ -9,6 +9,7 @@ public class FamilyMember
     public DateTime DateOfBirth { get; set; }
     public string? Biography { get; set; }
     public Gender Gender { get; set; } // <--- используй enum
+    public string? Photo { get; set; } = string.Empty;
     public ICollection<Relationship>? Relationships { get; set; }
 }
 
