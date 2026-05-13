@@ -6,10 +6,12 @@ using Family.Shared;
 public class FamilyController : ControllerBase
 {
     private readonly FamilyMemberService _familyMemberService;
+    private readonly IFileStorageService _fileStorageService;
 
-    public FamilyController(FamilyMemberService familyMemberService)
+    public FamilyController(FamilyMemberService familyMemberService, IFileStorageService fileStorageService)
     {
         _familyMemberService = familyMemberService;
+        _fileStorageService = fileStorageService;
     }
 
     /* [HttpGet("{id}")]
@@ -57,6 +59,14 @@ public class FamilyController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMember(int id, [FromBody] FamilyMemberDto dto)
     {
+        var member = await _familyMemberService.GetFamilyMember(id);
+        if (member == null) return NotFound("Родственник не найден");
+
+        if (string.IsNullOrEmpty(dto.PhotoUrl))
+        {
+            dto.PhotoUrl = member.Photo;
+        }
+
         await _familyMemberService.UpdateMemberAsync(id, dto);
         return NoContent();
     }
@@ -65,38 +75,44 @@ public class FamilyController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMember(int id)
     {
+        var member = await _familyMemberService.GetFamilyMember(id);
+        if (!string.IsNullOrEmpty(member.Photo))
+        {
+            _fileStorageService.DeletePhoto(member.Photo);
+        }
         await _familyMemberService.DeleteMemberAsync(id);
         return NoContent();
     }
     [HttpPost("{id}/upload-photo")]
     public async Task<IActionResult> UploadPhoto(int id, IFormFile file)
     {
-        if (file == null || file.Length == 0) return BadRequest("Файл не выбран");
-
-        // 1. Определяем путь к папке (wwwroot/photos)
-        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos");
-        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
-
-        // 2. Генерируем уникальное имя, чтобы избежать конфликтов
-        var fileName = $"{id}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-        var filePath = Path.Combine(folderPath, fileName);
-
-        // 3. Сохраняем файл на диск
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        try
         {
-            await file.CopyToAsync(stream);
-        }
+            var member = await _familyMemberService.GetFamilyMember(id);
+            if (member == null) return NotFound("Родственник не найден");
 
-        // 4. Обновляем путь в базе данных
-        // ВАЖНО: сохраняем относительный путь для фронтенда
-        var member = await _familyMemberService.GetFamilyMember(id);
-        if (member != null)
-        {
-            member.Photo = $"photos/{fileName}";
+            // 1. Удаляем старое фото через сервис, если оно было
+            if (!string.IsNullOrEmpty(member.Photo))
+            {
+                _fileStorageService.DeletePhoto(member.Photo);
+            }
+            // 2. Сохраняем новое фото через сервис
+            var relativePath = await _fileStorageService.SavePhotoAsync(id, file);
+
+            // 3. Обновляем сущность
+            member.Photo = relativePath;
             await _familyMemberService.UpdateMemberAsync(member);
-        }
 
-        return Ok(new { url = member.Photo });
+            return Ok(new { url = member.Photo });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Ошибка при загрузке: {ex.Message}");
+        }
     }
 
 

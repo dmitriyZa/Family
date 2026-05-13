@@ -16,6 +16,7 @@ builder.Services.AddBlazorFamilyJS();
 builder.Services.AddScoped<FamilyMappingService>();
 builder.Services.AddSingleton<FamilyNodeFactory>();
 builder.Services.AddSingleton<FamilyTreeStaticModule>();
+builder.Services.AddScoped<IFamilyClientService, FamilyClientService>();
 var webHost=builder
     .Build()
     .ConfigureIJSRuntimeJsonOptionsForBlazorFamilyTree();

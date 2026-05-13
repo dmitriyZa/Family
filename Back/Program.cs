@@ -25,6 +25,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 builder.Services.AddScoped<IRelationTypeRepository, RelationTypeRepository>();
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
 
 var app = builder.Build();

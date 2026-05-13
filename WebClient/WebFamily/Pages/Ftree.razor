@@ -6,38 +6,46 @@
 @inject FamilyNodeFactory NodeFactory
 @inject NavigationManager Nav
 @inject FamilyMappingService MappingService
+@inject IFamilyClientService FamilyService
 @inject IJSRuntime JS
-
 
 <PageTitle>Семейное дерево</PageTitle>
 
 <h1>Мое семейное дерево</h1>
 
-@if (_isLoading && _options == null)
-{
-    <p><em>Загрузка данных...</em></p>
-}
-else
-{
-    <div class="mb-2 text-end">
-    <Button Color="ButtonColor.Primary" Class="" @onclick='(() => Nav.NavigateTo("/add-member"))'> Добавить родственника </Button>    
-    </div>
-    <InputFile @ref="_fileInput" 
-               
-               id="photoUploadInput"
-               OnChange="HandleFileSelected"
-               accept=".jpg,.jpeg,.png"
-               style="display:none;" />
+<div class="mb-2 text-end">
+    <Button Color="ButtonColor.Primary" @onclick='(() => Nav.NavigateTo("/add-member"))'> Добавить родственника </Button>
+</div>
+<InputFile @ref="_fileInput"
+           id="photoUploadInput"
+           OnChange="HandleFileSelected"
+           accept=".jpg,.jpeg,.png"
+           style="display:none;" />
 
-    <div style="height: 700px; border: 1px solid #ccc;">
+<div class="position-relative" style="height: 700px; border: 1px solid #ccc;">
+
+    <!-- Индикатор загрузки накладывается поверх, не ломая разметку дерева -->
+    @if (_isLoading)
+    {
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 10;">
+            <div class="text-center">
+                <div class="spinner-border text-primary mb-2" role="status"></div>
+                <p class="mb-0 text-muted fw-medium">Загрузка данных...</p>
+            </div>
+        </div>
+    }
+
+    <!-- Дерево теперь РЕНДЕРИТСЯ ВСЕГДА и его ID не пропадает из DOM -->
+    @if (_options != null)
+    {
         <FamilyTree @ref=@_familyTree
                     TNode="CustomNode"
                     OnUpdatedNode=@OnUpdateNode
                     OnTextboxButtonClicked=@OnTextboxButtonClickedAsync
                     TreeId="family-tree-main"
                     Options=@_options />
-    </div>
-}
+    }
+</div>
 
 @code {
     private RootOptions<CustomNode> _options = null!;
@@ -162,21 +170,16 @@ else
         {
             var dto = MappingService.MapNodeToDto(updatedNode);
 
-            // ВАЖНО: убедись, что в dto поле называется Photo или PhotoUrl
-            // Если в MappingService ты его не заполнил, здесь будет null
-            if (!string.IsNullOrEmpty(dto.PhotoUrl))
+            if (string.IsNullOrEmpty(dto.PhotoUrl) && !string.IsNullOrEmpty(updatedNode.Photo))
             {
-                var baseUri = Http.BaseAddress?.ToString();
-                if (!string.IsNullOrEmpty(baseUri) && dto.PhotoUrl.StartsWith(baseUri))
-                {
-                    dto.PhotoUrl = dto.PhotoUrl.Replace(baseUri, "");
-                }
+                dto.PhotoUrl = updatedNode.Photo;
             }
 
-            await Http.PutAsJsonAsync($"api/Family/{dto.Id}", dto);
+            await FamilyService.UpdateMemberAsync(dto.Id, dto);
         }
         await ReloadTree();
     }
+
 
 
 
@@ -207,42 +210,37 @@ else
             // Если это временная нода (не из БД), просто удаляем визуально
             await _familyTree.RemoveNodeAsync(nodeId);
         }
-    }
-       
+    }     
 
     private async Task ReloadTree()
     {
         try
         {
             _isLoading = true;
-            _options = null!; // Сбрасываем опции для чистого рендеринга
-            StateHasChanged();
+            _options = null!;
+            StateHasChanged(); // Показываем оверлей загрузки
 
-            var members = await Http.GetFromJsonAsync<List<FamilyMemberDto>>("api/Family/all");
+            // Скачиваем данные родственников
+            var members = await FamilyService.GetAllMembersAsync();
 
             if (members != null)
             {
-                // Добавляем базовый адрес бэкенда к путям фото
-                foreach (var m in members.Where(x => !string.IsNullOrEmpty(x.PhotoUrl)))
-                {
-                    if (!m.PhotoUrl.StartsWith("http"))
-                    {
-                        // Http.BaseAddress обычно содержит "https://localhost:7001/"
-                        m.PhotoUrl = $"{Http.BaseAddress}{m.PhotoUrl}";
-                    }
-                }
                 var nodes = NodeFactory.CreateTree(members);
+
+                // Инициализируем новые опции только ПОСЛЕ загрузки данных
                 InitializeOptions(nodes);
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Ошибка: {ex.Message}");
+            Console.WriteLine($"Ошибка перезагрузки дерева: {ex.Message}");
         }
         finally
         {
             _isLoading = false;
-            StateHasChanged();
+            StateHasChanged(); // Скрываем оверлей загрузки
         }
     }
+
+
 }

@@ -1,106 +1,179 @@
 ﻿@page "/add-member"
 @using Family.Shared
-@inject HttpClient Http
+@inject IFamilyClientService FamilyService
 @inject NavigationManager Nav
+@inject IJSRuntime JS
+@inject HttpClient Http
 @using MyGender = Family.Shared.Gender
 
-<div class="container mt-4" style="max-width: 600px;">
-    <div class="card shadow">
-        <div class="card-header bg-primary fw-semibold text-white">
-            <h3 class="mb-0">Добавить родственника</h3>
+<div class="container py-5" style="max-width: 750px;">
+    <div class="card border-0 shadow-lg rounded-4">
+        <!-- Шапка карты -->
+        <div class="card-header bg-gradient bg-primary text-white py-3 px-4 rounded-top-4">
+            <h3 class="mb-0 fs-4 fw-bold">Добавить родственника</h3>
         </div>
-        <div class="card-body">
+
+        <div class="card-body p-4 px-md-5">
             @if (_allMembers == null)
             {
-                <p>Загрузка списка родственников...</p>
+                <div class="d-flex flex-column align-items-center py-5">
+                    <div class="spinner-border text-primary mb-3" role="status"></div>
+                    <p class="text-muted fw-medium">Загрузка списка родственников...</p>
+                </div>
             }
             else
             {
-                <EditForm Model="@_newMember" OnValidSubmit="HandleSubmit">
+                <EditForm Model="@_newMember" OnValidSubmit="HandleFormSubmit">
                     <DataAnnotationsValidator />
-                    <ValidationSummary class="text-danger" />
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Фамилия</label>
-                            <InputText @bind-Value="_newMember.LastName" class="form-control" />
+                    @if (context.GetValidationMessages().Any())
+                    {
+                        <div class="alert alert-danger d-flex align-items-center p-3 mb-4 rounded-3 border-start border-danger border-4" style="background-color: #fdf2f2;">
+                            <ValidationSummary class="text-danger mb-0 fs-6 list-unstyled ps-0" />
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Имя</label>
-                            <InputText @bind-Value="_newMember.FirstName" class="form-control" />
-                        </div>                        
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Отчество</label>
-                            <InputText @bind-Value="_newMember.ParentName" class="form-control" placeholder="Отчество" />
-                        </div>
-                    </div>
+                    }
 
-                    <div class="mb-3">
-                        <label class="form-label">Отец</label>
-                        <InputSelect @bind-Value="_newMember.FatherId" class="form-select">
-                            <option value="">-- Выберите отца --</option>
-                            @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Male))
-                            {
-                                <option value="@m.Id">@m.FirstName @m.LastName</option>
-                            }
-                        </InputSelect>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Мать</label>
-                        <InputSelect @bind-Value="_newMember.MotherId" class="form-select">
-                            <option value="">-- Выберите мать --</option>
-                            @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Female))
-                            {
-                                <option value="@m.Id">@m.FirstName @m.LastName</option>
-                            }
-                        </InputSelect>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Супруг / Супруга</label>
-                        <InputSelect TValue="int?"
-                                     Value="_selectedSpouseId"
-                                     ValueChanged="OnSpouseChanged"
-                                     ValueExpression="@(() => _selectedSpouseId)"
-                                     class="form-select">
-                            <option value="">-- Нет / Не выбрано --</option>
-                            @foreach (var m in _allMembers)
-                            {
-                                <option value="@m.Id">@m.FirstName @m.LastName</option>
-                            }
-                        </InputSelect>
-                        <small class="text-muted">Выберите человека, с которым новый родственник состоит в браке</small>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Пол</label>
-                            <InputSelect @bind-Value="_newMember.Gender" class="form-control">
-                                <option value="@MyGender.Male">Мужчина</option>
-                                <option value="@MyGender.Female">Женщина</option>
-                            </InputSelect>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Дата рождения</label>
-                            @* InputDate создаст стандартный календарь *@
-                            <InputDate TValue="DateTime"
-                                       Value="_newMember.DateOfBirth"
-                                       ValueChanged="@(d => _newMember.DateOfBirth = d)"
-                                       ValueExpression="@(() => _newMember.DateOfBirth)"
-                                       class="form-control" />
+                    <!-- Секция: Фотография профиля -->
+                    <div class="mb-4 text-center">
+                        <h5 class="text-secondary text-start fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider" style="font-size: 0.85rem;">
+                            Фотография профиля
+                        </h5>
+                        <div class="d-flex flex-column align-items-center gap-3 my-3">
+                            <div class="position-relative border rounded-circle bg-light d-flex align-items-center justify-content-center shadow-sm"
+                                 style="width: 140px; height: 140px; overflow: hidden;">
+                                @if (!string.IsNullOrEmpty(_previewPhotoUrl))
+                                {
+                                    <img src="@_previewPhotoUrl" style="width: 100%; height: 100%; object-fit: cover;" alt="Превью" />
+                                }
+                                else
+                                {
+                                    <span class="fs-1 text-muted">👤</span>
+                                }
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-primary btn-sm rounded-3 px-3 fw-medium" @onclick="TriggerFileInput">
+                                    Выбрать изображение
+                                </button>
+                                @if (_selectedFile != null)
+                                {
+                                    <button type="button" class="btn btn-link text-danger btn-sm p-0 ms-2 text-decoration-none fw-medium" @onclick="ClearSelectedPhoto">
+                                        Удалить
+                                    </button>
+                                }
+                            </div>
+                            <InputFile @ref="_fileInput"
+                                       id="photoFormUploadInput"
+                                       OnChange="OnPhotoSelected"
+                                       accept=".jpg,.jpeg,.png"
+                                       style="display:none;" />
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Биография</label>
-                        <InputTextArea @bind-Value="_newMember.Biography" class="form-control" rows="3" placeholder="Краткая история жизни..." />
+                    <!-- Секция: Основная информация -->
+                    <div class="mb-4">
+                        <h5 class="text-secondary fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider" style="font-size: 0.85rem;">
+                            Основная информация
+                        </h5>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold text-muted mb-1">Фамилия</label>
+                                <InputText @bind-Value="_newMember.LastName" class="form-control form-control-lg rounded-3 fs-6" placeholder="Иванов" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold text-muted mb-1">Имя</label>
+                                <InputText @bind-Value="_newMember.FirstName" class="form-control form-control-lg rounded-3 fs-6" placeholder="Иван" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold text-muted mb-1">Отчество</label>
+                                <InputText @bind-Value="_newMember.ParentName" class="form-control form-control-lg rounded-3 fs-6" placeholder="Иванович" />
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-muted mb-1">Пол</label>
+                                <InputSelect @bind-Value="_newMember.Gender" class="form-select form-control-lg rounded-3 fs-6">
+                                    <option value="@MyGender.Male">🧑 Мужчина</option>
+                                    <option value="@MyGender.Female">👩 Женщина</option>
+                                </InputSelect>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-muted mb-1">Дата рождения</label>
+                                <InputDate TValue="DateTime"
+                                           Value="_newMember.DateOfBirth"
+                                           ValueChanged="@(d => _newMember.DateOfBirth = d)"
+                                           ValueExpression="@(() => _newMember.DateOfBirth)"
+                                           class="form-control form-control-lg rounded-3 fs-6" />
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="button" class="btn btn-outline-secondary" @onclick="GoBack">Отмена</button>
-                        <button type="submit" class="btn btn-primary">Создать и связать</button>
+                    <!-- Секция: Семейные связи -->
+                    <div class="mb-4">
+                        <h5 class="text-secondary fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider" style="font-size: 0.85rem;">
+                            Семейные связи
+                        </h5>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-muted mb-1">Отец</label>
+                                <InputSelect @bind-Value="_newMember.FatherId" class="form-select form-control-lg rounded-3 fs-6">
+                                    <option value="">-- Выберите отца --</option>
+                                    @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Male))
+                                    {
+                                        <option value="@m.Id">@m.LastName @m.FirstName</option>
+                                    }
+                                </InputSelect>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-muted mb-1">Мать</label>
+                                <InputSelect @bind-Value="_newMember.MotherId" class="form-select form-control-lg rounded-3 fs-6">
+                                    <option value="">-- Выберите мать --</option>
+                                    @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Female))
+                                    {
+                                        <option value="@m.Id">@m.LastName @m.FirstName</option>
+                                    }
+                                </InputSelect>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-semibold text-muted mb-1">Супруг / Супруга</label>
+                                <InputSelect TValue="int?"
+                                             Value="_selectedSpouseId"
+                                             ValueChanged="OnSpouseChanged"
+                                             ValueExpression="@(() => _selectedSpouseId)"
+                                             class="form-select form-control-lg rounded-3 fs-6">
+                                    <option value="">-- Нет / Не выбрано --</option>
+                                    @foreach (var m in _allMembers)
+                                    {
+                                        <option value="@m.Id">@m.LastName @m.FirstName (@(m.Gender == MyGender.Male ? "муж" : "жен"))</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Секция: Дополнительно -->
+                    <div class="mb-4">
+                        <h5 class="text-secondary fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider" style="font-size: 0.85rem;">
+                            Дополнительные данные
+                        </h5>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-muted mb-1">Биография</label>
+                            <InputTextArea @bind-Value="_newMember.Biography" class="form-control rounded-3 fs-6 p-3" rows="4" placeholder="Краткая история жизни..." />
+                        </div>
+                    </div>
+
+                    <!-- Кнопки управления -->
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
+                        <button type="button" class="btn btn-light btn-lg rounded-3 px-4 fs-6 fw-medium text-secondary" @onclick="GoBack">
+                            Отмена
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-lg rounded-3 px-5 fs-6 fw-semibold shadow-sm">
+                            Создать и связать
+                        </button>
                     </div>
                 </EditForm>
             }
@@ -108,48 +181,89 @@
     </div>
 </div>
 
+
 @code {
-    private FamilyMemberDto _newMember = new()
-        {
-            DateOfBirth = DateTime.Today,
-            SpouseIds = new List<int>() 
-        };
+    private FamilyMemberDto _newMember = new() { DateOfBirth = DateTime.Today };
     private List<FamilyMemberDto>? _allMembers;
-    private int? _selectedSpouseId; // Для биндинга выпадающего списка
+    private int? _selectedSpouseId;
+
+    private InputFile? _fileInput;
+    private IBrowserFile? _selectedFile;
+    private string? _previewPhotoUrl;
 
     protected override async Task OnInitializedAsync()
     {
-        try
+        _allMembers = await FamilyService.GetAllMembersAsync();
+    }
+
+    private async Task TriggerFileInput()
+    {
+        if (_fileInput?.Element != null)
         {
-            _allMembers = await Http.GetFromJsonAsync<List<FamilyMemberDto>>("api/Family/all");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Детальная ошибка: {ex.Message}");
+            await JS.InvokeVoidAsync("HTMLElement.prototype.click.call", _fileInput.Element);
         }
     }
 
-    private void OnSpouseChanged(int? id)
+    private async Task OnPhotoSelected(InputFileChangeEventArgs e)
     {
-        _selectedSpouseId = id;
-        _newMember.SpouseIds.Clear();
-        if (id.HasValue)
+        var file = e.File; // e.File — это уже готовый IBrowserFile
+        if (file == null) return;
+
+        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+        var extension = Path.GetExtension(file.Name).ToLower(); // Исправлено: file.Name вместо file.File.Name
+
+        if (!allowedExtensions.Contains(extension) || file.Size > 1024 * 1024 * 2) // Исправлено: file.Size вместо file.File.Size
         {
-            _newMember.SpouseIds.Add(id.Value);
+            Console.WriteLine("Ошибка: неверный формат или размер файла > 2МБ");
+            return;
+        }
+
+        _selectedFile = file;
+
+        using var stream = _selectedFile.OpenReadStream(2 * 1024 * 1024);
+        using var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        _previewPhotoUrl = $"data:{_selectedFile.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+    }
+
+    private void ClearSelectedPhoto()
+    {
+        _selectedFile = null;
+        _previewPhotoUrl = null;
+    }
+
+    private void OnSpouseChanged(int? value)
+    {
+        _selectedSpouseId = value;
+        if (value.HasValue)
+        {
+            _newMember.SpouseIds = new List<int> { value.Value };
+        }
+        else
+        {
+            _newMember.SpouseIds = null;
         }
     }
 
-
-    private async Task HandleSubmit()
+    private async Task HandleFormSubmit()
     {
-        var response = await Http.PostAsJsonAsync("api/Family/add", _newMember);
-        if (response.IsSuccessStatusCode)
+        var createdMember = await FamilyService.AddMemberAsync(_newMember);
+
+        if (createdMember != null)
         {
+            if (_selectedFile != null)
+            {
+                await FamilyService.UploadPhotoAsync(createdMember.Id.ToString(), _selectedFile);
+            }
+
             Nav.NavigateTo("/ftree");
         }
-    }    
+    }
 
-    private void GoBack() => Nav.NavigateTo("/ftree");
+    private void GoBack()
+    {
+        Nav.NavigateTo("/ftree");
+    }
 }
 
 
