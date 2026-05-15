@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\zagariy_ds\\desktop\\test4\\family\\family\\webclient\\webfamily\\pages\\addmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:pages\\addmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\zagariy_ds\\desktop\\test4\\family\\family\\webclient\\webfamily\\pages\\ftree.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:pages\\ftree.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\zagariy_ds\\desktop\\test4\\family\\family\\webclient\\webfamily\\models\\customnode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:models\\customnode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\zagariy_ds\\desktop\\test4\\family\\family\\webclient\\webfamily\\services\\ifamilyclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:services\\ifamilyclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\zagariy_ds\\desktop\\test4\\family\\family\\webclient\\webfamily\\services\\familynodefactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -34,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,76 +46,55 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IFamilyClientService.cs",
-              "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\IFamilyClientService.cs",
-              "RelativeDocumentMoniker": "Services\\IFamilyClientService.cs",
-              "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\IFamilyClientService.cs",
-              "RelativeToolTip": "Services\\IFamilyClientService.cs",
-              "ViewState": "AQIAAEwAAAAAAAAAAAAswEMAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-13T10:05:29.014Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AddMember.razor",
-              "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\AddMember.razor",
-              "RelativeDocumentMoniker": "Pages\\AddMember.razor",
-              "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\AddMember.razor",
-              "RelativeToolTip": "Pages\\AddMember.razor",
-              "ViewState": "AQIAAC8AAAAAAAAAAAAAAOcAAAASAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-13T08:38:42.348Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "FamilyMappingService.cs",
-              "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\FamilyMappingService.cs",
-              "RelativeDocumentMoniker": "Services\\FamilyMappingService.cs",
-              "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\FamilyMappingService.cs",
-              "RelativeToolTip": "Services\\FamilyMappingService.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAAwCEAAABRAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-07T08:59:12.728Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "FamilyNodeFactory.cs",
               "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\FamilyNodeFactory.cs",
               "RelativeDocumentMoniker": "Services\\FamilyNodeFactory.cs",
               "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\FamilyNodeFactory.cs",
               "RelativeToolTip": "Services\\FamilyNodeFactory.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAA6AAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABQAAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-07T10:40:50.859Z"
+              "WhenOpened": "2026-05-15T10:54:26.023Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
+              "Title": "FamilyMappingService.cs",
+              "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\FamilyMappingService.cs",
+              "RelativeDocumentMoniker": "Services\\FamilyMappingService.cs",
+              "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\FamilyMappingService.cs",
+              "RelativeToolTip": "Services\\FamilyMappingService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACcAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T08:59:12.728Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "Ftree.razor",
               "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\Ftree.razor",
               "RelativeDocumentMoniker": "Pages\\Ftree.razor",
               "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\Ftree.razor",
               "RelativeToolTip": "Pages\\Ftree.razor",
-              "ViewState": "AQIAANEAAAAAAAAAAAAgwNsAAAAdAAAA",
+              "ViewState": "AQIAADcAAAAAAAAAAAAgwF4AAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-07T10:31:00.111Z"
+              "WhenOpened": "2026-05-07T10:31:00.111Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "CustomNode.cs",
               "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Models\\CustomNode.cs",
               "RelativeDocumentMoniker": "Models\\CustomNode.cs",
               "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Models\\CustomNode.cs",
               "RelativeToolTip": "Models\\CustomNode.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAFAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T06:47:02.71Z"
+              "WhenOpened": "2026-04-22T06:47:02.71Z",
+              "EditorCaption": ""
             }
           ]
         }

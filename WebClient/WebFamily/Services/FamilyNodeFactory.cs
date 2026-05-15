@@ -17,9 +17,9 @@ namespace WebFamily.Services
                 
                 Id = dto.Id.ToString(),
                 Name = $"{dto.LastName} {dto.FirstName} {dto.ParentName}",
-                FatherId =dto.FatherId?.ToString(),
-                MotherId = dto.MotherId?.ToString(),             
-                
+                MotherId = dto.FatherId?.ToString(),
+                FatherId = dto.MotherId?.ToString(),
+
                 PartnerIds = dto.SpouseIds?.Select(id => id.ToString()).ToArray(),                
                 Gender = dto.Gender == MyGender.Male ? BTJS.Male : BTJS.Female,
                 Biography = dto.Biography,

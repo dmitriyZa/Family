@@ -1,4 +1,5 @@
 ﻿using Blazor.FamilyTreeJS.Components.Interop.Options;
+using System.Text.Json.Serialization;
 
 namespace WebFamily.Models
 {
@@ -8,5 +9,12 @@ namespace WebFamily.Models
         // Дополнительные поля из твоего DTO
         public string? Biography { get; init; }
         public string? BirthDate { get; init; }
+        
+
+        [JsonPropertyName("fid")]
+        public string? FatherId { get; set; }
+
+        [JsonPropertyName("mid")]
+        public string? MotherId { get; set; }
     }
 }
