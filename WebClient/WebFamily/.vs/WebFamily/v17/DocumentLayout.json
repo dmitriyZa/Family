@@ -54,8 +54,7 @@
               "RelativeToolTip": "Services\\FamilyNodeFactory.cs",
               "ViewState": "AQIAAAYAAAAAAAAAAAAAABQAAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-15T10:54:26.023Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-15T10:54:26.023Z"
             },
             {
               "$type": "Document",
@@ -67,8 +66,7 @@
               "RelativeToolTip": "Services\\FamilyMappingService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAACcAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-07T08:59:12.728Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-07T08:59:12.728Z"
             },
             {
               "$type": "Document",
@@ -78,7 +76,7 @@
               "RelativeDocumentMoniker": "Pages\\Ftree.razor",
               "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\Ftree.razor",
               "RelativeToolTip": "Pages\\Ftree.razor",
-              "ViewState": "AQIAADcAAAAAAAAAAAAgwF4AAAAxAAAA",
+              "ViewState": "AQIAAB0AAAAAAAAAAAAgwF4AAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-05-07T10:31:00.111Z",
               "EditorCaption": ""
@@ -93,8 +91,7 @@
               "RelativeToolTip": "Models\\CustomNode.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T06:47:02.71Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-22T06:47:02.71Z"
             }
           ]
         }
