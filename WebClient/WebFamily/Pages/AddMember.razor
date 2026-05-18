@@ -1,4 +1,4 @@
-﻿@page "/family/add-member"
+﻿@page "/add-member"
 @using Family.Shared
 @inject IFamilyClientService FamilyService
 @inject NavigationManager Nav
@@ -283,13 +283,13 @@
                 await FamilyService.UploadPhotoAsync(createdMember.Id.ToString(), _selectedFile);
             }
 
-            Nav.NavigateTo("/ftree");
+            Nav.NavigateTo("ftree");
         }
     }
 
     private void GoBack()
     {
-        Nav.NavigateTo("/family/ftree");
+        Nav.NavigateTo("ftree");
     }
 }
 

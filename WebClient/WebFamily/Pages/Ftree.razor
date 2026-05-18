@@ -1,4 +1,4 @@
-﻿@page "/family/ftree"
+﻿@page "/ftree"
 @using WebFamily.Services
 @using Family.Shared
 @using WebFamily.Models
@@ -14,7 +14,7 @@
 <h1>Мое семейное дерево</h1>
 
 <div class="mb-2 text-end">
-    <Button Color="ButtonColor.Primary" @onclick='(() => Nav.NavigateTo("/family/add-member"))'> Добавить родственника </Button>
+    <Button Color="ButtonColor.Primary" @onclick='(() => Nav.NavigateTo("add-member"))'> Добавить родственника </Button>
 </div>
 
 <div class="position-relative" style="height: 700px; border: 1px solid #ccc;">

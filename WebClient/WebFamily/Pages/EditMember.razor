@@ -1,4 +1,4 @@
-﻿@page "/family/edit-member/{Id:int}"
+﻿@page "/edit-member/{Id:int}"
 @using Family.Shared
 @using WebFamily.Services
 @inject IFamilyClientService FamilyService
@@ -334,13 +334,13 @@
                 await FamilyService.UploadPhotoAsync(Id.ToString(), _selectedFile);
             }
 
-            Nav.NavigateTo("/family/ftree");
+            Nav.NavigateTo("ftree");
         }
     }
 
     private void GoBack()
     {
-        Nav.NavigateTo("/family/ftree");
+        Nav.NavigateTo("ftree");
     }
 
 }
