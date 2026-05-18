@@ -16,11 +16,6 @@
 <div class="mb-2 text-end">
     <Button Color="ButtonColor.Primary" @onclick='(() => Nav.NavigateTo("/add-member"))'> Добавить родственника </Button>
 </div>
-<InputFile @ref="_fileInput"
-           id="photoUploadInput"
-           OnChange="HandleFileSelected"
-           accept=".jpg,.jpeg,.png"
-           style="display:none;" />
 
 <div class="position-relative" style="height: 700px; border: 1px solid #ccc;">
 
@@ -35,13 +30,11 @@
         </div>
     }
 
-    <!-- Дерево теперь РЕНДЕРИТСЯ ВСЕГДА и его ID не пропадает из DOM -->
+    <!-- Дерево рендерится всегда, когда готовы опции -->
     @if (_options != null)
     {
         <FamilyTree @ref=@_familyTree
                     TNode="CustomNode"
-                    OnUpdatedNode=@OnUpdateNode
-                    OnTextboxButtonClicked=@OnTextboxButtonClickedAsync
                     TreeId="family-tree-main"
                     Options=@_options />
     }
@@ -51,9 +44,6 @@
     private RootOptions<CustomNode> _options = null!;
     private FamilyTree<CustomNode> _familyTree = null!;
     private bool _isLoading = true;
-    private string? _currentNodeId;
-    private InputFile? _fileInput;
-    private TaskCompletionSource<string?>? _photoUploadTcs;
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,163 +52,46 @@
 
     private void InitializeOptions(List<CustomNode> nodes)
     {
-        // 1. Создаем список отцов с пустой строкой на первом месте
-        var fatherOptions = new List<Dictionary<string, string>>
-    {
-        new() { { "value", "" }, { "text", "-- Не выбрано --" } }
-    };
-
-        fatherOptions.AddRange(nodes
-             .Where(n => n.Gender?.ToString().ToLower() == "male")
-            .Select(n => new Dictionary<string, string> { { "value", n.Id }, { "text", n.Name ?? "" } }));
-
-        // 2. Создаем список матерей с пустой строкой на первом месте
-        var motherOptions = new List<Dictionary<string, string>>
-    {
-        new() { { "value", "" }, { "text", "-- Не выбрано --" } }
-    };
-
-        motherOptions.AddRange(nodes
-             .Where(n => n.Gender?.ToString().ToLower() == "female")
-            .Select(n => new Dictionary<string, string> { { "value", n.Id }, { "text", n.Name ?? "" } }));
-
-
         _options = new(
             FamilyTreeOptions: new(
-                MiniMap:false,                
+                MiniMap: false,
                 Mode: "light",
-                Template: Template.Tommy,                
+                Template: Template.Tommy,
                 NodeBinding: new Dictionary<string, string>()
-                            {
+                {
                     { NodeBinding.Field0, "name" },
                     { NodeBinding.Field1, "birthDate" },
-                    { NodeBinding.Img0, "photo" }                    
-                            },
+                    { NodeBinding.Img0, "photo" }
+                },
                 Nodes: nodes,
                 NodeMenu: new()
-                    {
-                        Details = new(Text: "Открыть анкету"),
-                        Edit = new(Text: "Редактировать"),
-                        Remove = new(Text: "Удалить",
-                            OnClick: (Action<string, object?>)((nodeId, _) => OnManualDelete(nodeId)))
-                    },
-                EditForm: new(
-                    PhotoBinding: "photo",
-                    CancelBtn: "Отмена",
-                    SaveAndCloseBtn: "Сохранить",
-                    Elements: new List<EditFormElement>()
-                                {
-                        new(Type: "textbox", Label: "ФИО", Binding: "name"),
-                        new(Type: "textbox", Label: "Дата рождения", Binding: "birthDate"),
-                        new(Type: "textbox", Label: "Photo", Binding: "photo", Btn: "Загрузить фото"),
-                        new(Type: "select", Label: "Отец", Binding: "fid", Options: fatherOptions),
-                        new(Type: "select", Label: "Мать", Binding: "mid", Options: motherOptions),
-                        new(Type: "textbox", Label: "Биография", Binding: "biography"),                        
-                        new(Type: "textbox", Label: "Пол", Binding: "gender",
-                        Options: new List<Dictionary<string, string>>()
-              {
-                new() { { "value", "male" }, { "text", "Муж" } },
-                new() { { "value", "female" }, { "text", "Жен" } }
-              })
-              }
-                )
+                {
+                    Details = new(Text: "Открыть анкету"),
+                    // Перенаправляем на нашу кастомную страницу по ID
+                    Edit = new(Text: "Редактировать",
+                        OnClick: (Action<string, object?>)((nodeId, _) => Nav.NavigateTo($"/edit-member/{nodeId}"))),
+                    Remove = new(Text: "Удалить",
+                        OnClick: (Action<string, object?>)((nodeId, _) => OnManualDelete(nodeId)))
+                },
+                EditForm: null // Встроенная форма полностью отключена
             )
         );
-    }  
-    
-
-    private async Task<string?> OnTextboxButtonClickedAsync(TextboxButtonClickedArgs args)
-    {
-        if (args.BindingName == "photo")
-        {
-            _currentNodeId = args.NodeId; // Сохраняем ID текущего родственника
-            _photoUploadTcs = new TaskCompletionSource<string?>();
-
-            if (_fileInput?.Element != null)
-            {
-                await JS.InvokeVoidAsync("HTMLElement.prototype.click.call", _fileInput.Element);
-            }
-
-            return await _photoUploadTcs.Task;
-        }
-        return string.Empty;
     }
-
-
-
-    private async Task HandleFileSelected(InputFileChangeEventArgs e)
-    {
-        var file = e.File;
-        if (file == null || string.IsNullOrEmpty(_currentNodeId)) return;
-
-        try
-        {
-            using var content = new MultipartFormDataContent();
-            var fileContent = new StreamContent(file.OpenReadStream(5 * 1024 * 1024));
-            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
-            content.Add(fileContent, "file", file.Name);
-
-            var response = await Http.PostAsync($"api/Family/{_currentNodeId}/upload-photo", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                // Читаем как JsonElement, чтобы динамически достать поле "url"
-                var result = await response.Content.ReadFromJsonAsync<System.Text.Json.JsonElement>();
-
-                if (result.TryGetProperty("url", out var urlProperty))
-                {
-                    var photoPath = urlProperty.GetString();
-
-                    // Передаем путь в форму дерева.
-                    // Библиотека сама подставит этот текст в TextBox.
-                    _photoUploadTcs?.SetResult(photoPath);
-                }
-                StateHasChanged();
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Ошибка загрузки: {ex.Message}");
-            _photoUploadTcs?.SetResult(null);
-        }
-    }
-
-
-
-
-
-    private async Task OnUpdateNode(UpdateNodeArgs<CustomNode> args)
-    {
-        foreach (var updatedNode in args.UpdateNodesData)
-        {
-            var dto = MappingService.MapNodeToDto(updatedNode);
-
-            if (string.IsNullOrEmpty(dto.PhotoUrl) && !string.IsNullOrEmpty(updatedNode.Photo))
-            {
-                dto.PhotoUrl = updatedNode.Photo;
-            }
-
-            await FamilyService.UpdateMemberAsync(dto.Id, dto);
-        }
-        await ReloadTree();
-    }
-
-
-
 
     private async void OnManualDelete(string nodeId)
     {
         if (string.IsNullOrEmpty(nodeId)) return;
 
-        // Библиотека иногда использует временные ID, их не шлем на бэк
         if (int.TryParse(nodeId, out int idToDelete))
         {
             try
             {
-                var response = await Http.DeleteAsync($"api/Family/{idToDelete}");
-                if (response.IsSuccessStatusCode)
+                _isLoading = true;
+                StateHasChanged();
+
+                var success = await FamilyService.DeleteMemberAsync(idToDelete);
+                if (success)
                 {
-                    // Важно: после удаления на бэке нужно удалить узел визуально
                     await _familyTree.RemoveNodeAsync(nodeId);
                     await ReloadTree();
                 }
@@ -227,45 +100,44 @@
             {
                 Console.WriteLine($"Ошибка при удалении: {ex.Message}");
             }
+            finally
+            {
+                _isLoading = false;
+                StateHasChanged();
+            }
         }
         else
         {
-            // Если это временная нода (не из БД), просто удаляем визуально
             await _familyTree.RemoveNodeAsync(nodeId);
         }
-    }     
+    }
 
     private async Task ReloadTree()
     {
         try
         {
             _isLoading = true;
-            _options = null!;
-            StateHasChanged(); // Показываем оверлей загрузки
+            _options = null!; // Сбрасываем старое дерево для чистого рендеринга
+            StateHasChanged();
 
-            // Скачиваем данные родственников
             var members = await FamilyService.GetAllMembersAsync();
 
             if (members != null)
             {
                 var nodes = NodeFactory.CreateTree(members);
-
-                // Инициализируем новые опции только ПОСЛЕ загрузки данных
                 InitializeOptions(nodes);
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Ошибка перезагрузки дерева: {ex.Message}");
+            Console.WriteLine($"Ошибка загрузки дерева: {ex.Message}");
         }
         finally
         {
             _isLoading = false;
-            StateHasChanged(); // Скрываем оверлей загрузки
+            StateHasChanged();
         }
     }
-        
-    
 
 
 }

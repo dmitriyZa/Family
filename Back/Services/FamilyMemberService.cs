@@ -131,18 +131,20 @@ public class FamilyMemberService
 
         await _familyRepository.UpdateFamilyMemberAsync(member);
 
-        // 2. Обновляем связи (простой подход: удалить старые и записать новые)
-        // Удаляем все текущие связи этого человека (где он субъект)
-        await _relationshipRepository.DeleteRelationshipAsync(id);
+        // 2. Очищаем старые связи, где этот человек был СУБЪЕКТОМ
+        await _relationshipRepository.DeleteRelationshipsBySubjectIdAsync(id);
 
-        // 3. Записываем новые связи из DTO (логика как в AddMemberAsync)
-        if (dto.FatherId.HasValue)
+        // Загружаем все оставшиеся связи для проверки на дубликаты в памяти
+        var allRemainingRelations = await _relationshipRepository.GetAllRelationshipsAsync();
+
+        // 3. Записываем новые связи из DTO
+        if (dto.FatherId.HasValue && dto.FatherId.Value != 0)
         {
             await _relationshipRepository.AddRelationshipAsync(new Relationship
             { FamilyMemberId = id, RelatedMemberId = dto.FatherId.Value, RelationTypeId = 1 });
         }
 
-        if (dto.MotherId.HasValue)
+        if (dto.MotherId.HasValue && dto.MotherId.Value != 0)
         {
             await _relationshipRepository.AddRelationshipAsync(new Relationship
             { FamilyMemberId = id, RelatedMemberId = dto.MotherId.Value, RelationTypeId = 2 });
@@ -152,23 +154,43 @@ public class FamilyMemberService
         {
             foreach (var spouseId in dto.SpouseIds)
             {
+                if (spouseId == 0 || spouseId == id) continue;
 
-                // Прямая связь
-                await _relationshipRepository.AddRelationshipAsync(new Relationship
-                { FamilyMemberId = id, RelatedMemberId = spouseId, RelationTypeId = 3 });
-                // Обратная связь
-                await _relationshipRepository.AddRelationshipAsync(new Relationship
-                { FamilyMemberId = spouseId, RelatedMemberId = id, RelationTypeId = 3 });
+                // Прямая связь (ток если её еще нет)
+                if (!allRemainingRelations.Any(r => r.FamilyMemberId == id && r.RelatedMemberId == spouseId && r.RelationTypeId == 3))
+                {
+                    await _relationshipRepository.AddRelationshipAsync(new Relationship
+                    { FamilyMemberId = id, RelatedMemberId = spouseId, RelationTypeId = 3 });
+                }
+
+                // Обратная зеркальная связь (ток если её еще нет)
+                if (!allRemainingRelations.Any(r => r.FamilyMemberId == spouseId && r.RelatedMemberId == id && r.RelationTypeId == 3))
+                {
+                    await _relationshipRepository.AddRelationshipAsync(new Relationship
+                    { FamilyMemberId = spouseId, RelatedMemberId = id, RelationTypeId = 3 });
+                }
             }
         }
+
+
     }
 
     public async Task DeleteMemberAsync(int id)
     {
-        // 1. Удаляем все связи, где этот человек был субъектом ИЛИ объектом
-        // Это важно, чтобы у детей не осталось "битой" ссылки на удаленного родителя
-        await _relationshipRepository.DeleteRelationshipAsync(id);
-        // 2. Удаляем самого человека
+        var allRelations = await _relationshipRepository.GetAllRelationshipsAsync();
+        var relationsToDelete = allRelations
+            .Where(r => r.FamilyMemberId == id || r.RelatedMemberId == id)
+            .ToList();
+
+        foreach (var rel in relationsToDelete)
+        {
+            // Передаем первичный ключ самой связи rel.Id, а не id человека!
+            await _relationshipRepository.DeleteRelationshipAsync(rel.Id);
+        }
+
         await _familyRepository.DeleteFamilyMemberAsync(id);
     }
+
+
+
 }

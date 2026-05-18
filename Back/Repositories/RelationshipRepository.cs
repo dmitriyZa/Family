@@ -7,6 +7,7 @@ public interface IRelationshipRepository
     Task AddRelationshipAsync(Relationship relationship);
     Task DeleteRelationshipAsync(int id);
     Task<List<Relationship>> GetAllRelationshipsAsync();
+    Task DeleteRelationshipsBySubjectIdAsync(int memberId);
 }
 
 public class RelationshipRepository : IRelationshipRepository
@@ -57,5 +58,19 @@ public class RelationshipRepository : IRelationshipRepository
             await _context.SaveChangesAsync();
         }
     }
+    public async Task DeleteRelationshipsBySubjectIdAsync(int memberId)
+    {
+        // Находим только те связи, которые «исходят» от этого человека
+        var rels = await _context.Relationships
+            .Where(r => r.FamilyMemberId == memberId)
+            .ToListAsync();
+
+        if (rels.Any())
+        {
+            _context.Relationships.RemoveRange(rels);
+            await _context.SaveChangesAsync();
+        }
+    }
+
 }
 
