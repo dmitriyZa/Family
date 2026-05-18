@@ -82,6 +82,8 @@ Migrations/
  20260512111030_MakeBioNullable12.Designer.cs
  20260512114226_MakeBioNullable123.cs
  20260512114226_MakeBioNullable123.Designer.cs
+ 20260516195427_AddPhotoToFamilyMembers.cs
+ 20260516195427_AddPhotoToFamilyMembers.Designer.cs
  ApplicationDbContextModelSnapshot.cs
 Models/
  FamilyMember.cs
