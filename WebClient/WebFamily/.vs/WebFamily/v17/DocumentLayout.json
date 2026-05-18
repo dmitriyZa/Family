@@ -7,6 +7,18 @@
       "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:pages\\ftree.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\zagariy_ds\\desktop\\test4\\family\\family\\webclient\\webfamily\\pages\\editmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:pages\\editmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\zagariy_ds\\desktop\\test4\\family\\family\\webclient\\webfamily\\pages\\addmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:pages\\addmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\zagariy_ds\\desktop\\test4\\family\\family\\webclient\\webfamily\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\zagariy_ds\\desktop\\test4\\family\\family\\webclient\\webfamily\\wwwroot\\.nojekyll||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:wwwroot\\.nojekyll||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
@@ -30,8 +42,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 10,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Home.razor",
+              "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\Home.razor",
+              "RelativeDocumentMoniker": "Pages\\Home.razor",
+              "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\Home.razor",
+              "RelativeToolTip": "Pages\\Home.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-18T11:13:13.156Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EditMember.razor",
+              "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\EditMember.razor",
+              "RelativeDocumentMoniker": "Pages\\EditMember.razor",
+              "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\EditMember.razor",
+              "RelativeToolTip": "Pages\\EditMember.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-18T11:09:44.463Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -50,7 +88,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
+              "Title": "AddMember.razor",
+              "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\AddMember.razor",
+              "RelativeDocumentMoniker": "Pages\\AddMember.razor",
+              "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\AddMember.razor",
+              "RelativeToolTip": "Pages\\AddMember.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-18T11:02:11.524Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": ".nojekyll",
               "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\wwwroot\\.nojekyll",
               "RelativeDocumentMoniker": "wwwroot\\.nojekyll",
@@ -58,12 +109,11 @@
               "RelativeToolTip": "wwwroot\\.nojekyll",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-05-18T10:28:25.109Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-18T10:28:25.109Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "FamilyNodeFactory.cs",
               "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\FamilyNodeFactory.cs",
               "RelativeDocumentMoniker": "Services\\FamilyNodeFactory.cs",
@@ -75,7 +125,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "FamilyMappingService.cs",
               "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Services\\FamilyMappingService.cs",
               "RelativeDocumentMoniker": "Services\\FamilyMappingService.cs",
@@ -93,14 +143,14 @@
               "RelativeDocumentMoniker": "Pages\\Ftree.razor",
               "ToolTip": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Pages\\Ftree.razor",
               "RelativeToolTip": "Pages\\Ftree.razor",
-              "ViewState": "AQIAACAAAAAAAAAAAAAgwDAAAAAFAAAA",
+              "ViewState": "AQIAAG8AAAAAAAAAAAAAABAAAABKAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-05-07T10:31:00.111Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "CustomNode.cs",
               "DocumentMoniker": "C:\\Users\\zagariy_ds\\Desktop\\test4\\Family\\Family\\WebClient\\WebFamily\\Models\\CustomNode.cs",
               "RelativeDocumentMoniker": "Models\\CustomNode.cs",

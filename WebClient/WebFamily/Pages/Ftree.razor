@@ -1,4 +1,4 @@
-﻿@page "/ftree"
+﻿@page "/family/ftree"
 @using WebFamily.Services
 @using Family.Shared
 @using WebFamily.Models
@@ -14,7 +14,7 @@
 <h1>Мое семейное дерево</h1>
 
 <div class="mb-2 text-end">
-    <Button Color="ButtonColor.Primary" @onclick='(() => Nav.NavigateTo("/add-member"))'> Добавить родственника </Button>
+    <Button Color="ButtonColor.Primary" @onclick='(() => Nav.NavigateTo("/family/add-member"))'> Добавить родственника </Button>
 </div>
 
 <div class="position-relative" style="height: 700px; border: 1px solid #ccc;">
@@ -69,7 +69,7 @@
                     Details = new(Text: "Открыть анкету"),
                     // Перенаправляем на нашу кастомную страницу по ID
                     Edit = new(Text: "Редактировать",
-                        OnClick: (Action<string, object?>)((nodeId, _) => Nav.NavigateTo($"/edit-member/{nodeId}"))),
+                        OnClick: (Action<string, object?>)((nodeId, _) => Nav.NavigateTo($"/family/edit-member/{nodeId}"))),
                     Remove = new(Text: "Удалить",
                         OnClick: (Action<string, object?>)((nodeId, _) => OnManualDelete(nodeId)))
                 },

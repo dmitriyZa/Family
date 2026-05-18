@@ -1,4 +1,4 @@
-﻿@page "/add-member"
+﻿@page "/family/add-member"
 @using Family.Shared
 @inject IFamilyClientService FamilyService
 @inject NavigationManager Nav
@@ -233,20 +233,19 @@
 
     private async Task OnPhotoSelected(InputFileChangeEventArgs e)
     {
-        var file = e.File; // e.File — это уже готовый IBrowserFile
+        var file = e.File;
         if (file == null) return;
 
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-        var extension = Path.GetExtension(file.Name).ToLower(); // Исправлено: file.Name вместо file.File.Name
+        var extension = Path.GetExtension(file.Name).ToLower();
 
-        if (!allowedExtensions.Contains(extension) || file.Size > 1024 * 1024 * 2) // Исправлено: file.Size вместо
-            file.File.Size
+        if (!allowedExtensions.Contains(extension) || file.Size > 1024 * 1024 * 2)
         {
             Console.WriteLine("Ошибка: неверный формат или размер файла > 2МБ");
             return;
         }
 
-        _selectedFile = file;
+        _selectedFile = file;        
 
         using var stream = _selectedFile.OpenReadStream(2 * 1024 * 1024);
         using var ms = new MemoryStream();
