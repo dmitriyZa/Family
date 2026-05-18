@@ -7,11 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowBlazorOrigin",
-        builder => builder.WithOrigins("https://localhost:7053") // Адрес вашего Blazor
-                          .AllowAnyMethod()
-                          .AllowAnyHeader());
+    options.AddPolicy("BlazorCorsPolicy", policy =>
+    {
+        policy.WithOrigins("https://dmitriyza.github.io") // Разрешаем ваш фронтенд
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
+
+
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -42,7 +46,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 app.UseStaticFiles();
-app.UseCors("AllowBlazorOrigin");
+app.UseCors("BlazorCorsPolicy");
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

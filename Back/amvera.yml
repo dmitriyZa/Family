@@ -1,0 +1,16 @@
+meta:
+  environment: csharp
+  toolchain:
+    name: dotnet
+    version: 8.0 # Укажите 8.0 или 9.0 в зависимости от версии вашей студии
+
+build:
+  # Если у вас проект лежит в подпапке Back, укажите к ней путь. 
+  # Если Amvera привязана напрямую к папке бэкенда, оставьте просто имя файла.
+  buildFileName: Back/Family.Back 
+
+run:
+  # Монтируем постоянный диск Amvera в системную папку /data
+  persistenceMount: /data 
+  # Порт, который будет слушать бэкенд в облаке (Amvera рекомендует 80 или 8080)
+  containerPort: 8080 
