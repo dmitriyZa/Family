@@ -1,0 +1,39 @@
+name: Deploy Blazor to GitHub Pages
+
+on:
+  push:
+    branches: [ main ] # Скрипт будет срабатывать при пуше в ветку main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # 1. Устанавливаем .NET SDK
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x' # Укажите версию вашей студии (8.0 или 9.0)
+
+    # 2. Публикуем Blazor проект в режиме Release
+    - name: Publish Blazor Project
+      run: dotnet publish WebClient/WebFamily/WebFamily.csproj -c Release -o release-output
+
+    # 3. Решаем проблему путей GitHub Pages (Заменяем <base href="/" /> на имя репозитория)
+    # Замените 'Family' на точное имя вашего репозитория, если оно отличается в регистре
+    - name: Change base-tag in index.html
+      run: sed -i 's/<base href="\/" \/>/<base href="\/Family\/" \/>/g' release-output/wwwroot/index.html
+
+    # 4. Решаем проблему роутинга Blazor (копируем index.html в 404.html)
+    # Это нужно, чтобы при перезагрузке страниц внутри дерева не вылетала ошибка 404 от GitHub
+    - name: Copy index.html to 404.html
+      run: cp release-output/wwwroot/index.html release-output/wwwroot/404.html
+
+    # 5. Деплоим папку wwwroot в специальную ветку gh-pages
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: release-output/wwwroot
