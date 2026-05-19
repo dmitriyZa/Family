@@ -1,0 +1,14 @@
+---
+version: 1
+
+build:
+  type: dotnet
+  projectFile: Back/Back.csproj  # путь к вашему .csproj файлу
+  publish: true
+  configuration: Release  # конфигурация сборки (Release/Debug)
+  framework: net8.0  # укажите вашу версию .NET
+
+runtime:
+  type: dotnet
+  port: 80  # порт для запуска приложения
+  command: dotnet Back/Back.dll  # команда запуска опубликованного приложения
