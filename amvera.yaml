@@ -1,14 +1,20 @@
----
-version: 1
+meta:
+  environment: csharp
+  toolchain:
+    name: dotnet
+    version: 8.0
 
 build:
+  image: mcr.microsoft.com/dotnet/sdk:8.0
   type: dotnet
-  projectFile: Back/Back.csproj  # путь к вашему .csproj файлу
+  solutionFile: Back/Back.sln  # исправленный параметр
   publish: true
-  configuration: Release  # конфигурация сборки (Release/Debug)
-  framework: net8.0  # укажите вашу версию .NET
+  configuration: Release
+  framework: net8.0
 
-runtime:
-  type: dotnet
-  port: 80  # порт для запуска приложения
-  command: dotnet Back/Back.dll  # команда запуска опубликованного приложения
+run:
+  persistenceMount: /data
+  image: mcr.microsoft.com/dotnet/aspnet:8.0  # используйте aspnet для запуска
+  containerPort: 8080
+  servicePort: 80
+  command: dotnet Back/bin/Release/net8.0/Back.dll  # команда запуска приложения
