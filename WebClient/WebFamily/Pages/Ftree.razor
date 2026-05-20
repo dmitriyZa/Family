@@ -9,6 +9,8 @@
 @inject IFamilyClientService FamilyService
 @inject IJSRuntime JS
 
+
+
 <PageTitle>Семейное дерево</PageTitle>
 
 <h1>Мое семейное дерево</h1>
@@ -22,7 +24,8 @@
     <!-- Индикатор загрузки накладывается поверх, не ломая разметку дерева -->
     @if (_isLoading)
     {
-        <div class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 10;">
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center"
+             style="z-index: 10;">
             <div class="text-center">
                 <div class="spinner-border text-primary mb-2" role="status"></div>
                 <p class="mb-0 text-muted fw-medium">Загрузка данных...</p>
@@ -33,10 +36,7 @@
     <!-- Дерево рендерится всегда, когда готовы опции -->
     @if (_options != null)
     {
-        <FamilyTree @ref=@_familyTree
-                    TNode="CustomNode"
-                    TreeId="family-tree-main"
-                    Options=@_options />
+        <FamilyTree @ref=@_familyTree TNode="CustomNode" TreeId="family-tree-main" Options=@_options />
     }
 </div>
 
@@ -44,6 +44,9 @@
     private RootOptions<CustomNode> _options = null!;
     private FamilyTree<CustomNode> _familyTree = null!;
     private bool _isLoading = true;
+
+    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -69,11 +72,11 @@
                     Details = new(Text: "Открыть анкету"),
                     // Перенаправляем на нашу кастомную страницу по ID
                     Edit = new(Text: "Редактировать",
-                        OnClick: (Action<string, object?>)((nodeId, _) => Nav.NavigateTo($"/family/edit-member/{nodeId}"))),
+                        OnClick: (Action<string, object?>)((nodeId, _) => Nav.NavigateTo($"/Family/edit-member/{nodeId}"))),
                     Remove = new(Text: "Удалить",
                         OnClick: (Action<string, object?>)((nodeId, _) => OnManualDelete(nodeId)))
                 },
-                EditForm: null 
+                EditForm: null
             )
         );
     }
