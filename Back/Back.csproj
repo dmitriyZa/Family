@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Family.Shared\Family.Shared.csproj" />
+    <Reference Include="Family.Shared.dll" />
   </ItemGroup>
 
  
