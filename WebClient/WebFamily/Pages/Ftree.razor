@@ -5,16 +5,17 @@
 @inject HttpClient Http
 @inject FamilyNodeFactory NodeFactory
 @inject NavigationManager Nav
-@inject FamilyMappingService MappingService
 @inject IFamilyClientService FamilyService
 @inject IJSRuntime JS
+
+
 
 <PageTitle>Семейное дерево</PageTitle>
 
 <h1>Мое семейное дерево</h1>
 
 <div class="mb-2 text-end">
-    <Button Color="ButtonColor.Primary" @onclick='(() => Nav.NavigateTo("/add-member"))'> Добавить родственника </Button>
+    <Button Color="ButtonColor.Primary" @onclick='(() => Nav.NavigateTo("add-member"))'> Добавить родственника </Button>
 </div>
 
 <div class="position-relative" style="height: 700px; border: 1px solid #ccc;">
@@ -22,7 +23,8 @@
     <!-- Индикатор загрузки накладывается поверх, не ломая разметку дерева -->
     @if (_isLoading)
     {
-        <div class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 10;">
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center"
+             style="z-index: 10;">
             <div class="text-center">
                 <div class="spinner-border text-primary mb-2" role="status"></div>
                 <p class="mb-0 text-muted fw-medium">Загрузка данных...</p>
@@ -33,10 +35,7 @@
     <!-- Дерево рендерится всегда, когда готовы опции -->
     @if (_options != null)
     {
-        <FamilyTree @ref=@_familyTree
-                    TNode="CustomNode"
-                    TreeId="family-tree-main"
-                    Options=@_options />
+        <FamilyTree @ref=@_familyTree TNode="CustomNode" TreeId="family-tree-main" Options=@_options />
     }
 </div>
 
@@ -44,6 +43,9 @@
     private RootOptions<CustomNode> _options = null!;
     private FamilyTree<CustomNode> _familyTree = null!;
     private bool _isLoading = true;
+
+    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,13 +69,16 @@
                 NodeMenu: new()
                 {
                     Details = new(Text: "Открыть анкету"),
-                    // Перенаправляем на нашу кастомную страницу по ID
+
                     Edit = new(Text: "Редактировать",
-                        OnClick: (Action<string, object?>)((nodeId, _) => Nav.NavigateTo($"/edit-member/{nodeId}"))),
+                        OnClick: (Action<string, object?>)((nodeId, _) => Nav.NavigateTo($"/Family/edit-member/{nodeId}"))),
                     Remove = new(Text: "Удалить",
                         OnClick: (Action<string, object?>)((nodeId, _) => OnManualDelete(nodeId)))
                 },
-                EditForm: null // Встроенная форма полностью отключена
+                EditForm: new(
+                PhotoBinding: "photo", // Передаем имя свойства с маленькой буквы
+                Elements: new List<EditFormElement>()
+            )
             )
         );
     }

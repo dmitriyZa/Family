@@ -3,24 +3,42 @@
   "WorkspaceRootPath": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\services\\ifamilyclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:services\\ifamilyclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\services\\familymappingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:services\\familymappingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\pages\\editmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:pages\\editmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\pages\\ftree.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:pages\\ftree.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\services\\familynodefactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:services\\familynodefactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\webfamily.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:webfamily.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentfiles\\any\\net8.0\\wwwroot\\js\\components\\interop\\modules\\familytreestatic\\family-tree-static.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentfiles\\any\\net8.0\\wwwroot\\js\\components\\interop\\modules\\familytreeinterop\\family-tree-interop.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\services\\ifamilyclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:services\\ifamilyclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\pages\\editmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|solutionrelative:pages\\editmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7DBD52E5-8014-C603-565E-AF7EA06FDFE4}|WebFamily.csproj|c:\\users\\admin\\source\\repos\\family\\webclient\\webfamily\\pages\\addmember.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -43,32 +61,109 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T19:31:23.585Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainLayout.razor",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Layout\\MainLayout.razor",
+              "RelativeDocumentMoniker": "Layout\\MainLayout.razor",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Layout\\MainLayout.razor",
+              "RelativeToolTip": "Layout\\MainLayout.razor",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-21T19:29:50.396Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "NavMenu.razor",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Layout\\NavMenu.razor",
+              "RelativeDocumentMoniker": "Layout\\NavMenu.razor",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Layout\\NavMenu.razor",
+              "RelativeToolTip": "Layout\\NavMenu.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-21T19:29:46.866Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "WebFamily",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\WebFamily.csproj",
+              "RelativeDocumentMoniker": "WebFamily.csproj",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\WebFamily.csproj",
+              "RelativeToolTip": "WebFamily.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-05-21T17:38:20.255Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "family-tree-static.js",
+              "DocumentMoniker": "C:\\Users\\Admin\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentFiles\\any\\net8.0\\wwwroot\\js\\Components\\Interop\\Modules\\FamilyTreeStatic\\family-tree-static.js",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentFiles\\any\\net8.0\\wwwroot\\js\\Components\\Interop\\Modules\\FamilyTreeStatic\\family-tree-static.js",
+              "ToolTip": "C:\\Users\\Admin\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentFiles\\any\\net8.0\\wwwroot\\js\\Components\\Interop\\Modules\\FamilyTreeStatic\\family-tree-static.js [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentFiles\\any\\net8.0\\wwwroot\\js\\Components\\Interop\\Modules\\FamilyTreeStatic\\family-tree-static.js [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAAAAAAAAAAAAQAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-05-21T17:36:20.356Z",
+              "EditorCaption": " [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "family-tree-interop.js",
+              "DocumentMoniker": "C:\\Users\\Admin\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentFiles\\any\\net8.0\\wwwroot\\js\\Components\\Interop\\Modules\\FamilyTreeInterop\\family-tree-interop.js",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentFiles\\any\\net8.0\\wwwroot\\js\\Components\\Interop\\Modules\\FamilyTreeInterop\\family-tree-interop.js",
+              "ToolTip": "C:\\Users\\Admin\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentFiles\\any\\net8.0\\wwwroot\\js\\Components\\Interop\\Modules\\FamilyTreeInterop\\family-tree-interop.js [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\.nuget\\packages\\blazor.familytreejs\\3.0.1\\contentFiles\\any\\net8.0\\wwwroot\\js\\Components\\Interop\\Modules\\FamilyTreeInterop\\family-tree-interop.js [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-05-21T17:36:10.829Z",
+              "EditorCaption": " [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "IFamilyClientService.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Services\\IFamilyClientService.cs",
               "RelativeDocumentMoniker": "Services\\IFamilyClientService.cs",
               "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Services\\IFamilyClientService.cs",
               "RelativeToolTip": "Services\\IFamilyClientService.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAAwDgAAABKAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-21T17:20:25.436Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "EditMember.razor",
-              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Pages\\EditMember.razor",
-              "RelativeDocumentMoniker": "Pages\\EditMember.razor",
-              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Pages\\EditMember.razor",
-              "RelativeToolTip": "Pages\\EditMember.razor",
-              "ViewState": "AgIAAPcAAAAAAAAAAAAAAAMAAAAmAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "Ftree.razor",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Pages\\Ftree.razor",
+              "RelativeDocumentMoniker": "Pages\\Ftree.razor",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Pages\\Ftree.razor",
+              "RelativeToolTip": "Pages\\Ftree.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-16T20:57:01.38Z",
+              "WhenOpened": "2026-05-16T19:49:30.204Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "AddMember.razor",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Pages\\AddMember.razor",
               "RelativeDocumentMoniker": "Pages\\AddMember.razor",
@@ -76,8 +171,19 @@
               "RelativeToolTip": "Pages\\AddMember.razor",
               "ViewState": "AgIAAIEAAAAAAAAAAAAAAHoAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-16T19:58:49.848Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-16T19:58:49.848Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "EditMember.razor",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Pages\\EditMember.razor",
+              "RelativeDocumentMoniker": "Pages\\EditMember.razor",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Pages\\EditMember.razor",
+              "RelativeToolTip": "Pages\\EditMember.razor",
+              "ViewState": "AgIAAPcAAAAAAAAAAAAAAAMAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-16T20:57:01.38Z"
             },
             {
               "$type": "Document",
@@ -94,33 +200,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "FamilyMappingService.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Services\\FamilyMappingService.cs",
-              "RelativeDocumentMoniker": "Services\\FamilyMappingService.cs",
-              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Services\\FamilyMappingService.cs",
-              "RelativeToolTip": "Services\\FamilyMappingService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-16T19:49:30.2Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Ftree.razor",
-              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Pages\\Ftree.razor",
-              "RelativeDocumentMoniker": "Pages\\Ftree.razor",
-              "ToolTip": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Pages\\Ftree.razor",
-              "RelativeToolTip": "Pages\\Ftree.razor",
-              "ViewState": "AgIAADMAAAAAAAAAAAAAAAcAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-16T19:49:30.204Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 11,
               "Title": "CustomNode.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\Family\\WebClient\\WebFamily\\Models\\CustomNode.cs",
               "RelativeDocumentMoniker": "Models\\CustomNode.cs",
@@ -128,8 +208,7 @@
               "RelativeToolTip": "Models\\CustomNode.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-16T19:49:30.211Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-16T19:49:30.211Z"
             }
           ]
         }

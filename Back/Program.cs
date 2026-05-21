@@ -1,17 +1,23 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls("http://0.0.0.0:80");
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowBlazorOrigin",
-        builder => builder.WithOrigins("https://localhost:7053") // Адрес вашего Blazor
-                          .AllowAnyMethod()
-                          .AllowAnyHeader());
+    options.AddPolicy("BlazorCorsPolicy", policy =>
+    {
+        policy.WithOrigins("https://dmitriyza.github.io") // Разрешаем ваш фронтенд
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
+
+
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -42,7 +48,16 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 app.UseStaticFiles();
-app.UseCors("AllowBlazorOrigin");
+var dataPhotosPath = "/data/photos";
+if (Directory.Exists(dataPhotosPath))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(dataPhotosPath),
+        RequestPath = "/photos"
+    });
+}
+app.UseCors("BlazorCorsPolicy");
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
