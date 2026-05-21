@@ -4,6 +4,8 @@ public interface IFileStorageService
     void DeletePhoto(string? relativePath);
 }
 
+
+
 public class FileStorageService : IFileStorageService
 {
     private readonly string _photosFolder;
@@ -12,11 +14,9 @@ public class FileStorageService : IFileStorageService
     public FileStorageService(IConfiguration configuration, ILogger<FileStorageService> logger)
     {
         _logger = logger;
-        // Берём путь из конфигурации, по умолчанию — рядом с приложением
-        var basePath = configuration["FileStorage:BasePath"] ?? Directory.GetCurrentDirectory();
+        var basePath = configuration["FileStorage:BasePath"] ?? "/data";
         _photosFolder = Path.Combine(basePath, "photos");
 
-        // Создаём папку при старте, если её нет
         if (!Directory.Exists(_photosFolder))
         {
             Directory.CreateDirectory(_photosFolder);
@@ -36,8 +36,7 @@ public class FileStorageService : IFileStorageService
             await using var stream = new FileStream(filePath, FileMode.Create);
             await file.CopyToAsync(stream);
             _logger.LogInformation("Фото сохранено: {FilePath}", filePath);
-
-            return Path.Combine("photos", fileName).Replace('\\', '/');
+            return $"photos/{fileName}";
         }
         catch (Exception ex)
         {
@@ -69,21 +68,19 @@ public class FileStorageService : IFileStorageService
         }
     }
 
-
     private void ValidateFile(IFormFile file)
     {
         if (file == null || file.Length == 0)
             throw new ArgumentException("Файл не выбран или пуст");
 
-        // Проверка размера (максимум 10 МБ)
         const long maxSize = 10 * 1024 * 1024;
         if (file.Length > maxSize)
-            throw new ArgumentException($"Файл слишком большой. Максимальный размер: {maxSize / 1024 / 1024} МБ");
+            throw new ArgumentException($"Файл слишком большой. Максимальный размер: {maxSize / 1024 / 1024} МБ");
 
-        // Проверка расширения (только изображения)
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
         if (!allowedExtensions.Contains(extension))
             throw new ArgumentException("Недопустимый формат файла. Разрешены: JPG, PNG, GIF, BMP");
     }
 }
+

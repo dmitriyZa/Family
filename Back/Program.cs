@@ -48,13 +48,13 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 app.UseStaticFiles();
-var photosPath = "/data/photos";
-if (Directory.Exists(photosPath))
+var dataPhotosPath = "/data/photos";
+if (Directory.Exists(dataPhotosPath))
 {
     app.UseStaticFiles(new StaticFileOptions
     {
-        FileProvider = new PhysicalFileProvider(photosPath),
-        RequestPath = "/photos" // виртуальный путь в URL
+        FileProvider = new PhysicalFileProvider(dataPhotosPath),
+        RequestPath = "/photos"
     });
 }
 app.UseCors("BlazorCorsPolicy");
