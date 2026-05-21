@@ -70,13 +70,16 @@
                 NodeMenu: new()
                 {
                     Details = new(Text: "Открыть анкету"),
-                    // Перенаправляем на нашу кастомную страницу по ID
+
                     Edit = new(Text: "Редактировать",
                         OnClick: (Action<string, object?>)((nodeId, _) => Nav.NavigateTo($"/Family/edit-member/{nodeId}"))),
                     Remove = new(Text: "Удалить",
                         OnClick: (Action<string, object?>)((nodeId, _) => OnManualDelete(nodeId)))
                 },
-                EditForm: null
+                EditForm: new(
+                PhotoBinding: "photo", // Передаем имя свойства с маленькой буквы
+                Elements: new List<EditFormElement>()
+            )
             )
         );
     }
