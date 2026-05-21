@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,15 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 app.UseStaticFiles();
+var photosPath = "/data/photos";
+if (Directory.Exists(photosPath))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(photosPath),
+        RequestPath = "/photos" // виртуальный путь в URL
+    });
+}
 app.UseCors("BlazorCorsPolicy");
 app.UseHttpsRedirection();
 app.MapControllers();
