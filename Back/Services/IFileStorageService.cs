@@ -14,7 +14,7 @@ public class FileStorageService : IFileStorageService
         _logger = logger;
         // Берём путь из конфигурации, по умолчанию — рядом с приложением
         var basePath = configuration["FileStorage:BasePath"] ?? Directory.GetCurrentDirectory();
-        _photosFolder = Path.Combine(basePath, "data", "photos");
+        _photosFolder = Path.Combine(basePath, "photos");
 
         // Создаём папку при старте, если её нет
         if (!Directory.Exists(_photosFolder))
@@ -37,8 +37,7 @@ public class FileStorageService : IFileStorageService
             await file.CopyToAsync(stream);
             _logger.LogInformation("Фото сохранено: {FilePath}", filePath);
 
-            // Возвращаем относительный путь для хранения в БД
-            return Path.Combine("data", "photos", fileName).Replace('\\', '/');
+            return Path.Combine("photos", fileName).Replace('\\', '/');
         }
         catch (Exception ex)
         {
@@ -69,6 +68,7 @@ public class FileStorageService : IFileStorageService
             _logger.LogError(ex, "Ошибка при удалении файла {RelativePath}", relativePath);
         }
     }
+
 
     private void ValidateFile(IFormFile file)
     {
