@@ -16,7 +16,6 @@
     border-color: var(--bs-border-color, #e0e0e0) !important;
 }
 
-/* Окно превью аватара */
 .avatar-preview-box {
     width: 130px;
     height: 130px;
