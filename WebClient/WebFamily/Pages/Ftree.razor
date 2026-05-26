@@ -12,31 +12,39 @@
 
 <PageTitle>Семейное дерево</PageTitle>
 
-<h1>Мое семейное дерево</h1>
-
-<div class="mb-2 text-end">
-    <Button Color="ButtonColor.Primary" @onclick='(() => Nav.NavigateTo("add-member"))'> Добавить родственника </Button>
+<!-- Красивая верхняя панель страницы -->
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 fw-bold text-gradient mb-1">Мое семейное дерево</h1>
+        <p class="text-muted small mb-0">Управление связями и просмотр карточек родственников</p>
+    </div>
+    <Button Color="ButtonColor.Primary" Class="px-4 py-2 shadow-sm rounded-3 fw-medium" @onclick='(() => Nav.NavigateTo("add-member"))'>
+        <i class="bi bi-person-plus-fill me-2"></i> Добавить родственника
+    </Button>
 </div>
 
-<div class="position-relative" style="height: 700px; border: 1px solid #ccc;">
+<!-- Контейнер для дерева с мягкими тенями -->
+<div class="tree-container position-relative rounded-4 shadow-sm overflow-hidden border">
 
-    <!-- Индикатор загрузки накладывается поверх, не ломая разметку дерева -->
+    <!-- Индикатор загрузки, поддерживающий темную тему -->
     @if (_isLoading)
     {
-        <div class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex align-items-center justify-content-center"
-             style="z-index: 10;">
-            <div class="text-center">
-                <div class="spinner-border text-primary mb-2" role="status"></div>
-                <p class="mb-0 text-muted fw-medium">Загрузка данных...</p>
+        <div class="loader-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+            <div class="text-center p-4 rounded-3 shadow-sm bg-body border">
+                <div class="spinner-border text-primary mb-3" style="width: 2.5rem; height: 2.5rem;" role="status"></div>
+                <p class="mb-0 fw-medium">Загрузка данных...</p>
+                <p class="text-muted small mb-0">Пожалуйста, подождите</p>
             </div>
         </div>
     }
 
-    <!-- Дерево рендерится всегда, когда готовы опции -->
-    @if (_options != null)
-    {
-        <FamilyTree @ref=@_familyTree TNode="CustomNode" TreeId="family-tree-main" Options=@_options />
-    }
+    <!-- Область отрисовки дерева -->
+    <div class="tree-viewport">
+        @if (_options != null)
+        {
+            <FamilyTree @ref=@_familyTree TNode="CustomNode" TreeId="family-tree-main" Options=@_options />
+        }
+    </div>
 </div>
 
 @code {

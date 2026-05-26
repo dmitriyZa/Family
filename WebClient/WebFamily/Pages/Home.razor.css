@@ -1,0 +1,40 @@
+﻿/* Плавное появление элементов при загрузке */
+.welcome-container {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Ограничиваем максимальный размер фото, чтобы оно не ломало верстку */
+.family-image-card {
+    max-width: 650px;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    /* Элегантный микро-эффект при наведении */
+    .family-image-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(113, 44, 249, 0.1) !important; /* Легкое фиолетовое свечение */
+    }
+
+/* Поддержка темной темы для карточки */
+[data-bs-theme="dark"] .family-image-card {
+    background-color: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .text-dark {
+    color: #f8f9fa !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
