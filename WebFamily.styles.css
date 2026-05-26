@@ -1,83 +1,5 @@
 @import '_content/Blazor.Bootstrap/Blazor.Bootstrap.7t9tbfaemk.bundle.scp.css';
 
-/* /Layout/MainLayout.razor.rz.scp.css */
-.page[b-obhngh1thv] {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-main[b-obhngh1thv] {
-    flex: 1;
-}
-
-.sidebar[b-obhngh1thv] {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
-}
-
-.top-row[b-obhngh1thv] {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
-}
-
-    .top-row[b-obhngh1thv]  a, .top-row[b-obhngh1thv]  .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
-
-    .top-row[b-obhngh1thv]  a:hover, .top-row[b-obhngh1thv]  .btn-link:hover {
-        text-decoration: underline;
-    }
-
-    .top-row[b-obhngh1thv]  a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-@media (max-width: 640.98px) {
-    .top-row[b-obhngh1thv] {
-        justify-content: space-between;
-    }
-
-    .top-row[b-obhngh1thv]  a, .top-row[b-obhngh1thv]  .btn-link {
-        margin-left: 0;
-    }
-}
-
-@media (min-width: 641px) {
-    .page[b-obhngh1thv] {
-        flex-direction: row;
-    }
-
-    .sidebar[b-obhngh1thv] {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
-    }
-
-    .top-row[b-obhngh1thv] {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top-row.auth[b-obhngh1thv]  a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
-
-    .top-row[b-obhngh1thv], article[b-obhngh1thv] {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
-}
 /* /Layout/NavMenu.razor.rz.scp.css */
 .navbar-toggler[b-wbcgt32oet] {
     background-color: rgba(255, 255, 255, 0.1);
@@ -160,5 +82,194 @@ main[b-obhngh1thv] {
         /* Allow sidebar to scroll for tall menus */
         height: calc(100vh - 3.5rem);
         overflow-y: auto;
+    }
+}
+/* /Pages/AddMember.razor.rz.scp.css */
+.form-container[b-heax6m98m4] {
+    max-width: 750px;
+}
+
+/* Стилизация карточки для поддержки темной и светлой темы */
+.card[b-heax6m98m4] {
+    background-color: var(--bs-card-bg, #ffffff);
+    border-color: var(--bs-border-color, #e0e0e0) !important;
+}
+
+/* Красивые подзаголовки разделов анкеты */
+.section-title[b-heax6m98m4] {
+    color: var(--bs-secondary-color) !important;
+    font-size: 0.825rem;
+    letter-spacing: 0.05em;
+    border-color: var(--bs-border-color, #e0e0e0) !important;
+}
+
+/* Окно превью аватара */
+.avatar-preview-box[b-heax6m98m4] {
+    width: 130px;
+    height: 130px;
+    overflow: hidden;
+    background-color: var(--bs-tertiary-bg, #f8f9fa);
+    border-color: var(--bs-border-color, #e0e0e0) !important;
+}
+
+.avatar-img[b-heax6m98m4] {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Настройки высоты и шрифта для полей */
+.form-control[b-heax6m98m4], .form-select[b-heax6m98m4] {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.95rem;
+}
+
+/* Исправление жесткого цвета для системного блока ошибок Bootstrap */
+[data-bs-theme="dark"] .alert-danger[b-heax6m98m4] {
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    border-color: var(--bs-danger) !important;
+    color: #f8d7da !important;
+}
+/* Настройка поля биографии */
+textarea.form-control[b-heax6m98m4] {
+    resize: vertical; /* Разрешаем растягивать только по вертикали */
+    min-height: 120px;
+    max-height: 400px;
+    line-height: 1.5;
+}
+/* /Pages/EditMember.razor.rz.scp.css */
+.form-container[b-tygn34gcsr] {
+    max-width: 750px;
+}
+
+/* Настройки темной/светлой карты */
+.card[b-tygn34gcsr] {
+    background-color: var(--bs-card-bg, #ffffff);
+    border-color: var(--bs-border-color, #e0e0e0) !important;
+}
+
+/* Разделительные заголовки */
+.section-title[b-tygn34gcsr] {
+    color: var(--bs-secondary-color) !important;
+    font-size: 0.825rem;
+    letter-spacing: 0.05em;
+    border-color: var(--bs-border-color, #e0e0e0) !important;
+}
+
+/* Окно превью аватара */
+.avatar-preview-box[b-tygn34gcsr] {
+    width: 130px;
+    height: 130px;
+    overflow: hidden;
+    background-color: var(--bs-tertiary-bg, #f8f9fa);
+    border-color: var(--bs-border-color, #e0e0e0) !important;
+}
+
+.avatar-img[b-tygn34gcsr] {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Поля ввода и область биографии */
+.form-control[b-tygn34gcsr], .form-select[b-tygn34gcsr] {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.95rem;
+}
+
+textarea.form-control[b-tygn34gcsr] {
+    resize: vertical;
+    min-height: 120px;
+    max-height: 400px;
+    line-height: 1.5;
+}
+
+/* Корректировка алертов ошибок для темной темы */
+[data-bs-theme="dark"] .alert-danger[b-tygn34gcsr] {
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    border-color: var(--bs-danger) !important;
+    color: #f8d7da !important;
+}
+/* /Pages/Ftree.razor.rz.scp.css */
+/* Элегантный градиент для заголовка */
+.text-gradient[b-502wkyvhh5] {
+    background: linear-gradient(45deg, var(--bs-primary), #4b1ea0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Стилизация контейнера дерева */
+.tree-container[b-502wkyvhh5] {
+    height: 720px;
+    background-color: var(--bs-card-bg, #ffffff);
+    border-color: var(--bs-border-color, #e0e0e0) !important;
+}
+
+.tree-viewport[b-502wkyvhh5] {
+    width: 100%;
+    height: 100%;
+}
+
+/* Оверлей загрузки, который подстраивается под светлую и темную темы */
+.loader-overlay[b-502wkyvhh5] {
+    z-index: 100;
+    backdrop-filter: blur(4px); /* Модный эффект размытия заднего плана */
+    transition: all 0.3s ease;
+}
+
+/* Адаптация оверлея под светлый режим */
+[data-bs-theme="light"] .loader-overlay[b-502wkyvhh5] {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Адаптация оверлея под темный режим */
+[data-bs-theme="dark"] .loader-overlay[b-502wkyvhh5] {
+    background-color: rgba(18, 18, 18, 0.7);
+}
+
+[data-bs-theme="dark"] .text-gradient[b-502wkyvhh5] {
+    background: linear-gradient(45deg, #a370f7, #c19bfb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+/* /Pages/Home.razor.rz.scp.css */
+/* Плавное появление элементов при загрузке */
+.welcome-container[b-mzzbpjlyyi] {
+    animation: fadeIn-b-mzzbpjlyyi 0.6s ease-out;
+}
+
+/* Ограничиваем максимальный размер фото, чтобы оно не ломало верстку */
+.family-image-card[b-mzzbpjlyyi] {
+    max-width: 650px;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    /* Элегантный микро-эффект при наведении */
+    .family-image-card:hover[b-mzzbpjlyyi] {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(113, 44, 249, 0.1) !important; /* Легкое фиолетовое свечение */
+    }
+
+/* Поддержка темной темы для карточки */
+[data-bs-theme="dark"] .family-image-card[b-mzzbpjlyyi] {
+    background-color: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .text-dark[b-mzzbpjlyyi] {
+    color: #f8f9fa !important;
+}
+
+@keyframes fadeIn-b-mzzbpjlyyi {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
