@@ -16,66 +16,46 @@
 
 <body>
     <div id="app">
-    <!-- Стиль для эффекта плавного мерцания скелетона -->
+    <!-- Стили для тонкого индикатора загрузки -->
     <style>
-        .skeleton-loading .placeholder {
-            background-color: #e9ecef;
-            border-radius: 4px;
+        .top-loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, #0d6efd, #6f42c1, #0d6efd);
+            background-size: 200% 100%;
+            z-index: 9999;
+            animation: loading-animation 2s linear infinite;
         }
-        @keyframes shimmer {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
+
+        @keyframes loading-animation {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
-        .shimmer-effect {
-            animation: shimmer 1.5s infinite ease-in-out;
+
+        /* Мягкий фоновый цвет для страницы во время загрузки (опционально) */
+        .loading-screen-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #f8f9fa; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 
-    <div class="skeleton-loading shimmer-effect d-flex flex-column vh-100 bg-light">
-        <!-- 1. Верхняя панель (Navbar) -->
-        <header class="navbar navbar-dark bg-dark px-4 border-bottom shadow-sm" style="height: 56px;">
-            <div class="placeholder col-2 bg-secondary opacity-50" style="height: 24px; min-width: 120px;"></div>
-            <div class="rounded-circle bg-secondary opacity-50" style="width: 32px; height: 32px;"></div>
-        </header>
+    <!-- Тонкая полоска на самом верху -->
+    <div class="top-loading-bar"></div>
 
-        <div class="d-flex flex-grow-1">
-            <!-- 2. Боковое меню (Sidebar) -->
-            <aside class="bg-white border-end d-none d-md-block" style="width: 250px;">
-                <div class="p-3 d-flex flex-column gap-3">
-                    <div class="placeholder col-9" style="height: 35px;"></div>
-                    <div class="placeholder col-11" style="height: 35px;"></div>
-                    <div class="placeholder col-8" style="height: 35px;"></div>
-                    <div class="placeholder col-10" style="height: 35px;"></div>
-                </div>
-            </aside>
-
-            <!-- 3. Основной контент страницы -->
-            <main class="flex-grow-1 p-4 overflow-hidden">
-                <!-- Хлебные крошки / Заголовок -->
-                <div class="placeholder col-4 col-md-3 mb-4 bg-secondary opacity-25" style="height: 32px;"></div>
-
-                <!-- Карточка-контейнер -->
-                <div class="card border-0 shadow-sm p-4 bg-white">
-                    <div class="d-flex flex-column gap-3">
-                        <div class="placeholder col-7" style="height: 20px;"></div>
-                        <div class="placeholder col-12" style="height: 15px;"></div>
-                        <div class="placeholder col-10" style="height: 15px;"></div>
-                        
-                        <!-- Имитация таблицы или сетки данных -->
-                        <div class="row g-3 mt-3">
-                            <div class="col-4"><div class="placeholder col-12" style="height: 80px;"></div></div>
-                            <div class="col-4"><div class="placeholder col-12" style="height: 80px;"></div></div>
-                            <div class="col-4"><div class="placeholder col-12" style="height: 80px;"></div></div>
-                        </div>
-                        
-                        <div class="placeholder col-5 mt-3" style="height: 15px;"></div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
+    <!-- Чистый фон. Когда Blazor загрузится, этот экран мгновенно исчезнет -->
+    <div class="loading-screen-bg"></div>
 </div>
+
 
 
 
