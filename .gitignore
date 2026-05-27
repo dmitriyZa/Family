@@ -40,4 +40,4 @@ Thumbs.db
 
 # Другие файлы
 *.env
-/WebClient/WebFamily/.vs/WebFamily/FileContentIndex/f38e4db1-e875-485d-96fd-0f0318c592bc.vsidx
+.vs/

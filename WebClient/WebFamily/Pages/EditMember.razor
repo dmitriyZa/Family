@@ -6,11 +6,13 @@
 @inject IJSRuntime JS
 @using MyGender = Family.Shared.Gender
 
-<div class="container py-5" style="max-width: 750px;">
-    <div class="card border-0 shadow-lg rounded-4">
-        <!-- Шапка карты -->
-        <div class="card-header bg-gradient bg-primary text-white py-3 px-4 rounded-top-4">
-            <h3 class="mb-0 fs-4 fw-bold">Редактировать родственника</h3>
+<div class="form-container container py-4">
+    <!-- Адаптивная карточка без жестких границ -->
+    <div class="card border shadow-sm rounded-4 overflow-hidden">
+
+        <!-- Шапка карты в едином стиле приложения -->
+        <div class="card-header bg-primary text-white py-3 px-4 border-0">
+            <h3 class="mb-0 fs-5 fw-bold">Редактировать родственника</h3>
         </div>
 
         <div class="card-body p-4 px-md-5">
@@ -23,8 +25,8 @@
             }
             else if (_editMember == null)
             {
-                <div class="alert alert-danger text-center rounded-3" role="alert">
-                    Родственник с указанным ID не найден.
+                <div class="alert alert-danger text-center rounded-3 m-0" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Родственник с указанным ID не найден.
                 </div>
             }
             else
@@ -34,25 +36,22 @@
 
                     @if (context.GetValidationMessages().Any())
                     {
-                        <div class="alert alert-danger d-flex align-items-center p-3 mb-4 rounded-3 border-start border-danger border-4"
-                             style="background-color: #fdf2f2;">
+                        <!-- Блок ошибок, корректно работающий в темной теме -->
+                        <div class="alert alert-danger d-flex align-items-center p-3 mb-4 rounded-3 border-start border-danger border-4">
                             <ValidationSummary class="text-danger mb-0 fs-6 list-unstyled ps-0" />
                         </div>
                     }
 
                     <!-- Секция: Фотография профиля -->
                     <div class="mb-4 text-center">
-                        <h5 class="text-secondary text-start fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider"
-                            style="font-size: 0.85rem;">
+                        <h5 class="section-title text-start fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider">
                             Фотография профиля
                         </h5>
                         <div class="d-flex flex-column align-items-center gap-3 my-3">
-                            <div class="position-relative border rounded-circle bg-light d-flex align-items-center justify-content-center shadow-sm"
-                                 style="width: 140px; height: 140px; overflow: hidden;">
+                            <div class="avatar-preview-box border rounded-circle d-flex align-items-center justify-content-center shadow-sm">
                                 @if (!string.IsNullOrEmpty(_previewPhotoUrl))
                                 {
-                                    <img src="@_previewPhotoUrl" style="width: 100%; height: 100%; object-fit: cover;"
-                                         alt="Фото" />
+                                    <img src="@_previewPhotoUrl" class="avatar-img" alt="Фото" />
                                 }
                                 else
                                 {
@@ -80,8 +79,7 @@
 
                     <!-- Секция: Основная информация -->
                     <div class="mb-4">
-                        <h5 class="text-secondary fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider"
-                            style="font-size: 0.85rem;">
+                        <h5 class="section-title fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider">
                             Основная информация
                         </h5>
 
@@ -89,17 +87,17 @@
                             <div class="col-md-4">
                                 <label class="form-label small fw-semibold text-muted mb-1">Фамилия</label>
                                 <InputText @bind-Value="_editMember.LastName"
-                                           class="form-control form-control-lg rounded-3 fs-6" placeholder="Иванов" />
+                                           class="form-control rounded-3" placeholder="Иванов" />
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label small fw-semibold text-muted mb-1">Имя</label>
                                 <InputText @bind-Value="_editMember.FirstName"
-                                           class="form-control form-control-lg rounded-3 fs-6" placeholder="Иван" />
+                                           class="form-control rounded-3" placeholder="Иван" />
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label small fw-semibold text-muted mb-1">Отчество</label>
                                 <InputText @bind-Value="_editMember.ParentName"
-                                           class="form-control form-control-lg rounded-3 fs-6" placeholder="Иванович" />
+                                           class="form-control rounded-3" placeholder="Иванович" />
                             </div>
                         </div>
 
@@ -107,7 +105,7 @@
                             <div class="col-md-6">
                                 <label class="form-label small fw-semibold text-muted mb-1">Пол</label>
                                 <InputSelect @bind-Value="_editMember.Gender"
-                                             class="form-select form-control-lg rounded-3 fs-6">
+                                             class="form-select rounded-3">
                                     <option value="@MyGender.Male">🧑 Мужчина</option>
                                     <option value="@MyGender.Female">👩 Женщина</option>
                                 </InputSelect>
@@ -117,15 +115,14 @@
                                 <InputDate TValue="DateTime" Value="_editMember.DateOfBirth"
                                            ValueChanged="@(d => _editMember.DateOfBirth = d)"
                                            ValueExpression="@(() => _editMember.DateOfBirth)"
-                                           class="form-control form-control-lg rounded-3 fs-6" />
+                                           class="form-control rounded-3" />
                             </div>
                         </div>
                     </div>
 
                     <!-- Секция: Семейные связи -->
                     <div class="mb-4">
-                        <h5 class="text-secondary fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider"
-                            style="font-size: 0.85rem;">
+                        <h5 class="section-title fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider">
                             Семейные связи
                         </h5>
 
@@ -133,7 +130,7 @@
                             <div class="col-md-6">
                                 <label class="form-label small fw-semibold text-muted mb-1">Отец</label>
                                 <InputSelect @bind-Value="_editMember.FatherId"
-                                             class="form-select form-control-lg rounded-3 fs-6">
+                                             class="form-select rounded-3">
                                     <option value="">-- Выберите отца --</option>
                                     @if (_allMembers != null)
                                     {
@@ -148,7 +145,7 @@
                             <div class="col-md-6">
                                 <label class="form-label small fw-semibold text-muted mb-1">Мать</label>
                                 <InputSelect @bind-Value="_editMember.MotherId"
-                                             class="form-select form-control-lg rounded-3 fs-6">
+                                             class="form-select rounded-3">
                                     <option value="">-- Выберите мать --</option>
                                     @if (_allMembers != null)
                                     {
@@ -159,49 +156,62 @@
                                     }
                                 </InputSelect>
                             </div>
+                        </div>
+                    </div>
 
+                    <!-- Поле Супруг / Супруга -->
+                    <div class="col-md-12 mt-3">
+                        <label class="form-label small fw-semibold text-muted mb-1">
+                            @(_editMember.Gender == MyGender.Male ? "Жена / Супруга" : "Муж / Супруг")
+                            <!-- Для страницы EditMember замените _newMember на _editMember -->
+                        </label>
+                        <InputSelect @bind-Value="_editMember.SpouseIds" class="form-select rounded-3">
+                            <option value="">-- Нет супруга (холост / незамужем) --</option>
+                            @if (_editMember.Gender == MyGender.Male)
+                            {
+                                <!-- Если текущий член — мужчина, выбираем жену из женщин -->
+                                @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Female))
+                                {
+                                    <option value="@m.Id">@m.LastName @m.FirstName</option>
+                                }
+                            }
+                            else
+                            {
+                                <!-- Если текущий член — женщина, выбираем мужа из мужчин -->
+                                @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Male))
+                                {
+                                    <option value="@m.Id">@m.LastName @m.FirstName</option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+
+
+                    <!-- Секция: Биография -->
+                    <div class="mb-4 mt-4">
+                        <h5 class="section-title fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider">
+                            Биография и примечания
+                        </h5>
+
+                        <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label small fw-semibold text-muted mb-1">Супруг / Супруга</label>
-                                <InputSelect TValue="int?" Value="_selectedSpouseId" ValueChanged="OnSpouseChanged"
-                                             ValueExpression="@(() => _selectedSpouseId)"
-                                             class="form-select form-control-lg rounded-3 fs-6">
-                                    <option value="">-- Нет / Не выбрано --</option>
-                                    @if (_allMembers != null)
-                                    {
-                                        @foreach (var m in _allMembers.Where(x => x.Id != Id))
-                                        {
-                                            <option value="@m.Id">@m.LastName @m.FirstName (@(m.Gender == MyGender.Male ? "муж" :
-                                                                         "жен"))</option>
-                                            }
-                                        }
-                                    </InputSelect>
-                                </div>
+                                <label class="form-label small fw-semibold text-muted mb-1">История жизни, воспоминания или заметки</label>
+                                <InputTextArea @bind-Value="_editMember.Biography"
+                                               class="form-control rounded-3"
+                                               rows="5"
+                                               placeholder="Расскажите об основных событиях в жизни человека, его профессии, увлечениях или важных семейных воспоминаниях..." />
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Секция: Дополнительно -->
-                        <div class="mb-4">
-                            <h5 class="text-secondary fw-semibold border-bottom pb-2 mb-3 text-uppercase tracking-wider"
-                                style="font-size: 0.85rem;">
-                                Дополнительные данные
-                            </h5>
-                            <div class="mb-3">
-                                <label class="form-label small fw-semibold text-muted mb-1">Биография</label>
-                                <InputTextArea @bind-Value="_editMember.Biography" class="form-control rounded-3 fs-6 p-3"
-                                               rows="4" placeholder="Краткая история жизни..." />
-                            </div>
-                        </div>
-
-                        <!-- Кнопки управления -->
-                        <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
-                            <button type="button" class="btn btn-light btn-lg rounded-3 px-4 fs-6 fw-medium text-secondary"
-                                    @onclick="GoBack">
-                                Отмена
-                            </button>
-                            <button type="submit" class="btn btn-primary btn-lg rounded-3 px-5 fs-6 fw-semibold shadow-sm">
-                                Сохранить изменения
-                            </button>
-                        </div>
+                    <div class="d-flex justify-content-between gap-2 pt-3 border-top">
+                        <button type="button" class="btn btn-light rounded-3 px-4" @onclick='(() => Nav.NavigateTo("ftree"))'>
+                            Отмена
+                        </button>
+                        <button type="submit" class="btn btn-primary rounded-3 px-4 fw-medium shadow-sm">
+                            Сохранить изменения
+                        </button>
+                    </div>
                     </EditForm>
                 }
             </div>
