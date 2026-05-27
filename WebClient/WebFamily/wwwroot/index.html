@@ -16,18 +16,29 @@
 
 <body>
     <div id="app">
-    <!-- Стили для тонкого индикатора загрузки -->
+    <!-- Стили вашей главной страницы, адаптированные для экрана загрузки -->
     <style>
+        .welcome-container-loading {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .family-image-card-loading {
+            max-width: 650px;
+            width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Тонкий индикатор загрузки на самом верху, адаптированный под ваш фиолетовый цвет */
         .top-loading-bar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(to right, #0d6efd, #6f42c1, #0d6efd);
+            background: linear-gradient(to right, #712cf9, #9b51e0, #712cf9);
             background-size: 200% 100%;
             z-index: 9999;
-            animation: loading-animation 2s linear infinite;
+            animation: loading-animation 1.5s linear infinite;
         }
 
         @keyframes loading-animation {
@@ -35,25 +46,41 @@
             100% { background-position: -200% 0; }
         }
 
-        /* Мягкий фоновый цвет для страницы во время загрузки (опционально) */
-        .loading-screen-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #f8f9fa; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Поддержка темной темы, если она включена в браузере */
+        @media (prefers-color-scheme: dark) {
+            .bg-loading-screen { background-color: #121212 !important; color: #f8f9fa !important; }
+            .text-dark-loading { color: #f8f9fa !important; }
+            .family-image-card-loading { background-color: #1e1e1e !important; border-color: rgba(255, 255, 255, 0.05); }
         }
     </style>
 
-    <!-- Тонкая полоска на самом верху -->
+    <!-- Тонкая фиолетовая полоска прогресса сверху -->
     <div class="top-loading-bar"></div>
 
-    <!-- Чистый фон. Когда Blazor загрузится, этот экран мгновенно исчезнет -->
-    <div class="loading-screen-bg"></div>
+    <!-- Статический макет вашей страницы -->
+    <div class="bg-loading-screen container-fluid py-5 vh-100 d-flex flex-column justify-content-center" style="background-color: #f8f9fa;">
+        <div class="welcome-container-loading">
+            
+            <!-- Заголовок -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold text-dark text-dark-loading mb-2">Добро пожаловать в Семейный Архив</h1>
+                <p class="text-muted fst-italic fs-5">Храните историю и традиции вашего рода в одном месте</p>
+            </div>
+
+            <!-- Контейнер для фото (картинка загрузится стандартными средствами браузера сразу) -->
+            <div class="d-flex justify-content-center">
+                <div class="family-image-card-loading shadow-sm rounded-4 overflow-hidden bg-white">
+                    <img src="./sample-data/family.png" class="img-fluid d-block" alt="Семейная фотография" />
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 
