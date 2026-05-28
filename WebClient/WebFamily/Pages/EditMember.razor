@@ -172,7 +172,7 @@
                                 <!-- Если текущий член — мужчина, выбираем жену из женщин -->
                                 @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Female))
                                 {
-                                    <option value="@m.Id">@m.LastName @m.FirstName</option>
+                                    <option value="@m.Id">@m.LastName @m.FirstName @m.ParentName</option>
                                 }
                             }
                             else
@@ -180,7 +180,7 @@
                                 <!-- Если текущий член — женщина, выбираем мужа из мужчин -->
                                 @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Male))
                                 {
-                                    <option value="@m.Id">@m.LastName @m.FirstName</option>
+                                    <option value="@m.Id">@m.LastName @m.FirstName @m.ParentName</option>
                                 }
                             }
                         </InputSelect>
