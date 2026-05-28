@@ -119,9 +119,10 @@
 }
 
 /* Настройки высоты и шрифта для полей */
-.form-control[b-heax6m98m4], .form-select[b-heax6m98m4] {
-    padding: 0.55rem 0.85rem;
-    font-size: 0.95rem;
+[b-heax6m98m4] .form-control,
+[b-heax6m98m4] .form-select {
+    padding: 0.55rem 0.85rem !important;
+    font-size: 0.95rem !important;
 }
 
 /* Исправление жесткого цвета для системного блока ошибок Bootstrap */
@@ -130,9 +131,10 @@
     border-color: var(--bs-danger) !important;
     color: #f8d7da !important;
 }
+
 /* Настройка поля биографии */
-textarea.form-control[b-heax6m98m4] {
-    resize: vertical; /* Разрешаем растягивать только по вертикали */
+[b-heax6m98m4] textarea.form-control {
+    resize: vertical !important;
     min-height: 120px;
     max-height: 400px;
     line-height: 1.5;
@@ -171,13 +173,14 @@ textarea.form-control[b-heax6m98m4] {
 }
 
 /* Поля ввода и область биографии */
-.form-control[b-tygn34gcsr], .form-select[b-tygn34gcsr] {
-    padding: 0.55rem 0.85rem;
-    font-size: 0.95rem;
+[b-tygn34gcsr] .form-control,
+[b-tygn34gcsr] .form-select {
+    padding: 0.55rem 0.85rem !important;
+    font-size: 0.95rem !important;
 }
 
-textarea.form-control[b-tygn34gcsr] {
-    resize: vertical;
+[b-tygn34gcsr] textarea.form-control {
+    resize: vertical !important;
     min-height: 120px;
     max-height: 400px;
     line-height: 1.5;
