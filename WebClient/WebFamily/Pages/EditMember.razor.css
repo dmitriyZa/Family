@@ -31,13 +31,14 @@
 }
 
 /* Поля ввода и область биографии */
-.form-control, .form-select {
-    padding: 0.55rem 0.85rem;
-    font-size: 0.95rem;
+::deep .form-control,
+::deep .form-select {
+    padding: 0.55rem 0.85rem !important;
+    font-size: 0.95rem !important;
 }
 
-textarea.form-control {
-    resize: vertical;
+::deep textarea.form-control {
+    resize: vertical !important;
     min-height: 120px;
     max-height: 400px;
     line-height: 1.5;
