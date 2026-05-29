@@ -165,14 +165,14 @@
                             @(_editMember.Gender == MyGender.Male ? "Жена / Супруга" : "Муж / Супруг")
                             <!-- Для страницы EditMember замените _newMember на _editMember -->
                         </label>
-                        <InputSelect @bind-Value="_editMember.SpouseIds" class="form-select rounded-3">
+                        <InputSelect @bind-Value="SelectedSpouseId" class="form-select rounded-3">
                             <option value="">-- Нет супруга (холост / незамужем) --</option>
                             @if (_editMember.Gender == MyGender.Male)
                             {
                                 <!-- Если текущий член — мужчина, выбираем жену из женщин -->
                                 @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Female))
                                 {
-                                    <option value="@m.Id">@m.LastName @m.FirstName</option>
+                                    <option value="@m.Id">@m.LastName @m.FirstName @m.ParentName</option>
                                 }
                             }
                             else
@@ -180,7 +180,7 @@
                                 <!-- Если текущий член — женщина, выбираем мужа из мужчин -->
                                 @foreach (var m in _allMembers.Where(x => x.Gender == MyGender.Male))
                                 {
-                                    <option value="@m.Id">@m.LastName @m.FirstName</option>
+                                    <option value="@m.Id">@m.LastName @m.FirstName @m.ParentName</option>
                                 }
                             }
                         </InputSelect>
@@ -223,7 +223,22 @@
 
     private FamilyMemberDto? _editMember;
     private List<FamilyMemberDto>? _allMembers;
-    private int? _selectedSpouseId;
+    private int? SelectedSpouseId
+    {
+        get => _editMember.SpouseIds != null && _editMember.SpouseIds.Any()
+               ? _editMember.SpouseIds.First()
+               : null;
+        set
+        {
+            _editMember.SpouseIds ??= new List<int>();
+            _editMember.SpouseIds.Clear(); // Очищаем старые связи
+
+            if (value.HasValue && value.Value != 0)
+            {
+                _editMember.SpouseIds.Add(value.Value); // Добавляем ID нового супруга
+            }
+        }
+    }
     private bool _isLoading = true;
 
     private InputFile? _fileInput;
@@ -259,7 +274,7 @@
                 };
 
                 _previewPhotoUrl = _editMember.PhotoUrl;
-                _selectedSpouseId = _editMember.SpouseIds?.FirstOrDefault();
+                SelectedSpouseId = _editMember.SpouseIds?.FirstOrDefault();
             }
         }
         catch (Exception ex)
@@ -315,17 +330,9 @@
         _photoDeleted = true; // Сигнал для бэкенда удалить картинку
     }
 
-    private void OnSpouseChanged(int? value)
-    {
-        _selectedSpouseId = value;
-        if (_editMember != null)
-        {
-            _editMember.SpouseIds = value.HasValue ? new List<int> { value.Value } : null;
-        }
-    }
 
     private async Task HandleFormSubmit()
-    {
+    {        
         if (_editMember == null) return;
 
         // Если пользователь нажал "Удалить фото", очищаем поле перед отправкой DTO
