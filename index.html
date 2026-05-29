@@ -16,72 +16,39 @@
 
 <body>
     <div id="app">
-    <!-- Стили вашей главной страницы, адаптированные для экрана загрузки -->
-    <style>
-        .welcome-container-loading {
-            animation: fadeIn 0.6s ease-out;
-        }
+    <!-- Стили для отображения GIF строго по центру экрана -->
+        <style>
+            .gif-loading-screen {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: #ffffff; /* Стандартный чистый светлый фон */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
 
-        .family-image-card-loading {
-            max-width: 650px;
-            width: 100%;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
+            .loading-tree-gif {
+                max-width: 300px; /* Настройте размер GIF (больше/меньше) здесь */
+                width: 100%;
+                height: auto;
+            }
+        </style>
 
-        /* Тонкий индикатор загрузки на самом верху, адаптированный под ваш фиолетовый цвет */
-        .top-loading-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(to right, #712cf9, #9b51e0, #712cf9);
-            background-size: 200% 100%;
-            z-index: 9999;
-            animation: loading-animation 1.5s linear infinite;
-        }
-
-        @keyframes loading-animation {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Поддержка темной темы, если она включена в браузере */
-        @media (prefers-color-scheme: dark) {
-            .bg-loading-screen { background-color: #121212 !important; color: #f8f9fa !important; }
-            .text-dark-loading { color: #f8f9fa !important; }
-            .family-image-card-loading { background-color: #1e1e1e !important; border-color: rgba(255, 255, 255, 0.05); }
-        }
-    </style>
-
-    <!-- Тонкая фиолетовая полоска прогресса сверху -->
-    <div class="top-loading-bar"></div>
-
-    <!-- Статический макет вашей страницы -->
-    <div class="bg-loading-screen container-fluid py-5 vh-100 d-flex flex-column justify-content-center" style="background-color: #f8f9fa;">
-        <div class="welcome-container-loading">
-            
-            <!-- Заголовок -->
-            <div class="text-center mb-5">
-                <h1 class="display-5 fw-bold text-dark text-dark-loading mb-2">Добро пожаловать в Семейный Архив</h1>
-                <p class="text-muted fst-italic fs-5">Храните историю и традиции вашего рода в одном месте</p>
-            </div>
-
-            <!-- Контейнер для фото (картинка загрузится стандартными средствами браузера сразу) -->
-            <div class="d-flex justify-content-center">
-                <div class="family-image-card-loading shadow-sm rounded-4 overflow-hidden bg-white">
-                    <img src="./sample-data/family.png" class="img-fluid d-block" alt="Семейная фотография" />
-                </div>
-            </div>
-
+        <!-- Блок с анимацией -->
+        <div class="gif-loading-screen">
+            <!-- Укажите правильное имя файла и путь к вашей GIF -->
+            <img src="./sample-data/growing-tree.gif.gif" class="loading-tree-gif" alt="Загрузка..." />
         </div>
     </div>
-</div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
 
 
 
