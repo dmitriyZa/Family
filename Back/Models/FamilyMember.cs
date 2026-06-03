@@ -7,6 +7,8 @@ public class FamilyMember
     public string LastName { get; set; }
     public string ParentName { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
+    public DateTime? DateOfDeath { get; set; }
+    public string? Occupation { get; set; }
     public string? Biography { get; set; }
     public Gender Gender { get; set; } // <--- используй enum
     public string? Photo { get; set; } = string.Empty;

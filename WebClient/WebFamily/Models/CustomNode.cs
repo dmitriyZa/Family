@@ -9,7 +9,9 @@ namespace WebFamily.Models
         // Дополнительные поля из твоего DTO
         public string? Biography { get; init; }
         public string? BirthDate { get; init; }
-        
+        // Новые поля для дерева (в виде строк для JS)
+        public string? DeathDate { get; set; }
+        public string? Occupation { get; set; }
 
         [JsonPropertyName("fid")]
         public string? FatherId { get; set; }

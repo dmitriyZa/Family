@@ -30,6 +30,8 @@ public class FamilyMemberService
             Gender = m.Gender,
             Biography = m.Biography,
             PhotoUrl = m.Photo,
+            Occupation = m.Occupation,
+            DateOfDeath = m.DateOfDeath,
             // Мапим отца (ищем связь, где текущий человек - субъект, а тип связи - 1 (Отец))
             // Предположим Id 1 - Отец, 2 - Мать, 3 - Супруг
             FatherId = relations.FirstOrDefault(r => r.FamilyMemberId == m.Id && r.RelationTypeId == 1)?.RelatedMemberId,
@@ -60,7 +62,9 @@ public class FamilyMemberService
             DateOfBirth = dto.DateOfBirth,
             Gender = dto.Gender,
             Biography = dto.Biography,
-            Photo = dto.PhotoUrl
+            Photo = dto.PhotoUrl,
+            Occupation = dto.Occupation,
+            DateOfDeath = dto.DateOfDeath
         };
 
         // 2. Сохраняем основного человека через репозиторий
@@ -128,6 +132,8 @@ public class FamilyMemberService
         {
             member.Photo = dto.PhotoUrl;
         }
+        member.Occupation = dto.Occupation;   // Добавлено
+        member.DateOfDeath = dto.DateOfDeath; // Добавлено
 
         await _familyRepository.UpdateFamilyMemberAsync(member);
 

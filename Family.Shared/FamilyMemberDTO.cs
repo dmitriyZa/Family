@@ -15,9 +15,13 @@ public class FamilyMemberDto
     [Required(ErrorMessage = "Дата рождения обязательна")]
     [DataType(DataType.Date, ErrorMessage = "Введите корректную дату")]
     public DateTime DateOfBirth { get; set; }
+    [DataType(DataType.Date, ErrorMessage = "Введите корректную дату")]
+    public DateTime? DateOfDeath { get; set; }
     [JsonIgnore]
     [Required(ErrorMessage = "Пол обязателен для выбора")]
     public Gender Gender { get; set; } // Теперь здесь ENUM
+    [Display(Name = "Профессия")]
+    public string? Occupation { get; set; } // Профессия
     [Display(Name = "Биография")]
     [StringLength(1000, ErrorMessage = "Биография не должна превышать 1000 символов")]
     public string? Biography { get; set; }
