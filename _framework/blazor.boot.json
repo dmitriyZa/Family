@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "WebFamily",
   "resources": {
-    "hash": "sha256-hqEQTz0lx3E/y8ds1PV5MEgDVeIC35OXI0iCWcp/3n4=",
+    "hash": "sha256-Aab/Q4MagbZItzy1xSNV5enn7Xk0VoM2HpLbZ3JogGs=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-YDHEHpc+/PUWFYa9BMCN3EcVlpemjKD024swcpPfMIQ="
     },
@@ -21,7 +21,7 @@
       "Blazor.Core.wasm": "sha256-vCjFPBPPUxOkQu7lBb8WVjCVt/UZwvjZnncvTCeuNsQ=",
       "Blazor.FamilyTreeJS.wasm": "sha256-eJxjDM+wl3rNjALfW9tYOpIxHzeOZLpeYHy0Mp6oHn4=",
       "BlazorBootstrap.wasm": "sha256-ITQwUw5RiwxKdd6M4G17bdlCt/7nx74B+rnAbL5w+/0=",
-      "Family.Shared.wasm": "sha256-I6+i/txe+XV2F9iP/kz08rJjm9PvIUhDeMIPtUK6jgM=",
+      "Family.Shared.wasm": "sha256-bONQB1oxx9bs9Yru6Pz0eK1pQN+gHbdWU8+uR61qAiw=",
       "Microsoft.AspNetCore.Components.Forms.wasm": "sha256-IW1QNBi7DZtOt218GVv95nxeOtOLUXHW792TKM73I6k=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-J4NdeUjN3hICzyuAtnoy2TicahLYu+2vMVoDlFJxWAA=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-oRHq0J11pYYZ5kVtIQx2+nOrm0z8MOS1F6pNxZpVtRg=",
@@ -66,7 +66,7 @@
       "System.Text.RegularExpressions.wasm": "sha256-ii7jv7klw/5nAO7Q8UclQqnxpPoE9aiERgkQfkJfWjk=",
       "System.Threading.wasm": "sha256-aijIo9C3m+brvr2pAaUBxq74zX2hzPEvgojYtbaKHSE=",
       "System.wasm": "sha256-dH8gTwfC8agr9n3W9LFMY/2xjJQVN+9jyVvplI7C1jY=",
-      "WebFamily.wasm": "sha256-JONGy4NuBPu2JeXsUIlIhB3R5Cs22q9OLOW26vNpPdk="
+      "WebFamily.wasm": "sha256-D0ys/JeILYwdfZQN24yBt0U8LMeZNkwp/WC9PJ52odE="
     }
   },
   "cacheBootResources": true,
