@@ -40,12 +40,15 @@
     -webkit-text-fill-color: transparent;
 }
 
-/* Разрешаем перенос строк и сохраняем абзацы в окне деталей FamilyTreeJS */
+/* Принудительно заставляем блок текста в анкете переносить слова */
+div[data-edit-form-item="biography"] .bft-edit-form-value,
 .bft-edit-form-value, 
-.bft-details-view,
-[data-edit-form-item="biography"] {
-    white-space: pre-line !important;
-    word-break: break-word !important;
-    line-height: 1.5 !important;
+.bft-details-view {
+    white-space: pre-line !important; /* Сохраняет \n переносы строк */
+    word-break: break-word !important; /* Переносит слишком длинные слова */
+    height: auto !important; /* Позволяет блоку расти вниз */
+    min-height: 40px;
+    display: block !important;
 }
+
 
