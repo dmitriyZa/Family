@@ -2,9 +2,10 @@
 
 @if (Member != null)
 {
-    <div class="modal fade show d-block" style="background: rgba(0,0,0,0.5); z-index: 1060;" tabindex="-1">
+    <!-- Добавлен класс bg-body для фона модалки в любой теме -->
+    <div class="modal fade show d-block text-body" style="background: rgba(0,0,0,0.6); z-index: 1060;" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-4 shadow border-0">
+            <div class="modal-content rounded-4 shadow border-0 bg-body">
                 <div class="modal-header border-bottom-0 pb-0">
                     <h5 class="modal-title fw-bold">Анкета родственника</h5>
                     <button type="button" class="btn-close" @onclick="CloseModal"></button>
@@ -15,20 +16,26 @@
                         <img src="@Member.Photo" class="rounded-circle mb-3 border shadow-sm"
                              style="width: 100px; height: 100px; object-fit: cover;" />
                     }
-                    <h4 class="fw-bold mb-1">@Member.Name</h4>
+                    <h4 class="fw-bold mb-1 text-body">@Member.Name</h4>
                     <p class="text-muted small mb-3">@Member.BirthDate</p>
 
                     @if (!string.IsNullOrEmpty(Member.Occupation))
                     {
                         <div class="mb-3">
-                            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">💼 @Member.Occupation</span>
+                            <!-- bg-body-tertiary заменяет bg-light и адаптируется под темную тему -->
+                            <span class="badge bg-body-tertiary text-body border px-3 py-2 rounded-pill fw-medium">
+                                💼 @Member.Occupation
+                            </span>
                         </div>
                     }
 
-                    <div class="bg-light p-3 rounded-3 text-start border mx-2"
+                    <!-- Блок биографии: теперь фон bg-body-tertiary, текст text-body -->
+                    <div class="bg-body-tertiary p-3 rounded-3 text-start border mx-2"
                          style="white-space: pre-line; max-height: 250px; overflow-y: auto;">
-                        <span class="fw-medium text-muted d-block small mb-1">Биография:</span>
-                        @Member.Biography
+                        <span class="fw-medium text-muted d-block small mb-2">Биография:</span>
+                        <div class="text-body" style="line-height: 1.5;">
+                            @Member.Biography
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-top-0">
@@ -40,11 +47,9 @@
 }
 
 @code {
-    // Входной параметр для передачи выбранного родственника
     [Parameter]
     public CustomNode? Member { get; set; }
 
-    // Событие, которое сообщит родителю, что модалку нужно закрыть
     [Parameter]
     public EventCallback OnClose { get; set; }
 
