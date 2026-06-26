@@ -235,16 +235,23 @@
     -webkit-text-fill-color: transparent;
 }
 
-/* Принудительно заставляем блок текста в анкете переносить слова */
-div[data-edit-form-item="biography"] .bft-edit-form-value[b-502wkyvhh5],
-.bft-edit-form-value[b-502wkyvhh5], 
-.bft-details-view[b-502wkyvhh5] {
-    white-space: pre-line !important; /* Сохраняет \n переносы строк */
-    word-break: break-word !important; /* Переносит слишком длинные слова */
-    height: auto !important; /* Позволяет блоку расти вниз */
-    min-height: 40px;
-    display: block !important;
-}
+ /* Находим контейнер именно для поля биографии во встроенной анкете */
+    div[data-edit-form-item="biography"][b-502wkyvhh5] {
+        display: block !important;
+        height: auto !important;
+    }
+
+    /* Превращаем однострочное поле ввода биографии в большое многострочное */
+    div[data-edit-form-item="biography"] input[b-502wkyvhh5],
+    div[data-edit-form-item="biography"] .bft-edit-form-value[b-502wkyvhh5] {
+        display: block !important;
+        white-space: pre-line !important; /* Включает распознавание \n и переносов */
+        word-break: break-word !important; /* Переносит длинные слова */
+        height: 120px !important; /* Задает высоту как у textarea */
+        overflow-y: auto !important; /* Добавляет прокрутку, если текст очень длинный */
+        line-height: 1.5 !important;
+        padding: 8px !important;
+    }
 
 
 /* /Pages/Home.razor.rz.scp.css */
