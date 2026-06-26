@@ -74,6 +74,7 @@
                     { NodeBinding.Field0, "name" },
                     { NodeBinding.Field1, "birthDate" },
                     { NodeBinding.Field2, "occupation" },
+                    { "field_3", "biography" },
                     { NodeBinding.Img0, "photo" }
                 },
                 Nodes: nodes,
@@ -154,6 +155,26 @@
             StateHasChanged();
         }
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    if (firstRender)
+    {
+        await JS.InvokeVoidAsync("eval", @"
+            if (typeof FamilyTree !== 'undefined' && FamilyTree.templates && FamilyTree.templates.tommy) {
+                
+                // 1. Явно объявляем поле в структуре шаблона, чтобы библиотека его рендерила
+                FamilyTree.templates.tommy.field_3 = `
+                    <foreignObject x='20' y='95' width='210' height='50'>
+                        <div xmlns='http://w3.org' class='tree-card-biography'>
+                            {val}
+                        </div>
+                    </foreignObject>
+                `;
+            }
+        ");
+    }
+}
 
 
 }
