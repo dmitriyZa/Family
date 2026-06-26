@@ -235,13 +235,7 @@
     -webkit-text-fill-color: transparent;
 }
 
- /* Находим контейнер именно для поля биографии во встроенной анкете */
-    div[data-edit-form-item="biography"][b-502wkyvhh5] {
-        display: block !important;
-        height: auto !important;
-    }
-
-    .tree-card-biography[b-502wkyvhh5] {
+.tree-card-biography[b-502wkyvhh5] {
         font-size: 11px !important;
         color: rgba(255, 255, 255, 0.85) !important; /* Белый цвет с легкой прозрачностью */
         text-align: center;
@@ -252,12 +246,9 @@
         overflow: hidden; /* Прячет текст, если биография — это целый роман */
         text-overflow: ellipsis;
         font-family: inherit;
-    }
-
-    /* border color */
-div.bft-light .bft-input>input[b-502wkyvhh5]{
-    border-color: red ;
 }
+
+
 
 
 /* /Pages/Home.razor.rz.scp.css */
