@@ -89,6 +89,10 @@
                 EditForm: new(
                 PhotoBinding: "photo", // Передаем имя свойства с маленькой буквы
                 Elements: new List<EditFormElement>()
+                {
+                    // Используем стандартный EditFormElement, задавая тип "textarea" через параметры
+        new EditFormElement(Binding: "biography", Label: "Биография", Type: "textarea")
+                }
             )
             )
         );
