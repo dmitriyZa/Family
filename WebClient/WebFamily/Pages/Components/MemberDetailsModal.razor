@@ -1,0 +1,55 @@
+@using WebFamily.Models
+
+@if (Member != null)
+{
+    <div class="modal fade show d-block" style="background: rgba(0,0,0,0.5); z-index: 1060;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow border-0">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold">Анкета родственника</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body text-center pt-2">
+                    @if (!string.IsNullOrEmpty(Member.Photo))
+                    {
+                        <img src="@Member.Photo" class="rounded-circle mb-3 border shadow-sm"
+                             style="width: 100px; height: 100px; object-fit: cover;" />
+                    }
+                    <h4 class="fw-bold mb-1">@Member.Name</h4>
+                    <p class="text-muted small mb-3">@Member.BirthDate</p>
+
+                    @if (!string.IsNullOrEmpty(Member.Occupation))
+                    {
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">💼 @Member.Occupation</span>
+                        </div>
+                    }
+
+                    <div class="bg-light p-3 rounded-3 text-start border mx-2"
+                         style="white-space: pre-line; max-height: 250px; overflow-y: auto;">
+                        <span class="fw-medium text-muted d-block small mb-1">Биография:</span>
+                        @Member.Biography
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-secondary w-100 rounded-3" @onclick="CloseModal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    // Входной параметр для передачи выбранного родственника
+    [Parameter]
+    public CustomNode? Member { get; set; }
+
+    // Событие, которое сообщит родителю, что модалку нужно закрыть
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private async Task CloseModal()
+    {
+        await OnClose.InvokeAsync();
+    }
+}

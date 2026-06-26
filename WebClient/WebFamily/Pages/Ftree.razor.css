@@ -40,18 +40,7 @@
     -webkit-text-fill-color: transparent;
 }
 
-.tree-card-biography {
-        font-size: 11px !important;
-        color: rgba(255, 255, 255, 0.85) !important; /* Белый цвет с легкой прозрачностью */
-        text-align: center;
-        white-space: pre-line; /* Распознает переносы строк \n */
-        word-break: break-word; /* Переносит длинные слова */
-        line-height: 1.3;
-        max-height: 55px; /* Ограничиваем высоту под размер foreignObject */
-        overflow: hidden; /* Прячет текст, если биография — это целый роман */
-        text-overflow: ellipsis;
-        font-family: inherit;
-}
+
 
 
 

@@ -2,6 +2,7 @@
 @using WebFamily.Services
 @using Family.Shared
 @using WebFamily.Models
+@using WebFamily.Pages.Components
 @inject HttpClient Http
 @inject FamilyNodeFactory NodeFactory
 @inject NavigationManager Nav
@@ -47,15 +48,33 @@
             <FamilyTree @ref=@_familyTree TNode="CustomNode" TreeId="family-tree-main" Options=@_options />
         }
     </div>
+    <!-- Вызов твоего нового изолированного компонента -->
+    <MemberDetailsModal Member="_selectedMember" OnClose="CloseDetails" />
 </div>
 
 @code {
     private RootOptions<CustomNode> _options = null!;
     private FamilyTree<CustomNode> _familyTree = null!;
     private bool _isLoading = true;
+    private CustomNode? _selectedMember;
+
+    private void OpenBlazorDetails(string nodeId)
+    {
+        // Ищем узел в уже загруженном списке дерева по его Id
+        if (_options?.FamilyTreeOptions?.Nodes != null)
+        {
+            _selectedMember = _options.FamilyTreeOptions.Nodes.FirstOrDefault(n => n.Id == nodeId);
+            StateHasChanged(); // Принудительно обновляем интерфейс Blazor
+        }
+    }
+
+    private void CloseDetails()
+    {
+        _selectedMember = null;
+        StateHasChanged();
+    }
 
     
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -80,7 +99,9 @@
                 Nodes: nodes,
                 NodeMenu: new()
                 {
-                    Details = new(Text: "Открыть анкету"),
+                    // Заменяем встроенное окно "Details" на кастомный клик C#
+                    Details = new(Text: "Открыть анкету",
+                    OnClick: (Action<string, object?>)((nodeId, _) => OpenBlazorDetails(nodeId))),
 
                     Edit = new(Text: "Редактировать",
                         OnClick: (Action<string, object?>)((nodeId, _) => Nav.NavigateTo($"/Family/edit-member/{nodeId}"))),
@@ -94,6 +115,8 @@
             )
         );
     }
+
+    
 
     private async void OnManualDelete(string nodeId)
     {
@@ -155,26 +178,7 @@
             StateHasChanged();
         }
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-{
-    if (firstRender)
-    {
-        await JS.InvokeVoidAsync("eval", @"
-            if (typeof FamilyTree !== 'undefined' && FamilyTree.templates && FamilyTree.templates.tommy) {
-                
-                // 1. Явно объявляем поле в структуре шаблона, чтобы библиотека его рендерила
-                FamilyTree.templates.tommy.field_3 = `
-                    <foreignObject x='20' y='95' width='210' height='50'>
-                        <div xmlns='http://w3.org' class='tree-card-biography'>
-                            {val}
-                        </div>
-                    </foreignObject>
-                `;
-            }
-        ");
-    }
 }
 
 
-}
+
